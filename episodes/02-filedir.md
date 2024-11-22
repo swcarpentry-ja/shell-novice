@@ -1,53 +1,49 @@
 ---
-title: Navigating Files and Directories
+title: ファイルとディレクトリのナビゲーション
 teaching: 30
 exercises: 10
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain the similarities and differences between a file and a directory.
-- Translate an absolute path into a relative path and vice versa.
-- Construct absolute and relative paths that identify specific files and directories.
-- Use options and arguments to change the behaviour of a shell command.
-- Demonstrate the use of tab completion and explain its advantages.
+- ファイルとディレクトリの類似点と相違点を説明する。
+- 絶対パスを相対パスに、またはその逆に変換する。
+- 特定のファイルやディレクトリを識別する絶対パスと相対パスを構築する。
+- シェルコマンドの動作を変更するためにオプションと引数を使用する。
+- タブ補完の使用方法を実演し、その利点を説明する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I move around on my computer?
-- How can I see what files and directories I have?
-- How can I specify the location of a file or directory on my computer?
+- コンピュータ上をどのように移動できますか？
+- 自分の持っているファイルやディレクトリをどのように確認できますか？
+- コンピュータ上のファイルやディレクトリの場所をどのように指定しますか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: instructor
 
-Introducing and navigating the filesystem in the shell
-(covered in [Navigating Files and Directories](02-filedir.md) section)
-can be confusing. You may have both terminal and GUI file explorer
-open side by side so learners can see the content and file
-structure while they're using terminal to navigate the system.
+シェルでファイルシステムを紹介しナビゲートすること
+（[ファイルとディレクトリのナビゲーション](02-filedir.md) セクションでカバー）
+は混乱を招くことがあります。学習者がターミナルとGUIファイルエクスプローラーの両方を
+並べて開き、ターミナルを使用してシステムをナビゲートする間にコンテンツやファイル構造を確認できるようにすることをお勧めします。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-The part of the operating system responsible for managing files and directories
-is called the **file system**.
-It organizes our data into files,
-which hold information,
-and directories (also called 'folders'),
-which hold files or other directories.
+ファイルとディレクトリを管理するオペレーティングシステムの部分は**ファイルシステム**と呼ばれます。
+これはデータをファイル（情報を保持するもの）と、
+ディレクトリ（「フォルダ」とも呼ばれる。ファイルや他のディレクトリを保持するもの）に整理します。
 
-Several commands are frequently used to create, inspect, rename, and delete files and directories.
-To start exploring them, we'll go to our open shell window.
+ファイルやディレクトリを作成、確認、名前変更、削除するために頻繁に使用されるコマンドがいくつかあります。
+これらを探求し始めるために、開いているシェルウィンドウを使用します。
 
-First, let's find out where we are by running a command called `pwd`
-(which stands for 'print working directory'). Directories are like *places* — at any time
-while we are using the shell, we are in exactly one place called
-our **current working directory**. Commands mostly read and write files in the
-current working directory, i.e. 'here', so knowing where you are before running
-a command is important. `pwd` shows you where you are:
+まず、自分がどこにいるかを確認するために、`pwd`というコマンドを実行します
+（これは「print working directory」の略です）。ディレクトリは*場所*のようなもので、
+シェルを使用している間、常に**現在の作業ディレクトリ**と呼ばれる1つの場所にいます。
+コマンドは主に現在の作業ディレクトリ、つまり「ここ」でファイルを読み書きするので、
+コマンドを実行する前に自分がどこにいるのかを知ることが重要です。
+`pwd`を実行すると現在の場所が表示されます。
 
 ```bash
 $ pwd
@@ -57,88 +53,83 @@ $ pwd
 /Users/nelle
 ```
 
-Here,
-the computer's response is `/Users/nelle`,
-which is Nelle's **home directory**:
+ここで、
+コンピュータの応答は`/Users/nelle`となっており、
+これはNelleの**ホームディレクトリ**です。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Home Directory Variation
+## ホームディレクトリのバリエーション
 
-The home directory path will look different on different operating systems.
-On Linux, it may look like `/home/nelle`,
-and on Windows, it will be similar to `C:\Documents and Settings\nelle` or
-`C:\Users\nelle`.
-(Note that it may look slightly different for different versions of Windows.)
-In future examples, we've used Mac output as the default - Linux and Windows
-output may differ slightly but should be generally similar.
+ホームディレクトリのパスは、オペレーティングシステムによって異なります。
+Linuxでは、`/home/nelle`のように見えるかもしれませんし、
+Windowsでは`C:\Documents and Settings\nelle`や
+`C:\Users\nelle`に似ているかもしれません。
+（Windowsのバージョンによって少し異なる場合があります。）
+今後の例では、Macの出力をデフォルトとして使用していますが、
+LinuxやWindowsの出力も若干異なる可能性がありますが、概ね似ています。
 
-We will also assume that your `pwd` command returns your user's home directory.
-If `pwd` returns something different, you may need to navigate there using `cd`
-or some commands in this lesson will not work as written.
-See [Exploring Other Directories](#exploring-other-directories) for more details
-on the `cd` command.
-
+また、`pwd`コマンドがユーザーのホームディレクトリを返すと仮定します。
+`pwd`が異なるものを返す場合、`cd`を使用してそこに移動する必要があり、
+このレッスンの一部のコマンドはそのままでは機能しない場合があります。
+`cd`コマンドの詳細については[他のディレクトリの探索](#他のディレクトリを探索する)を参照してください。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-To understand what a 'home directory' is,
-let's have a look at how the file system as a whole is organized.  For the
-sake of this example, we'll be
-illustrating the filesystem on our scientist Nelle's computer.  After this
-illustration, you'll be learning commands to explore your own filesystem,
-which will be constructed in a similar way, but not be exactly identical.
+「ホームディレクトリ」が何であるかを理解するために、
+ファイルシステム全体がどのように構成されているかを見てみましょう。
+この例のために、科学者Nelleのコンピュータのファイルシステムを例に示します。
+この後、自分のファイルシステムを探索するためのコマンドを学びます。
+自分のファイルシステムは同様に構築されていますが、完全には一致しません。
 
-On Nelle's computer, the filesystem looks like this:
+Nelleのコンピュータのファイルシステムは次のようになっています。
 
-![](fig/filesystem.svg){alt='The file system is made up of a root directory that contains sub-directories titled bin, data, users, and tmp'}
+![](fig/filesystem.svg){alt='ファイルシステムは、bin、data、users、tmpといったサブディレクトリを含むルートディレクトリで構成されています'}
 
-The filesystem looks like an upside down tree. 
-The topmost directory  is the **root directory**
-that holds everything else.
-We refer to it using a slash character, `/`, on its own;
-this character is the leading slash in `/Users/nelle`.
+ファイルシステムは逆さの木のように見えます。
+最上位のディレクトリは**ルートディレクトリ**で、
+それ以外のすべてを保持します。
+これはスラッシュ文字`/`単独で表されます。
+この文字は、`/Users/nelle`の先頭にあるスラッシュでもあります。
 
-Inside that directory are several other directories:
-`bin` (which is where some built-in programs are stored),
-`data` (for miscellaneous data files),
-`Users` (where users' personal directories are located),
-`tmp` (for temporary files that don't need to be stored long-term),
-and so on.
+そのディレクトリの中には、他にもいくつかのディレクトリがあります：
+`bin`（いくつかの組み込みプログラムが格納されている場所）、
+`data`（様々なデータファイル用）、
+`Users`（ユーザーの個人ディレクトリが格納されている場所）、
+`tmp`（長期保存が必要でない一時ファイル用）などです。
 
-We know that our current working directory `/Users/nelle` is stored inside `/Users`
-because `/Users` is the first part of its name.
-Similarly,
-we know that `/Users` is stored inside the root directory `/`
-because its name begins with `/`.
+現在の作業ディレクトリ`/Users/nelle`が`/Users`の中に格納されていることは、
+その名前の最初の部分が`/Users`であることから分かります。
+同様に、
+`/Users`がルートディレクトリ`/`の中に格納されていることは、
+その名前が`/`で始まっていることから分かります。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Slashes
+## スラッシュ
 
-Notice that there are two meanings for the `/` character.
-When it appears at the front of a file or directory name,
-it refers to the root directory. When it appears *inside* a path,
-it's just a separator.
-
+`/`文字には2つの意味があることに注意してください。
+ファイルやディレクトリ名の先頭に現れるときはルートディレクトリを指します。
+パスの*内部*に現れるときは、単なる区切り文字です。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Underneath `/Users`,
-we find one directory for each user with an account on Nelle's machine,
-her colleagues *imhotep* and *larry*.
+`/Users`の下には、
+Nelleのマシンのアカウントを持つ各ユーザーのための1つのディレクトリがあります。
+彼女の同僚*imhotep*と*larry*も含まれます。
 
-![](fig/home-directories.svg){alt='Like other directories, home directories are sub-directories underneath "/Users" like "/Users/imhotep", "/Users/larry" or"/Users/nelle"'}
+![](fig/home-directories.svg){alt='/Usersの下に、"/Users/imhotep"、"/Users/larry"、"/Users/nelle"のようなサブディレクトリとして、ホームディレクトリが存在します'}
 
-The user *imhotep*'s files are stored in `/Users/imhotep`,
-user *larry*'s in `/Users/larry`,
-and Nelle's in `/Users/nelle`. Nelle is the user in our
-examples here; therefore, we get `/Users/nelle` as our home directory.
-Typically, when you open a new command prompt, you will be in
-your home directory to start.
+ユーザー*imhotep*のファイルは`/Users/imhotep`に格納され、
+ユーザー*larry*のファイルは`/Users/larry`に格納されています。
+そして、Nelleのファイルは`/Users/nelle`に格納されています。
+ここでの例ではNelleがユーザーです。
+そのため、ホームディレクトリとして`/Users/nelle`を取得します。
+通常、新しいコマンドプロンプトを開くと、
+ホームディレクトリにいる状態から始まります。
 
-Now let's learn the command that will let us see the contents of our
-own filesystem.  We can see what's in our home directory by running `ls`:
+次に、自分のファイルシステムの内容を確認するコマンドを学びます。
+ホームディレクトリの内容を確認するには、`ls`を実行します：
 
 ```bash
 $ ls
@@ -149,85 +140,79 @@ Applications Documents    Library      Music        Public
 Desktop      Downloads    Movies       Pictures
 ```
 
-(Again, your results may be slightly different depending on your operating
-system and how you have customized your filesystem.)
+（オペレーティングシステムやファイルシステムのカスタマイズ方法によって、
+結果が若干異なる場合があります。）
 
-`ls` prints the names of the files and directories in the current directory.
-We can make its output more comprehensible by using the `-F` **option**
-which tells `ls` to classify the output
-by adding a marker to file and directory names to indicate what they are:
+`ls`は、現在のディレクトリ内のファイルやディレクトリの名前を表示します。
+`-F` **オプション**を使用すると、
+出力に分類記号を追加して、よりわかりやすくすることができます。
 
-- a trailing `/` indicates that this is a directory
-- `@` indicates a link
-- `*` indicates an executable
+- 末尾の`/`は、ディレクトリであることを示します。
+- `@`はリンクを示します。
+- `*`は実行可能ファイルを示します。
 
-Depending on your shell's default settings,
-the shell might also use colors to indicate whether each entry is a file or
-directory.
+シェルのデフォルト設定によっては、
+ファイルやディレクトリかどうかを示すために色分けが使用される場合もあります。
 
 ```bash
 $ ls -F
 ```
 
 ```output
-Applications/ Documents/    Library/      Music/        Public/
+Applications/ Documents/    Library/
+
+      Music/        Public/
 Desktop/      Downloads/    Movies/       Pictures/
 ```
 
-Here,
-we can see that the home directory contains only **sub-directories**.
-Any names in the output that don't have a classification symbol
-are **files** in the current working directory.
+ここで、
+ホームディレクトリには**サブディレクトリ**のみが含まれていることがわかります。
+出力に分類記号が付いていない名前は、
+現在の作業ディレクトリ内の**ファイル**です。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Clearing your terminal
+## ターミナルのクリア
 
-If your screen gets too cluttered, you can clear your terminal using the
-`clear` command. You can still access previous commands using <kbd>↑</kbd>
-and <kbd>↓</kbd> to move line-by-line, or by scrolling in your terminal.
-
+画面が混雑しすぎた場合は、`clear`コマンドを使用してターミナルをクリアできます。
+以前のコマンドには、<kbd>↑</kbd>および<kbd>↓</kbd>キーで
+1行ずつ移動するか、ターミナル内でスクロールすることでアクセスできます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Getting help
+### ヘルプの取得
 
-`ls` has lots of other **options**. There are two common ways to find out how
-to use a command and what options it accepts ---
-**depending on your environment, you might find that only one of these ways works:**
+`ls`には多くの**オプション**があります。コマンドの使い方や受け付けるオプションを知る方法は2つあり、環境によってはどちらか一方しか動作しない場合があります。
 
-1. We can pass a `--help` option to any command (available on Linux and Git Bash), for example:
-  
+1. コマンドに`--help`オプションを付ける（LinuxやGit Bashで利用可能）、例：
+
   ```bash
   $ ls --help
   ```
 
-2. We can read its manual with `man` (available on Linux and macOS):
-  
+2. マニュアルを読むために`man`を使用する（LinuxやmacOSで利用可能）：
+
   ```bash
   $ man ls
   ```
 
-We'll describe both ways next.
+次に、それぞれの方法について説明します。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Help for built-in commands
+## 組み込みコマンドのヘルプ
 
-Some commands are built in to the Bash shell, rather than existing as separate
-programs on the filesystem. One example is the `cd` (change directory) command.
-If you get a message like `No manual entry for cd`, try `help cd` instead. The
-`help` command is how you get usage information for
-[Bash built-ins](https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html).
-
+一部のコマンドは、ファイルシステム上の個別のプログラムではなく、Bashシェルに組み込まれています。例として`cd`（ディレクトリを変更するコマンド）があります。`No manual entry for cd`というメッセージが表示された場合は、代わりに`help cd`を試してください。
+`help`コマンドを使用すると、
+[Bashの組み込みコマンド](https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html)
+の使用情報を取得できます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-#### The `--help` option
+#### `--help`オプション
 
-Most bash commands and programs that people have written to be
-run from within bash, support a `--help` option that displays more
-information on how to use the command or program.
+ほとんどのbashコマンドやbash内で実行するために作成されたプログラムは、
+`--help`オプションをサポートしており、コマンドやプログラムの使用方法に関する詳細情報を表示します。
 
 ```bash
 $ ls --help
@@ -263,22 +248,21 @@ Mandatory arguments to long options are mandatory for short options, too.
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-### When to use short or long options
-When options exist as both short and long options:
+### 短いオプションと長いオプションの使い分け
 
-- Use the short option when typing commands directly into the
-   shell to minimize keystrokes and get your task done faster.
-- Use the long option in scripts to provide clarity.
-  It will be read many times and typed once.
-  
+短いオプションと長いオプションが両方存在する場合：
+
+- コマンドを直接シェルに入力する場合は、入力を最小限にして作業を迅速に進めるために短いオプションを使用します。
+- スクリプト内では長いオプションを使用し、読みやすさを重視します。
+  これにより、何度も読み返すスクリプトを簡単に理解できます。
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Unsupported command-line options
+## サポートされていないコマンドラインオプション
 
-If you try to use an option that is not supported, `ls` and other commands
-will usually print an error message similar to:
+サポートされていないオプションを使用しようとすると、`ls`やその他のコマンドは通常次のようなエラーメッセージを出力します：
 
 ```bash
 $ ls -j
@@ -291,67 +275,61 @@ Try 'ls --help' for more information.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-#### The `man` command
+#### `man`コマンド
 
-The other way to learn about `ls` is to type
+`ls`について学ぶもう一つの方法は、次のように入力することです：
 
 ```bash
 $ man ls
 ```
 
-This command will turn your terminal into a page with a description
-of the `ls` command and its options.
+このコマンドはターミナルを`ls`コマンドとそのオプションについての説明が記載されたページに切り替えます。
 
-To navigate through the `man` pages,
-you may use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line,
-or try <kbd>b</kbd> and <kbd>Spacebar</kbd> to skip up and down by a full page.
-To search for a character or word in the `man` pages,
-use <kbd>/</kbd> followed by the character or word you are searching for.
-Sometimes a search will result in multiple hits.
-If so, you can move between hits using <kbd>N</kbd> (for moving forward) and
-<kbd>Shift</kbd>\+<kbd>N</kbd> (for moving backward).
+`man`ページをナビゲートするには、
+<kbd>↑</kbd>および<kbd>↓</kbd>キーを使用して1行ずつ移動するか、
+<kbd>b</kbd>および<kbd>Spacebar</kbd>を使用して1ページ分上または下にスキップします。
+`man`ページ内で文字や単語を検索するには、
+<kbd>/</kbd>を押し、その後検索したい文字や単語を入力します。
+検索結果が複数ある場合、
+<kbd>N</kbd>（前方への移動）や
+<kbd>Shift</kbd>\+<kbd>N</kbd>（後方への移動）を使って結果間を移動できます。
 
-To **quit** the `man` pages, press <kbd>q</kbd>.
+**終了**するには、<kbd>q</kbd>を押します。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Manual pages on the web
+## ウェブでのマニュアルページ
 
-Of course, there is a third way to access help for commands:
-searching the internet via your web browser.
-When using internet search, including the phrase `unix man page` in your search
-query will help to find relevant results.
+コマンドのヘルプにアクセスするもう一つの方法は、
+ウェブブラウザを使用してインターネットで検索することです。
+検索クエリに「unix man page」というフレーズを含めると、
+関連する結果を見つけやすくなります。
 
-GNU provides links to its
-[manuals](https://www.gnu.org/manual/manual.html) including the
-[core GNU utilities](https://www.gnu.org/software/coreutils/manual/coreutils.html),
-which covers many commands introduced within this lesson.
-
+GNUは、
+[マニュアル](https://www.gnu.org/manual/manual.html)や
+[GNUコアユーティリティ](https://www.gnu.org/software/coreutils/manual/coreutils.html)
+へのリンクを提供しており、
+このレッスンで紹介した多くのコマンドが含まれています。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Exploring More `ls` Options
+## より多くの`ls`オプションの探求
 
-You can also use two options at the same time. What does the command `ls` do when used
-with the `-l` option? What about if you use both the `-l` and the `-h` option?
+2つのオプションを同時に使用することもできます。`-l`オプションを使用すると`ls`コマンドはどう動作しますか？
+また、`-l`オプションと`-h`オプションの両方を使用するとどうなりますか？
 
-Some of its output is about properties that we do not cover in this lesson (such
-as file permissions and ownership), but the rest should be useful
-nevertheless.
+出力にはこのレッスンで取り扱わないプロパティ（例えば、ファイルのパーミッションや所有権）に関するものも含まれますが、それ以外の部分は役立つはずです。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The `-l` option makes `ls` use a **l**ong listing format, showing not only
-the file/directory names but also additional information, such as the file size
-and the time of its last modification. If you use both the `-h` option and the `-l` option,
-this makes the file size '**h**uman readable', i.e. displaying something like `5.3K`
-instead of `5369`.
-
-
+`-l`オプションを使用すると、`ls`は**長い**リスト形式で出力され、
+ファイルやディレクトリ名だけでなく、ファイルサイズや最終変更時間などの追加情報も表示されます。
+`-h`オプションと`-l`オプションの両方を使用すると、
+ファイルサイズが「**人間が読みやすい**」形式になり、例えば`5.3K`のように表示されます。
 
 :::::::::::::::::::::::::
 
@@ -359,39 +337,33 @@ instead of `5369`.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Listing in Reverse Chronological Order
+## 逆時系列順でのリスト表示
 
-By default, `ls` lists the contents of a directory in alphabetical
-order by name. The command `ls -t` lists items by time of last
-change instead of alphabetically. The command `ls -r` lists the
-contents of a directory in reverse order.
-Which file is displayed last when you combine the `-t` and `-r` options?
-Hint: You may need to use the `-l` option to see the
-last changed dates.
+デフォルトでは、`ls`はディレクトリ内の内容を名前のアルファベット順にリストします。
+`ls -t`コマンドは、名前のアルファベット順ではなく、最終変更時刻順に項目をリストします。
+また、`ls -r`コマンドはディレクトリの内容を逆順でリストします。
+`-t`オプションと`-r`オプションを組み合わせた場合、どのファイルが最後に表示されますか？
+ヒント：最終変更日の確認には、`-l`オプションを使用する必要があるかもしれません。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The most recently changed file is listed last when using `-rt`. This
-can be very useful for finding your most recent edits or checking to
-see if a new output file was written.
-
-
+`-rt`オプションを使用すると、最後に表示されるのは最も最近変更されたファイルです。
+これは、最新の編集内容を見つけたり、新しい出力ファイルが書き込まれたかを確認する際に非常に便利です。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Exploring Other Directories
+### 他のディレクトリを探索する
 
-Not only can we use `ls` on the current working directory,
-but we can use it to list the contents of a different directory.
-Let's take a look at our `Desktop` directory by running `ls -F Desktop`,
-i.e.,
-the command `ls` with the `-F` **option** and the [**argument**][Arguments]  `Desktop`.
-The argument `Desktop` tells `ls` that
-we want a listing of something other than our current working directory:
+`ls`は現在の作業ディレクトリだけでなく、
+別のディレクトリの内容をリストするためにも使用できます。
+`Desktop`ディレクトリを例にしてみましょう。
+`ls -F Desktop`、つまり`ls`コマンドに`-F` **オプション**と[**引数**][Arguments] `Desktop`を付けて実行します。
+引数`Desktop`は、
+現在の作業ディレクトリ以外のリストを取得したいことを`ls`に伝えます：
 
 ```bash
 $ ls -F Desktop
@@ -401,26 +373,21 @@ $ ls -F Desktop
 shell-lesson-data/
 ```
 
-Note that if a directory named `Desktop` does not exist in your current working directory,
-this command will return an error. Typically, a `Desktop` directory exists in your
-home directory, which we assume is the current working directory of your bash shell.
+現在の作業ディレクトリに`Desktop`という名前のディレクトリが存在しない場合、
+このコマンドはエラーを返します。通常、`Desktop`ディレクトリはホームディレクトリ内に存在します。
+ホームディレクトリが現在のbashシェルの作業ディレクトリであると仮定しています。
 
-Your output should be a list of all the files and sub-directories in your
-Desktop directory, including the `shell-lesson-data` directory you downloaded at
-the [setup for this lesson](../learners/setup.md). (On most systems, the
-contents of the `Desktop` directory in the shell will show up as icons in a graphical
-user interface behind all the open windows. See if this is the case for you.)
+出力は、`Desktop`ディレクトリ内のすべてのファイルやサブディレクトリをリストします。
+これには、このレッスンの[セットアップ時](../learners/setup.md)にダウンロードした`shell-lesson-data`ディレクトリも含まれます。
+（ほとんどのシステムでは、シェル内での`Desktop`ディレクトリの内容が、すべての開いているウィンドウの背後にあるグラフィカルユーザーインターフェースでアイコンとして表示されます。
+これはあなたの環境でも同じかどうか確認してみてください。）
 
-Organizing things hierarchically helps us keep track of our work. While it's
-possible to put hundreds of files in our home directory just as it's possible to
-pile hundreds of printed papers on our desk, it's much easier to find things when
-they've been organized into sensibly-named subdirectories.
+階層的に整理することで、作業を把握しやすくなります。ホームディレクトリに数百のファイルを置くことも可能ですが、
+ちょうど机の上に数百枚の紙を積み上げるようなもので、意味のある名前のサブディレクトリに整理されているほうが見つけやすくなります。
 
-Now that we know the `shell-lesson-data` directory is located in our Desktop directory, we
-can do two things.
+`shell-lesson-data`ディレクトリが`Desktop`ディレクトリ内にあることがわかったので、2つのことができます。
 
-First, using the same strategy as before, we can look at its contents by passing
-a directory name to `ls`:
+1つ目は、先ほどと同じ方法で、ディレクトリ名を`ls`に渡してその内容を確認することです：
 
 ```bash
 $ ls -F Desktop/shell-lesson-data
@@ -430,22 +397,16 @@ $ ls -F Desktop/shell-lesson-data
 exercise-data/  north-pacific-gyre/
 ```
 
-Second, we can actually change our location to a different directory, so
-we are no longer located in
-our home directory.
+2つ目は、実際に別のディレクトリに移動して、ホームディレクトリ以外の場所に作業ディレクトリを変更することです。
 
-The command to change locations is `cd` followed by a
-directory name to change our working directory.
-`cd` stands for 'change directory',
-which is a bit misleading.
-The command doesn't change the directory;
-it changes the shell's current working directory.
-In other words it changes the shell's settings for what directory we are in.
-The `cd` command is akin to double-clicking a folder in a graphical interface
-to get into that folder.
+場所を変更するコマンドは`cd`で、その後にディレクトリ名を指定して作業ディレクトリを変更します。
+`cd`は「ディレクトリを変更する」（change directory）を意味しますが、少し誤解を招きます。
+このコマンドはディレクトリそのものを変更するわけではなく、
+シェルの現在の作業ディレクトリを変更します。
+言い換えれば、シェルの設定として現在いるディレクトリを変更するのです。
+`cd`コマンドは、グラフィカルインターフェースでフォルダをダブルクリックしてその中に入る操作に似ています。
 
-Let's say we want to move into the `exercise-data` directory we saw above. We can
-use the following series of commands to get there:
+先ほど見た`exercise-data`ディレクトリに移動したいとします。この場合、次の一連のコマンドを使用します：
 
 ```bash
 $ cd Desktop
@@ -453,16 +414,16 @@ $ cd shell-lesson-data
 $ cd exercise-data
 ```
 
-These commands will move us from our home directory into our Desktop directory, then into
-the `shell-lesson-data` directory, then into the `exercise-data` directory.
-You will notice that `cd` doesn't print anything. This is normal.
-Many shell commands will not output anything to the screen when successfully executed.
-But if we run `pwd` after it, we can see that we are now
-in `/Users/nelle/Desktop/shell-lesson-data/exercise-data`.
+これらのコマンドにより、ホームディレクトリから`Desktop`ディレクトリ、次に`shell-lesson-data`ディレクトリ、
+最後に`exercise-data`ディレクトリへと移動します。
+`cd`は何も出力しないことに気づくでしょう。これは正常です。
+多くのシェルコマンドは、成功した場合には何も画面に表示しません。
+ただし、`pwd`を実行すれば、
+現在の場所が`/Users/nelle/Desktop/shell-lesson-data/exercise-data`であることが確認できます。
 
-If we run `ls -F` without arguments now,
-it lists the contents of `/Users/nelle/Desktop/shell-lesson-data/exercise-data`,
-because that's where we now are:
+現在、引数なしで`ls -F`を実行すると、
+`/Users/nelle/Desktop/shell-lesson-data/exercise-data`の内容がリストされます。
+これは、現在いる場所だからです：
 
 ```bash
 $ pwd
@@ -480,9 +441,9 @@ $ ls -F
 alkanes/  animal-counts/  creatures/  numbers.txt  writing/
 ```
 
-We now know how to go down the directory tree (i.e. how to go into a subdirectory),
-but how do we go up (i.e. how do we leave a directory and go into its parent directory)?
-We might try the following:
+これで、ディレクトリツリーを下に移動する方法（つまり、サブディレクトリに入る方法）がわかりましたが、
+上に移動するにはどうすればよいでしょうか（つまり、ディレクトリを出て親ディレクトリに移動する方法）？
+以下を試してみるかもしれません：
 
 ```bash
 $ cd shell-lesson-data
@@ -492,25 +453,20 @@ $ cd shell-lesson-data
 -bash: cd: shell-lesson-data: No such file or directory
 ```
 
-But we get an error! Why is this?
+しかし、エラーになります！これはなぜでしょうか？
 
-With our methods so far,
-`cd` can only see sub-directories inside your current directory. There are
-different ways to see directories above your current location; we'll start
-with the simplest.
+これまでの方法では、
+`cd`は現在のディレクトリ内のサブディレクトリしか認識できません。
+現在の場所の上位ディレクトリを見るにはいくつかの方法がありますが、まずは最も簡単な方法から始めます。
 
-There is a shortcut in the shell to move up one directory level. It works as follows:
+シェルには1つ上のディレクトリに移動するためのショートカットがあります。この方法は次のとおりです：
 
 ```bash
 $ cd ..
 ```
 
-`..` is a special directory name meaning
-"the directory containing this one",
-or more succinctly,
-the **parent** of the current directory.
-Sure enough,
-if we run `pwd` after running `cd ..`, we're back in `/Users/nelle/Desktop/shell-lesson-data`:
+`..`は「このディレクトリを含むディレクトリ」、つまり現在のディレクトリの**親**を意味する特別なディレクトリ名です。
+実際に、`cd ..`を実行した後に`pwd`を実行すると、`/Users/nelle/Desktop/shell-lesson-data`に戻っていることがわかります：
 
 ```bash
 $ pwd
@@ -520,8 +476,7 @@ $ pwd
 /Users/nelle/Desktop/shell-lesson-data
 ```
 
-The special directory `..` doesn't usually show up when we run `ls`. If we want
-to display it, we can add the `-a` option to `ls -F`:
+特別なディレクトリ`..`は通常`ls`を実行しても表示されません。表示させるには、`ls -F`に`-a`オプションを追加します：
 
 ```bash
 $ ls -F -a
@@ -531,44 +486,38 @@ $ ls -F -a
 ./  ../  exercise-data/  north-pacific-gyre/
 ```
 
-`-a` stands for 'show all' (including hidden files);
-it forces `ls` to show us file and directory names that begin with `.`,
-such as `..` (which, if we're in `/Users/nelle`, refers to the `/Users` directory).
-As you can see,
-it also displays another special directory that's just called `.`,
-which means 'the current working directory'.
-It may seem redundant to have a name for it,
-but we'll see some uses for it soon.
+`-a`は「すべてを表示」（hiddenファイルを含む）を意味します；
+これにより、`.`や`..`など、`.`で始まるファイルやディレクトリ名を表示させることができます。
+たとえば、`..`（`/Users/nelle`内にいる場合、`/Users`ディレクトリを指します）。
+また、
+`.`と呼ばれるもう1つの特別なディレクトリも表示されます。
+これは「現在の作業ディレクトリ」を意味します。
+冗長に思えるかもしれませんが、すぐにこれを使用する場面がわかるでしょう。
 
-Note that in most command line tools, multiple options can be combined
-with a single `-` and no spaces between the options; `ls -F -a` is
-equivalent to `ls -Fa`.
+ほとんどのコマンドラインツールでは、複数のオプションを1つの`-`でスペースを入れずに組み合わせることができます。
+たとえば、`ls -F -a`は`ls -Fa`と同等です。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Other Hidden Files
+## 他の隠しファイル
 
-In addition to the hidden directories `..` and `.`, you may also see a file
-called `.bash_profile`. This file usually contains shell configuration
-settings. You may also see other files and directories beginning
-with `.`. These are usually files and directories that are used to configure
-different programs on your computer. The prefix `.` is used to prevent these
-configuration files from cluttering the terminal when a standard `ls` command
-is used.
-
+隠しディレクトリの`..`や`.`に加えて、`.bash_profile`というファイルが表示される場合もあります。
+このファイルには通常、シェルの設定が含まれています。他にも`.`で始まるファイルやディレクトリが見えることがあります。
+これらは通常、コンピュータ上のさまざまなプログラムの設定に使用されるファイルやディレクトリです。
+接頭辞`.`は、標準の`ls`コマンドを使用したときにこれらの設定ファイルが端末を煩雑にしないようにするために使用されます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-These three commands are the basic commands for navigating the filesystem on your computer:
-`pwd`, `ls`, and `cd`. Let's explore some variations on those commands. What happens
-if you type `cd` on its own, without giving
-a directory?
+これで、コンピュータ上のファイルシステムをナビゲートするための基本コマンド、
+`pwd`、`ls`、`cd`がわかりました。
+これらのコマンドのいくつかのバリエーションを探りましょう。
+引数を指定せずに`cd`と入力した場合、どうなるでしょうか？
 
 ```bash
 $ cd
 ```
 
-How can you check what happened? `pwd` gives us the answer!
+何が起きたのかを確認するには？`pwd`が答えを教えてくれます！
 
 ```bash
 $ pwd
@@ -578,38 +527,33 @@ $ pwd
 /Users/nelle
 ```
 
-It turns out that `cd` without an argument will return you to your home directory,
-which is great if you've got lost in your own filesystem.
+引数なしの`cd`はホームディ
 
-Let's try returning to the `exercise-data` directory from before. Last time, we used
-three commands, but we can actually string together the list of directories
-to move to `exercise-data` in one step:
+レクトリに戻ることがわかります。
+これは、自分のファイルシステムで迷子になったときに便利です。
+
+先ほどの`exercise-data`ディレクトリに戻ってみましょう。前回は3つのコマンドを使いましたが、
+実際には、ディレクトリのリストをまとめて指定して1回で`exercise-data`に移動することもできます：
 
 ```bash
 $ cd Desktop/shell-lesson-data/exercise-data
 ```
 
-Check that we've moved to the right place by running `pwd` and `ls -F`.
+`pwd`と`ls -F`を実行して、正しい場所に移動したことを確認してください。
 
-If we want to move up one level from the data directory, we could use `cd ..`.  But
-there is another way to move to any directory, regardless of your
-current location.
+データディレクトリから1つ上のレベルに移動したい場合は、`cd ..`を使用できます。
+しかし、現在の場所に関係なく任意のディレクトリに移動する別の方法もあります。
 
-So far, when specifying directory names, or even a directory path (as above),
-we have been using **relative paths**.  When you use a relative path with a command
-like `ls` or `cd`, it tries to find that location from where we are,
-rather than from the root of the file system.
+これまでディレクトリ名やディレクトリパスを指定する際に使用してきたのは**相対パス**でした。
+`ls`や`cd`のようなコマンドで相対パスを使用すると、現在の場所からその場所を探します。
 
-However, it is possible to specify the **absolute path** to a directory by
-including its entire path from the root directory, which is indicated by a
-leading slash. The leading `/` tells the computer to follow the path from
-the root of the file system, so it always refers to exactly one directory,
-no matter where we are when we run the command.
+しかし、ルートディレクトリから始まる**絶対パス**を指定することで、
+そのファイルシステム上のどこからでも1つのディレクトリを指定できます。
+先頭のスラッシュ（/）はファイルシステムのルートからパスをたどることをコンピュータに指示するため、
+コマンドを実行する場所に関係なく、常に正確に1つのディレクトリを指します。
 
-This allows us to move to our `shell-lesson-data` directory from anywhere on
-the filesystem (including from inside `exercise-data`). To find the absolute path
-we're looking for, we can use `pwd` and then extract the piece we need
-to move to `shell-lesson-data`.
+これにより、`shell-lesson-data`ディレクトリにどこからでも移動できます（たとえば、`exercise-data`内からでも）。
+探している絶対パスを見つけるには、`pwd`を使用して必要な部分を抽出します：
 
 ```bash
 $ pwd
@@ -623,61 +567,62 @@ $ pwd
 $ cd /Users/nelle/Desktop/shell-lesson-data
 ```
 
-Run `pwd` and `ls -F` to ensure that we're in the directory we expect.
+`pwd`と`ls -F`を実行して、期待通りのディレクトリにいることを確認してください。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Two More Shortcuts
+## もう2つのショートカット
 
-The shell interprets a tilde (`~`) character at the start of a path to
-mean "the current user's home directory". For example, if Nelle's home
-directory is `/Users/nelle`, then `~/data` is equivalent to
-`/Users/nelle/data`. This only works if it is the first character in the
-path; `here/there/~/elsewhere` is *not* `here/there/Users/nelle/elsewhere`.
+シェルは、パスの先頭にあるチルダ（`~`）文字を
+「現在のユーザーのホームディレクトリ」を意味するものとして解釈します。
+たとえば、Nelleのホームディレクトリが`/Users/nelle`の場合、`~/data`は
+`/Users/nelle/data`と同等です。これは、パスの最初の文字として使用される場合にのみ機能します。
+例えば、`here/there/~/elsewhere`は
+`here/there/Users/nelle/elsewhere`を意味しません。
 
-Another shortcut is the `-` (dash) character. `cd` will translate `-` into
-*the previous directory I was in*, which is faster than having to remember,
-then type, the full path.  This is a *very* efficient way of moving
-*back and forth between two directories* -- i.e. if you execute `cd -` twice,
-you end up back in the starting directory.
+もう1つのショートカットは`-`（ハイフン）文字です。`cd`は`-`を
+「以前にいたディレクトリ」として解釈します。
+これにより、完全なパスを覚えて入力する必要がなくなり、
+非常に効率的に2つのディレクトリ間を
+行き来することができます。
+たとえば、`cd -`を2回実行すると、元のディレクトリに戻ります。
 
-The difference between `cd ..` and `cd -` is
-that the former brings you *up*, while the latter brings you *back*.
+`cd ..`と`cd -`の違いは、
+前者は「上に移動」するのに対し、後者は「戻る」ことです。
 
 ***
 
-Try it!
-First navigate to `~/Desktop/shell-lesson-data` (you should already be there).
+試してみましょう！
+まず、`~/Desktop/shell-lesson-data`に移動します（すでにそこにいるはずです）。
 
 ```bash
 $ cd ~/Desktop/shell-lesson-data
 ```
 
-Then `cd` into the `exercise-data/creatures` directory
+次に、`exercise-data/creatures`ディレクトリに`cd`します。
 
 ```bash
 $ cd exercise-data/creatures
 ```
 
-Now if you run
+次に、以下を実行すると
 
 ```bash
 $ cd -
 ```
 
-you'll see you're back in `~/Desktop/shell-lesson-data`.
-Run `cd -` again and you're back in `~/Desktop/shell-lesson-data/exercise-data/creatures`
-
+`~/Desktop/shell-lesson-data`に戻ります。
+さらにもう一度`cd -`を実行すると、
+`~/Desktop/shell-lesson-data/exercise-data/creatures`に戻ります。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Absolute vs Relative Paths
+## 絶対パスと相対パス
 
-Starting from `/Users/nelle/data`,
-which of the following commands could Nelle use to navigate to her home directory,
-which is `/Users/nelle`?
+`/Users/nelle/data`から開始して、
+Nelleがホームディレクトリ（`/Users/nelle`）に移動するために使用できるコマンドは次のうちどれでしょうか？
 
 1. `cd .`
 2. `cd /`
@@ -691,20 +636,17 @@ which is `/Users/nelle`?
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. No: `.` stands for the current directory.
-2. No: `/` stands for the root directory.
-3. No: Nelle's home directory is `/Users/nelle`.
-4. No: this command goes up two levels, i.e. ends in `/Users`.
-5. Yes: `~` stands for the user's home directory, in this case `/Users/nelle`.
-6. No: this command would navigate into a directory `home` in the current directory
-  if it exists.
-7. Yes: unnecessarily complicated, but correct.
-8. Yes: shortcut to go back to the user's home directory.
-9. Yes: goes up one level.
-  
-  
+1. いいえ：`.`は現在のディレクトリを意味します。
+2. いいえ：`/`はルートディレクトリを意味します。
+3. いいえ：Nelleのホームディレクトリは`/Users/nelle`です。
+4. いいえ：このコマンドは2レベル上に移動し、`/Users`で終了します。
+5. はい：`~`はユーザーのホームディレクトリを意味し、この場合は`/Users/nelle`です。
+6. いいえ：このコマンドは、現在のディレクトリ内に存在する場合に`home`ディレクトリに移動します。
+7. はい：複雑すぎますが正解です。
+8. はい：ユーザーのホームディレクトリに戻るショートカットです。
+9. はい：1レベル上に移動します。
 
 :::::::::::::::::::::::::
 
@@ -712,29 +654,27 @@ which is `/Users/nelle`?
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Relative Path Resolution
+## 相対パスの解決
 
-Using the filesystem diagram below, if `pwd` displays `/Users/thing`,
-what will `ls -F ../backup` display?
+以下のファイルシステム図を使用して、`pwd`が`/Users/thing`を表示している場合、
+`ls -F ../backup`はどのような出力を表示しますか？
 
 1. `../backup: No such file or directory`
 2. `2012-12-01 2013-01-08 2013-01-27`
 3. `2012-12-01/ 2013-01-08/ 2013-01-27/`
 4. `original/ pnas_final/ pnas_sub/`
 
-![](fig/filesystem-challenge.svg){alt='A directory tree below the Users directory where "/Users" contains the directories "backup" and "thing"; "/Users/backup" contains "original","pnas\_final" and "pnas\_sub"; "/Users/thing" contains "backup"; and"/Users/thing/backup" contains "2012-12-01", "2013-01-08" and"2013-01-27"'}
+![](fig/filesystem-challenge.svg){alt='Usersディレクトリ以下のディレクトリツリー。"/Users"には"backup"と"thing"ディレクトリがあり、"/Users/backup"には"original"、"pnas_final"、"pnas_sub"が含まれ、"/Users/thing"には"backup"があり、"/Users/thing/backup"には"2012-12-01"、"2013-01-08"、"2013-01-27"が含まれる'}
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. No: there *is* a directory `backup` in `/Users`.
-2. No: this is the content of `Users/thing/backup`,
-  but with `..`, we asked for one level further up.
-3. No: see previous explanation.
-4. Yes: `../backup/` refers to `/Users/backup/`.
-  
-  
+1. いいえ：`/Users`内に`backup`ディレクトリがあります。
+2. いいえ：これは`/Users/thing/backup`の内容ですが、
+  `..`を使用したため、1レベル上のものを要求しています。
+3. いいえ：先ほどの説明を参照してください。
+4. はい：`../backup/`は`/Users/backup/`を指します。
 
 :::::::::::::::::::::::::
 
@@ -742,18 +682,18 @@ what will `ls -F ../backup` display?
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## `ls` Reading Comprehension
+## `ls`のリーディングテスト
 
-Using the filesystem diagram below,
-if `pwd` displays `/Users/backup`,
-and `-r` tells `ls` to display things in reverse order,
-what command(s) will result in the following output:
+以下のファイルシステム図を使用して、
+`pwd`が`/Users/backup`を表示している場合、
+`-r`オプションは`ls`に逆順で表示するよう指示します。
+以下の出力を得るにはどのコマンドを実行しますか？
 
 ```output
 pnas_sub/ pnas_final/ original/
 ```
 
-![](fig/filesystem-challenge.svg){alt='A directory tree below the Users directory where "/Users" contains the directories "backup" and "thing"; "/Users/backup" contains "original","pnas\_final" and "pnas\_sub"; "/Users/thing" contains "backup"; and"/Users/thing/backup" contains "2012-12-01", "2013-01-08" and"2013-01-27"'}
+![](fig/filesystem-challenge.svg){alt='Usersディレクトリ以下のディレクトリツリー。"/Users"には"backup"と"thing"ディレクトリがあり、"/Users/backup"には"original"、"pnas_final"、"pnas_sub"が含まれ、"/Users/thing"には"backup"があり、"/Users/thing/backup"には"2012-12-01"、"2013-01-08"、"2013-01-27"が含まれる'}
 
 1. `ls pwd`
 2. `ls -r -F`
@@ -761,53 +701,48 @@ pnas_sub/ pnas_final/ original/
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. No: `pwd` is not the name of a directory.
-2. Yes: `ls` without directory argument lists files and directories
-  in the current directory.
-3. Yes: uses the absolute path explicitly.
-  
-  
+1. いいえ：`pwd`はディレクトリの名前ではありません。
+2. はい：ディレクトリ引数なしの`ls`は現在のディレクトリ内のファイルとディレクトリをリストします。
+3. はい：絶対パスを明示的に使用しています。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## General Syntax of a Shell Command
+## シェルコマンドの一般的な構文
 
-We have now encountered commands, options, and arguments,
-but it is perhaps useful to formalise some terminology.
+これまでにコマンド、オプション、引数を見てきましたが、
+用語を体系的に整理するのが役立つかもしれません。
 
-Consider the command below as a general example of a command,
-which we will dissect into its component parts:
+以下のコマンドを一般的な例として考え、
+その構成要素に分解してみます：
 
 ```bash
 $ ls -F /
 ```
 
-![](fig/shell_command_syntax.svg){alt='General syntax of a shell command'}
+![](fig/shell_command_syntax.svg){alt='シェルコマンドの一般的な構文'}
 
-`ls` is the **command**, with an **option** `-F` and an
-**argument** `/`.
-We've already encountered options  which
-either start with a single dash (`-`), known as **short options**,
-or two dashes (`--`), known as **long options**.
-[Options] change the behavior of a command and
-[Arguments] tell the command what to operate on (e.g. files and directories).
-Sometimes options and arguments are referred to as **parameters**.
-A command can be called with more than one option and more than one argument, but a
-command doesn't always require an argument or an option.
+`ls`は**コマンド**で、`-F`が**オプション**、
+`/`が**引数**です。
+これまでに、1つのダッシュ（`-`）で始まるもの（**短いオプション**）や、
+2つのダッシュ（`--`）で始まるもの（**長いオプション**）を見てきました。
+[オプション]はコマンドの動作を変更し、
+[引数]はコマンドが操作する対象（例：ファイルやディレクトリ）を指定します。
+オプションや引数は、**パラメータ**と呼ばれることもあります。
+コマンドは複数のオプションや引数を持つことができますが、
+常に必要というわけではありません。
 
-You might sometimes see options being referred to as **switches** or **flags**,
-especially for options that take no argument. In this lesson we will stick with
-using the term *option*.
+オプションは特に引数を取らない場合、**スイッチ**や**フラグ**と呼ばれることもあります。
+このレッスンでは用語として**オプション**を使用します。
 
-Each part is separated by spaces. If you omit the space
-between `ls` and `-F` the shell will look for a command called `ls-F`, which
-doesn't exist. Also, capitalization can be important.
-For example, `ls -s` will display the size of files and directories alongside the names,
-while `ls -S` will sort the files and directories by size, as shown below:
+各部分はスペースで区切られています。`ls`と`-F`の間のスペースを省略すると、
+シェルは`ls-F`というコマンドを探そうとしますが、これは存在しません。
+また、大文字と小文字も重要です。
+たとえば、`ls -s`はファイルやディレクトリの名前とともにサイズを表示しますが、
+`ls -S`はサイズ順に並べ替えます。以下に例を示します：
 
 ```bash
 $ cd ~/Desktop/shell-lesson-data
@@ -816,12 +751,14 @@ $ ls -s exercise-data
 
 ```output
 total 28
- 4 animal-counts   4 creatures  12 numbers.txt   4 alkanes   4 writing
+ 4 animal-counts   4 creatures  12 numbers.txt
+
+   4 alkanes   4 writing
 ```
 
-Note that the sizes returned by `ls -s` are in *blocks*.
-As these are defined differently for different operating systems,
-you may not obtain the same figures as in the example.
+なお、`ls -s`で返されるサイズは**ブロック**単位です。
+これはオペレーティングシステムによって定義が異なるため、
+例と同じ数値が得られない場合があります。
 
 ```bash
 $ ls -S exercise-data
@@ -831,9 +768,9 @@ $ ls -S exercise-data
 animal-counts  creatures  alkanes  writing  numbers.txt
 ```
 
-Putting all that together, our command `ls -F /` above gives us a listing
-of files and directories in the root directory `/`.
-An example of the output you might get from the above command is given below:
+これらをすべてまとめると、先ほどの`ls -F /`コマンドは、
+ルートディレクトリ`/`内のファイルとディレクトリをリストします。
+このコマンドから得られる出力例を以下に示します：
 
 ```bash
 $ ls -F /
@@ -845,69 +782,68 @@ Library/              Users/
 Network/              Volumes/
 ```
 
-### Nelle's Pipeline: Organizing Files
+### Nelleのパイプライン：ファイルの整理
 
-Knowing this much about files and directories,
-Nelle is ready to organize the files that the protein assay machine will create.
+ファイルやディレクトリについてこれだけの知識を持ったNelleは、
+タンパク質アッセイマシンが作成するファイルを整理する準備ができました。
 
-She creates a directory called `north-pacific-gyre`
-(to remind herself where the data came from),
-which will contain the data files from the assay machine
-and her data processing scripts.
+彼女は`north-pacific-gyre`というディレクトリを作成します
+（データの出所を思い出せるようにするためです）。
+このディレクトリには、アッセイマシンのデータファイルと
+データ処理スクリプトが含まれます。
 
-Each of her physical samples is labelled according to her lab's convention
-with a unique ten-character ID,
-such as 'NENE01729A'.
-This ID is what she used in her collection log
-to record the location, time, depth, and other characteristics of the sample,
-so she decides to use it within the filename of each data file.
-Since the output of the assay machine is plain text,
-she will call her files `NENE01729A.txt`, `NENE01812A.txt`, and so on.
-All 1520 files will go into the same directory.
+彼女の物理サンプルは、それぞれ彼女の研究室の慣例に従って
+「NENE01729A」のようなユニークな10文字のIDでラベル付けされています。
+このIDは、サンプルの場所、時間、深さ、およびその他の特性を記録するために
+収集ログに使用されたものであり、
+彼女はこれを各データファイルのファイル名に使用することにしました。
+アッセイマシンの出力がプレーンテキストであるため、
+ファイル名は`NENE01729A.txt`、`NENE01812A.txt`のようになります。
+すべての1520個のファイルは同じディレクトリに保存されます。
 
-Now in her current directory `shell-lesson-data`,
-Nelle can see what files she has using the command:
+現在のディレクトリ`shell-lesson-data`で、
+Nelleは次のコマンドを使用してどのファイルがあるかを確認できます：
 
 ```bash
 $ ls north-pacific-gyre/
 ```
 
-This command is a lot to type,
-but she can let the shell do most of the work through what is called **tab completion**.
-If she types:
+このコマンドは入力するのに少し長いですが、
+シェルで「**タブ補完**」と呼ばれる機能を使用することで、
+ほとんどの作業をシェルに任せることができます。
+次のように入力してみてください：
 
 ```bash
 $ ls nor
 ```
 
-and then presses <kbd>Tab</kbd> (the tab key on her keyboard),
-the shell automatically completes the directory name for her:
+そして<kbd>Tab</kbd>（キーボードのタブキー）を押すと、
+シェルはディレクトリ名を自動的に補完します：
 
 ```bash
 $ ls north-pacific-gyre/
 ```
 
-Pressing <kbd>Tab</kbd> again does nothing,
-since there are multiple possibilities;
-pressing <kbd>Tab</kbd> twice brings up a list of all the files.
+<kbd>Tab</kbd>をもう一度押すと何も起こりません。
+候補が複数ある場合は、<kbd>Tab</kbd>を2回押すとすべてのファイルがリストされます。
 
-If Nelle then presses <kbd>G</kbd> and then presses <kbd>Tab</kbd> again,
-the shell will append 'goo' since all files that start with 'g' share
-the first three characters 'goo'.
+次にNelleが<kbd>G</kbd>を押してから<kbd>Tab</kbd>を再度押すと、
+シェルは「goo」を追加します。これは「g」で始まるすべてのファイルが
+「goo」という最初の3文字を共有しているためです。
 
 ```bash
 $ ls north-pacific-gyre/goo
 ```
 
-To see all of those files, she can press <kbd>Tab</kbd> twice more.
+これらのファイルすべてを確認するには、さらに<kbd>Tab</kbd>を2回押します。
 
 ```bash
 ls north-pacific-gyre/goo
 goodiff.sh   goostats.sh
 ```
 
-This is called **tab completion**,
-and we will see it in many other tools as we go on.
+これは「**タブ補完**」と呼ばれるもので、
+以降のツールでもたびたび目にすることになるでしょう。
 
 
 
@@ -916,18 +852,18 @@ and we will see it in many other tools as we go on.
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- The file system is responsible for managing information on the disk.
-- Information is stored in files, which are stored in directories (folders).
-- Directories can also store other directories, which then form a directory tree.
-- `pwd` prints the user's current working directory.
-- `ls [path]` prints a listing of a specific file or directory; `ls` on its own lists the current working directory.
-- `cd [path]` changes the current working directory.
-- Most commands take options that begin with a single `-`.
-- Directory names in a path are separated with `/` on Unix, but `\` on Windows.
-- `/` on its own is the root directory of the whole file system.
-- An absolute path specifies a location from the root of the file system.
-- A relative path specifies a location starting from the current location.
-- `.` on its own means 'the current directory'; `..` means 'the directory above the current one'.
+- ファイルシステムはディスク上の情報を管理する役割を果たします。
+- 情報はファイルに保存され、ファイルはディレクトリ（フォルダ）に保存されます。
+- ディレクトリは他のディレクトリを保存することもでき、それによってディレクトリツリーを形成します。
+- `pwd`はユーザーの現在の作業ディレクトリを表示します。
+- `ls [path]`は特定のファイルやディレクトリのリストを表示します；`ls`だけを実行すると現在の作業ディレクトリをリストします。
+- `cd [path]`は現在の作業ディレクトリを変更します。
+- 多くのコマンドは単一の`-`で始まるオプションを取ります。
+- パス内のディレクトリ名はUnixでは`/`で区切られますが、Windowsでは`\`で区切られます。
+- `/`単独では、ファイルシステム全体のルートディレクトリを意味します。
+- 絶対パスは、ファイルシステムのルートからの位置を指定します。
+- 相対パスは、現在の場所から始まる位置を指定します。
+- `.`は現在のディレクトリを、`..`は現在のディレクトリの1つ上のディレクトリを意味します。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

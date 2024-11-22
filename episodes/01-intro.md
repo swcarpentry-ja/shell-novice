@@ -1,112 +1,97 @@
 ---
-title: Introducing the Shell
+title: シェルの紹介
 teaching: 5
 exercises: 0
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how the shell relates to the keyboard, the screen, the operating system, and users' programs.
-- Explain when and why command-line interfaces should be used instead of graphical interfaces.
+- シェルがキーボード、画面、オペレーティングシステム、ユーザーのプログラムにどのように関連しているかを説明する。
+- グラフィカルインターフェースではなくコマンドラインインターフェースを使用すべき状況とその理由を説明する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- What is a command shell and why would I use one?
+- コマンドシェルとは何で、なぜそれを使うべきなのか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Background
+### 背景
 
-Humans and computers commonly interact in many different ways, such as through a keyboard and mouse,
-touch screen interfaces, or using speech recognition systems.
-The most widely used way to interact with personal computers is called a
-**graphical user interface** (GUI).
-With a GUI, we give instructions by clicking a mouse and using menu-driven interactions.
+人間とコンピュータは、キーボードとマウス、タッチスクリーンインターフェース、または音声認識システムなど、さまざまな方法でやり取りします。
+個人用コンピュータとやり取りする最も一般的な方法は、**グラフィカルユーザーインターフェース**（GUI）と呼ばれています。
+GUIでは、マウスをクリックしてメニュー操作を行うことで指示を出します。
 
-While the visual aid of a GUI makes it intuitive to learn,
-this way of delivering instructions to a computer scales very poorly.
-Imagine the following task:
-for a literature search, you have to copy the third line of one thousand text files in one thousand
-different directories and paste it into a single file.
-Using a GUI, you would not only be clicking at your desk for several hours,
-but you could potentially also commit an error in the process of completing this repetitive task.
-This is where we take advantage of the Unix shell.
-The Unix shell is both a **command-line interface** (CLI) and a scripting language,
-allowing such repetitive tasks to be done automatically and fast.
-With the proper commands, the shell can repeat tasks with or without some modification
-as many times as we want.
-Using the shell, the task in the literature example can be accomplished in seconds.
+GUIの視覚的な助けは学習を直感的にしますが、この方法では指示を拡張するのが非常に困難です。
+次のようなタスクを想像してください：
+文献検索のために、1000個の異なるディレクトリ内の1000個のテキストファイルの3行目をコピーして、1つのファイルに貼り付ける必要がある場合です。
+GUIを使用すると、何時間もクリックを続けるだけでなく、反復作業の過程でエラーを犯す可能性もあります。
+ここで役立つのがUnixシェルです。
+Unixシェルは、**コマンドラインインターフェース**（CLI）であると同時にスクリプト言語でもあり、こうした反復作業を自動かつ迅速に行うことができます。
+適切なコマンドを使用すれば、シェルは必要に応じてタスクを何度でも繰り返すことが可能です。
+シェルを使用すれば、この文献検索の例のタスクは数秒で完了します。
 
-### The Shell
+### シェル
 
-The shell is a program where users can type commands.
-With the shell, it's possible to invoke complicated programs like climate modeling software
-or simple commands that create an empty directory with only one line of code.
-The most popular Unix shell is Bash (the Bourne Again SHell ---
-so-called because it's derived from a shell written by Stephen Bourne).
-Bash is the default shell on most modern implementations of Unix and in most packages that provide
-Unix-like tools for Windows.
-Note that 'Git Bash' is a piece of software that enables Windows users to use a Bash like interface
-when interacting with Git.
+シェルは、ユーザーがコマンドを入力できるプログラムです。
+シェルを使うことで、気候モデリングソフトウェアのような複雑なプログラムを呼び出したり、
+1行のコードで空のディレクトリを作成する簡単なコマンドを実行することができます。
+最も一般的なUnixシェルはBash（Bourne Again Shellの略で、Stephen Bourneによって作成されたシェルに由来します）です。
+Bashは、ほとんどの最新のUnix実装やWindows用のUnixライクツールパッケージのデフォルトシェルです。
+「Git Bash」は、WindowsユーザーがGitと対話する際にBashライクなインターフェースを使用できるようにするソフトウェアです。
 
-Using the shell will take some effort and some time to learn.
-While a GUI presents you with choices to select, CLI choices are not automatically presented to you,
-so you must learn a few commands like new vocabulary in a language you're studying.
-However, unlike a spoken language, a small number of "words" (i.e. commands) gets you a long way,
-and we'll cover those essential few today.
+シェルの使用は、ある程度の努力と学習時間が必要です。
+GUIが選択肢を提示するのに対し、CLIでは選択肢が自動的に提示されることはありません。
+そのため、新しい言語を学ぶ際の語彙のように、いくつかのコマンドを覚える必要があります。
+しかし、話し言葉とは異なり、少数の「単語」（つまりコマンド）を覚えるだけで非常に多くのことができるようになります。
+今日、その基本的なコマンドについて学びます。
 
-The grammar of a shell allows you to combine existing tools into powerful
-pipelines and handle large volumes of data automatically. Sequences of
-commands can be written into a *script*, improving the reproducibility of
-workflows.
+シェルの文法を使用すれば、既存のツールを組み合わせて強力なパイプラインを作成したり、大量のデータを自動的に処理したりすることができます。
+コマンドのシーケンスを*スクリプト*に書き込むことで、ワークフローの再現性を向上させることができます。
 
-In addition, the command line is often the easiest way to interact with remote machines
-and supercomputers.
-Familiarity with the shell is near essential to run a variety of specialized tools and resources
-including high-performance computing systems.
-As clusters and cloud computing systems become more popular for scientific data crunching,
-being able to interact with the shell is becoming a necessary skill.
-We can build on the command-line skills covered here
-to tackle a wide range of scientific questions and computational challenges.
+さらに、コマンドラインはリモートマシンやスーパーコンピュータと対話する最も簡単な方法であることがよくあります。
+シェルの習熟は、高性能コンピューティングシステムを含むさまざまな専門ツールやリソースを操作するためにほぼ必須です。
+クラスタやクラウドコンピューティングシステムが科学データ処理でますます普及する中、
+シェルを操作するスキルはますます必要とされています。
+ここで学ぶコマンドラインスキルを基に、さまざまな科学的課題や計算上の課題に取り組むことができます。
 
-Let's get started.
+さあ、始めましょう。
 
-When the shell is first opened, you are presented with a **prompt**,
-indicating that the shell is waiting for input.
+シェルを最初に開いたとき、**プロンプト**が表示されます。
+これは、シェルが入力を待機していることを示します。
 
 ```bash
 $
 ```
 
-The shell typically uses `$ ` as the prompt, but may use a different symbol.
-In the examples for this lesson, we'll show the prompt as `$ `.
-Most importantly, *do not type the prompt* when typing commands.
-Only type the command that follows the prompt.
-This rule applies both in these lessons and in lessons from other sources.
-Also note that after you type a command, you have to press the <kbd>Enter</kbd> key to execute it.
+シェルは通常、プロンプトとして`$ `を使用しますが、異なる記号を使用することもあります。
+このレッスンの例では、プロンプトを`$ `として表示します。
+最も重要なことは、*プロンプトを入力しないこと*です。
+コマンドはプロンプトの後に続く部分のみを入力してください。
+このルールは、このレッスンだけでなく、他のリソースのレッスンにも適用されます。
+また、コマンドを入力した後は、<kbd>Enter</kbd>キーを押して実行する必要があります。
 
-The prompt is followed by a **text cursor**, a character that indicates the position where your
-typing will appear.
-The cursor is usually a flashing or solid block, but it can also be an underscore or a pipe.
-You may have seen it in a text editor program, for example.
+プロンプトの後には、**テキストカーソル**が表示されます。
+これは、入力した文字が表示される位置を示すものです。
+カーソルは通常、点滅するまたは固定されたブロックですが、アンダースコアやパイプであることもあります。
+例えば、テキストエディタプログラムで見たことがあるかもしれません。
 
-Note that your prompt might look a little different. In particular, most popular shell
-environments by default put your user name and the host name before the `$`. Such
-a prompt might look like, e.g.:
+プロンプトは少し異なる場合があります。
+特に、ほとんどの一般的なシェル環境では、デフォルトでユーザー名とホスト名が`$ `の前に表示されます。
+例えば、次のようになります：
 
 ```bash
 nelle@localhost $
 ```
 
-The prompt might even include more than this. Do not worry if your prompt is not
-just a short `$ `. This lesson does not depend on this additional information and it
-should also not get in your way. The only important item to focus on is the `$ `
-character itself and we will see later why.
+プロンプトにこれ以上の情報が含まれることもあります。
+プロンプトが短い`$ `でなくても気にしないでください。
+このレッスンは、この追加情報に依存しませんし、作業の妨げにもなりません。
+注目すべき唯一の重要な項目は`$ `文字自体であり、その理由については後ほど説明します。
 
-So let's try our first command, `ls`, which is short for listing.
-This command will list the contents of the current directory:
+では、最初のコマンド`ls`を試してみましょう。
+これは、現在のディレクトリの内容をリスト表示するコマンドです：
 
 ```bash
 $ ls
@@ -119,10 +104,10 @@ Documents   Library     Music       Public
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Command not found
+## コマンドが見つからない
 
-If the shell can't find a program whose name is the command you typed, it
-will print an error message such as:
+シェルが、入力したコマンド名に対応するプログラムを見つけられない場合、
+次のようなエラーメッセージが表示されます：
 
 ```bash
 $ ks
@@ -132,61 +117,54 @@ $ ks
 ks: command not found
 ```
 
-This might happen if the command was mis-typed or if the program corresponding to that command
-is not installed.
-
+これは、コマンドを入力ミスした場合や、そのコマンドに対応するプログラムがインストールされていない場合に発生することがあります。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Nelle's Pipeline: A Typical Problem
+## ネルのパイプライン：典型的な問題
 
-Nelle Nemo, a marine biologist,
-has just returned from a six-month survey of the
-[North Pacific Gyre](https://en.wikipedia.org/wiki/North_Pacific_Gyre),
-where she has been sampling gelatinous marine life in the
-[Great Pacific Garbage Patch](https://en.wikipedia.org/wiki/Great_Pacific_Garbage_Patch).
-She has 1520 samples that she's run through an assay machine to measure the relative abundance
-of 300 proteins.
-She needs to run these 1520 files through an imaginary program called `goostats.sh`.
-In addition to this huge task, she has to write up results by the end of the month, so her paper
-can appear in a special issue of *Aquatic Goo Letters*.
+ネル・ネモは海洋生物学者で、
+[北太平洋環流](https://en.wikipedia.org/wiki/North_Pacific_Gyre)を
+6か月間調査して帰ってきたばかりです。
+彼女は[大太平洋ゴミベルト](https://en.wikipedia.org/wiki/Great_Pacific_Garbage_Patch)で
+ゼラチン質の海洋生物を採取していました。
+彼女は1520のサンプルを、300種類のタンパク質の相対量を測定するアッセイ装置にかけました。
+彼女はこれら1520のファイルを、`goostats.sh`という架空のプログラムで処理する必要があります。
+さらに、この大作業に加えて、今月中に結果をまとめて、*Aquatic Goo Letters*の特集号に論文を掲載するための準備をする必要があります。
 
-If Nelle chooses to run `goostats.sh` by hand using a GUI,
-she'll have to select and open a file 1520 times.
-If `goostats.sh` takes 30 seconds to run each file, the whole process will take more than 12 hours
-of Nelle's attention.
-With the shell, Nelle can instead assign her computer this mundane task while she focuses
-her attention on writing her paper.
+ネルがGUIを使って手作業で`goostats.sh`を実行すると、
+1520回ファイルを選択して開かなければなりません。
+`goostats.sh`が各ファイルを処理するのに30秒かかる場合、
+この作業にはネルの
 
-The next few lessons will explore the ways Nelle can achieve this.
-More specifically,
-the lessons explain how she can use a command shell to run the `goostats.sh` program,
-using loops to automate the repetitive steps of entering file names,
-so that her computer can work while she writes her paper.
+注意を12時間以上必要とします。
+シェルを使用すれば、ネルはこの単調な作業をコンピュータに任せ、自分は論文作成に集中することができます。
 
-As a bonus,
-once she has put a processing pipeline together,
-she will be able to use it again whenever she collects more data.
+次のいくつかのレッスンでは、ネルがこれを達成する方法を探ります。
+具体的には、コマンドシェルを使用して`goostats.sh`プログラムを実行し、
+ファイル名の入力を繰り返すステップを自動化するためにループを使用する方法を説明します。
+これにより、彼女が論文を書いている間、コンピュータが作業を行うことができます。
 
-In order to achieve her task, Nelle needs to know how to:
+さらに、処理パイプラインを一度構築すれば、
+データをさらに収集するたびに再利用することが可能になります。
 
-- navigate to a file/directory
-- create a file/directory
-- check the length of a file
-- chain commands together
-- retrieve a set of files
-- iterate over files
-- run a shell script containing her pipeline
+彼女のタスクを達成するために、ネルは次のことを知る必要があります：
 
-
+- ファイル/ディレクトリに移動する
+- ファイル/ディレクトリを作成する
+- ファイルの長さを確認する
+- コマンドを連鎖させる
+- ファイルのセットを取得する
+- ファイルを繰り返し処理する
+- パイプラインを含むシェルスクリプトを実行する
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- A shell is a program whose primary purpose is to read commands and run other programs.
-- This lesson uses Bash, the default shell in many implementations of Unix.
-- Programs can be run in Bash by entering commands at the command-line prompt.
-- The shell's main advantages are its high action-to-keystroke ratio, its support for automating repetitive tasks, and its capacity to access networked machines.
-- A significant challenge when using the shell can be knowing what commands need to be run and how to run them.
+- シェルは、主にコマンドを読み取り、他のプログラムを実行することを目的としたプログラムです。
+- このレッスンでは、Unixの多くの実装でデフォルトシェルであるBashを使用します。
+- Bashでは、コマンドラインプロンプトでコマンドを入力することでプログラムを実行できます。
+- シェルの主な利点は、キー操作に対する高いアクション効率、反復作業の自動化のサポート、ネットワーク化されたマシンへのアクセス機能です。
+- シェルを使用する際の大きな課題は、実行する必要があるコマンドとその実行方法を知ることです。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -1,64 +1,58 @@
 ---
-title: Loops
+title: ループ
 teaching: 40
 exercises: 10
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Write a loop that applies one or more commands separately to each file in a set of files.
-- Trace the values taken on by a loop variable during execution of the loop.
-- Explain the difference between a variable's name and its value.
-- Explain why spaces and some punctuation characters shouldn't be used in file names.
-- Demonstrate how to see what commands have recently been executed.
-- Re-run recently executed commands without retyping them.
+- 複数のファイルセットに対して、1つまたは複数のコマンドを個別に適用するループを書く。
+- ループ変数がループの実行中に取る値を追跡する。
+- 変数名とその値の違いを説明する。
+- ファイル名にスペースや一部の句読点文字を使用してはいけない理由を説明する。
+- 最近実行したコマンドを確認する方法を示す。
+- 再入力せずに最近実行したコマンドを再実行する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I perform the same actions on many different files?
+- 多くの異なるファイルに対して同じ操作を行うにはどうすればよいですか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-**Loops** are a programming construct which allow us to repeat a command or set of commands
-for each item in a list.
-As such they are key to productivity improvements through automation.
-Similar to wildcards and tab completion, using loops also reduces the
-amount of typing required (and hence reduces the number of typing mistakes).
+**ループ**は、リスト内の各項目に対してコマンドやコマンドのセットを繰り返すことを可能にするプログラミング構造です。
+そのため、自動化を通じた生産性向上の鍵となります。
+ワイルドカードやタブ補完と同様に、ループを使用することで必要な入力量が減少し（その結果、タイプミスの数も減少します）、効率が向上します。
 
-Suppose we have several hundred genome data files named `basilisk.dat`, `minotaur.dat`, and
-`unicorn.dat`.
-For this example, we'll use the `exercise-data/creatures` directory which only has three
-example files,
-but the principles can be applied to many many more files at once.
+例えば、数百のゲノムデータファイルが`basilisk.dat`、`minotaur.dat`、`unicorn.dat`という名前で保存されているとします。
+この例では、`exercise-data/creatures`ディレクトリを使用しますが、ここには3つの例ファイルしかありません。
+ただし、この原則は多数のファイルに適用できます。
 
-The structure of these files is the same: the common name, classification, and updated date are
-presented on the first three lines, with DNA sequences on the following lines.
-Let's look at the files:
+これらのファイルの構造は同じです：共通名、分類、更新日が最初の3行に記載され、
+その後にDNA配列が続きます。
+ファイルの内容を確認してみましょう：
 
 ```bash
 $ head -n 5 basilisk.dat minotaur.dat unicorn.dat
 ```
 
-We would like to print out the classification for each species, which is given on the second
-line of each file.
-For each file, we would need to execute the command `head -n 2` and pipe this to `tail -n 1`.
-We'll use a loop to solve this problem, but first let's look at the general form of a loop,
-using the pseudo-code below:
+各種の分類を出力したい場合、それは各ファイルの2行目に記載されています。
+各ファイルに対して`head -n 2`を実行し、これを`tail -n 1`にパイプで渡す必要があります。
+この問題を解決するためにループを使用しますが、まずループの一般的な形式を擬似コードで見てみましょう：
 
 ```bash
-# The word "for" indicates the start of a "For-loop" command
+# "for"という単語は「Forループ」コマンドの開始を示します
 for thing in list_of_things 
-#The word "do" indicates the start of job execution list
+# "do"という単語は実行すべきジョブリストの開始を示します
 do 
-    # Indentation within the loop is not required, but aids legibility
+    # ループ内のインデントは必須ではありませんが、可読性を高めます
     operation_using/command $thing 
-# The word "done" indicates the end of a loop
+# "done"という単語はループの終了を示します
 done  
 ```
 
-and we can apply this to our example like this:
+この形式を例に適用すると次のようになります：
 
 ```bash
 $ for filename in basilisk.dat minotaur.dat unicorn.dat
@@ -79,72 +73,58 @@ CLASSIFICATION: equus monoceros
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Follow the Prompt
+## プロンプトを確認しよう
 
-The shell prompt changes from `$` to `>` and back again as we were
-typing in our loop. The second prompt, `>`, is different to remind
-us that we haven't finished typing a complete command yet. A semicolon, `;`,
-can be used to separate two commands written on a single line.
-
+ループを入力中、シェルプロンプトが`$`から`>`に変わり、再び`$`に戻ることに気づいたかもしれません。
+2つ目のプロンプト`>`は、まだ完全なコマンドを入力していないことを思い出させるために異なっています。
+セミコロン`;`を使用すれば、1行に複数のコマンドを記述することができます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-When the shell sees the keyword `for`,
-it knows to repeat a command (or group of commands) once for each item in a list.
-Each time the loop runs (called an iteration), an item in the list is assigned in sequence to
-the **variable**, and the commands inside the loop are executed, before moving on to
-the next item in the list.
-Inside the loop,
-we call for the variable's value by putting `$` in front of it.
-The `$` tells the shell interpreter to treat
-the variable as a variable name and substitute its value in its place,
-rather than treat it as text or an external command.
+シェルは`for`というキーワードを見ると、リスト内の各項目に対して1回ずつコマンド（またはコマンドグループ）を繰り返すことを認識します。
+ループが実行されるたびに（これを「反復」と呼びます）、リスト内の1つの項目が順番に**変数**に割り当てられ、
+ループ内のコマンドが実行され、リストの次の項目に進みます。
+ループ内では、変数の値を取得するためにその名前の前に`$`を付けます。
+`$`はシェルインタープリタに対して、
+その変数を名前として扱い、その値を代入するよう指示します。
 
-In this example, the list is three filenames: `basilisk.dat`, `minotaur.dat`, and `unicorn.dat`.
-Each time the loop iterates, we first use `echo` to print the value that the variable
-`$filename` currently holds. This is not necessary for the result, but beneficial for us here to
-have an easier time to follow along.
-Next, we will run the `head` command on the file currently referred to by `$filename`.
-The first time through the loop, `$filename` is `basilisk.dat`.
-The interpreter runs the command `head` on `basilisk.dat`
-and pipes the first two lines to the `tail` command,
-which then prints the second line of `basilisk.dat`.
-For the second iteration, `$filename` becomes
-`minotaur.dat`. This time, the shell runs `head` on `minotaur.dat`
-and pipes the first two lines to the `tail` command,
-which then prints the second line of `minotaur.dat`.
-For the third iteration, `$filename` becomes
-`unicorn.dat`, so the shell runs the `head` command on that file,
-and `tail` on the output of that.
-Since the list was only three items, the shell exits the `for` loop.
+この例では、リストは3つのファイル名`basilisk.dat`、`minotaur.dat`、`unicorn.dat`です。
+ループが反復されるたびに、まず`echo`を使用して現在の`$filename`変数の値を出力します。
+これは結果には必要ありませんが、操作の流れを追いやすくするために役立ちます。
+次に、現在の`$filename`によって参照されるファイルに対して`head`コマンドを実行します。
+ループの最初の実行時、`$filename`は`basilisk.dat`です。
+インタープリタはこのファイルに対して`head`を実行し、
+最初の2行を`tail`コマンドにパイプで渡します。
+その結果、`basilisk.dat`の2行目が出力されます。
+2回目の実行時、`$filename`は`minotaur.dat`になります。
+今回は`head`が`minotaur.dat`に対して実行され、同様の操作が行われます。
+3回目の実行時、`$filename`は`unicorn.dat`になり、
+`head`がそのファイルに対して実行されます。
+リストが3項目だけなので、シェルは`for`ループを終了します。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Same Symbols, Different Meanings
+## 同じ記号、異なる意味
 
-Here we see `>` being used as a shell prompt, whereas `>` is also
-used to redirect output.
-Similarly, `$` is used as a shell prompt, but, as we saw earlier,
-it is also used to ask the shell to get the value of a variable.
+ここでは、`>`がシェルプロンプトとして使用されていますが、
+`>`は出力をリダイレクトする際にも使用されます。
+同様に、`$`はシェルプロンプトとして表示されますが、変数の値を取得する際にも使用されます。
 
-If the *shell* prints `>` or `$` then it expects you to type something,
-and the symbol is a prompt.
+*シェル*が`>`または`$`を表示している場合、それは入力を待っているプロンプトです。
 
-If *you* type `>` or `$` yourself, it is an instruction from you that
-the shell should redirect output or get the value of a variable.
-
+*自分*で`>`または`$`を入力する場合、それは出力をリダイレクトしたり、
+変数の値を取得するための命令です。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-When using variables it is also
-possible to put the names into curly braces to clearly delimit the variable
-name: `$filename` is equivalent to `${filename}`, but is different from
-`${file}name`. You may find this notation in other people's programs.
+変数を使用する際には、変数名を明確に区切るために名前を波括弧で囲むこともできます：
+`$filename`は`${filename}`と同等ですが、
+`${file}name`とは異なります。
+他人のプログラムでこの記法を見かけるかもしれません。
 
-We have called the variable in this loop `filename`
-in order to make its purpose clearer to human readers.
-The shell itself doesn't care what the variable is called;
-if we wrote this loop as:
+このループでは、変数を`filename`と名付けてその目的を人間の読者にとって分かりやすくしています。
+シェル自体は変数が何と呼ばれるかは気にしません。
+例えば、このループを以下のように書いても同じように動作します：
 
 ```bash
 $ for x in basilisk.dat minotaur.dat unicorn.dat
@@ -153,7 +133,7 @@ $ for x in basilisk.dat minotaur.dat unicorn.dat
 > done
 ```
 
-or:
+または：
 
 ```bash
 $ for temperature in basilisk.dat minotaur.dat unicorn.dat
@@ -162,28 +142,29 @@ $ for temperature in basilisk.dat minotaur.dat unicorn.dat
 > done
 ```
 
-it would work exactly the same way.
-*Don't do this.*
-Programs are only useful if people can understand them,
-so meaningless names (like `x`) or misleading names (like `temperature`)
-increase the odds that the program won't do what its readers think it does.
+ただし、これは*やめましょう*。
+プログラムは人間が理解できて初めて役に立ちます。
+意味のない名前（例えば`x`）や誤解を招く名前（例えば`temperature`）は、
+プログラムが読者の意図通りに動作しない可能性を高めます。
 
-In the above examples, the variables (`thing`, `filename`, `x` and `temperature`)
-could have been given any other name, as long as it is meaningful to both the person
-writing the code and the person reading it.
+上記の例では、変数（`thing`、`filename`、`x`、`temperature`）には、
+コードを書く人や読む人にとって意味が分かるものであれば、
+他の名前を使用しても問題ありません。
 
-Note also that loops can be used for other things than filenames, like a list of numbers
-or a subset of data.
+また、ループはファイル名だけでなく、
+例えば数字のリストやデータのサブセットなど、他の用途にも使用できます。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Write your own loop
+## 自分でループを書いてみよう
 
-How would you write a loop that echoes all 10 numbers from 0 to 9?
+0から9までの10個の数字をエコー出力するループを書くにはどうすればよいでしょうか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解
+
+答
 
 ```bash
 $ for loop_variable in 0 1 2 3 4 5 6 7 8 9
@@ -211,16 +192,16 @@ $ for loop_variable in 0 1 2 3 4 5 6 7 8 9
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Variables in Loops
+## ループ内での変数
 
-This exercise refers to the `shell-lesson-data/exercise-data/alkanes` directory.
-`ls *.pdb` gives the following output:
+この演習は、`shell-lesson-data/exercise-data/alkanes`ディレクトリを参照します。
+`ls *.pdb`を実行すると、次の出力が得られます：
 
 ```output
 cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
 ```
 
-What is the output of the following code?
+次のコードの出力はどうなりますか？
 
 ```bash
 $ for datafile in *.pdb
@@ -229,7 +210,7 @@ $ for datafile in *.pdb
 > done
 ```
 
-Now, what is the output of the following code?
+次に、以下のコードの出力はどうなりますか？
 
 ```bash
 $ for datafile in *.pdb
@@ -238,18 +219,17 @@ $ for datafile in *.pdb
 > done
 ```
 
-Why do these two loops give different outputs?
+なぜこれら2つのループは異なる出力を生成するのでしょうか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The first code block gives the same output on each iteration through
-the loop.
-Bash expands the wildcard `*.pdb` within the loop body (as well as
-before the loop starts) to match all files ending in `.pdb`
-and then lists them using `ls`.
-The expanded loop would look like this:
+最初のコードブロックでは、ループを通じて各反復で同じ出力が得られます。
+Bashはループ本体内でワイルドカード`*.pdb`を展開します
+（ループが開始する前にも展開されます）、
+そしてそれを`ls`でリストします。
+展開されたループは以下のようになります：
 
 ```bash
 $ for datafile in cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
@@ -267,9 +247,9 @@ cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
 cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
 ```
 
-The second code block lists a different file on each loop iteration.
-The value of the `datafile` variable is evaluated using `$datafile`,
-and then listed using `ls`.
+2つ目のコードブロックでは、各ループの反復で異なるファイルがリストされます。
+変数`datafile`の値が`$datafile`を使用して評価され、
+その値が`ls`コマンドでリストされます。
 
 ```output
 cubane.pdb
@@ -286,10 +266,10 @@ propane.pdb
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Limiting Sets of Files
+## ファイルセットの制限
 
-What would be the output of running the following loop in the
-`shell-lesson-data/exercise-data/alkanes` directory?
+次のループを`shell-lesson-data/exercise-data/alkanes`ディレクトリで実行すると、
+出力はどうなりますか？
 
 ```bash
 $ for filename in c*
@@ -298,22 +278,20 @@ $ for filename in c*
 > done
 ```
 
-1. No files are listed.
-2. All files are listed.
-3. Only `cubane.pdb`, `octane.pdb` and `pentane.pdb` are listed.
-4. Only `cubane.pdb` is listed.
+1. ファイルは何もリストされない。
+2. すべてのファイルがリストされる。
+3. `cubane.pdb`、`octane.pdb`、`pentane.pdb`のみがリストされる。
+4. `cubane.pdb`のみがリストされる。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-4 is the correct answer. `*` matches zero or more characters, so any file name starting with
-the letter c, followed by zero or more other characters will be matched.
-
+4が正解です。`*`はゼロ個以上の文字に一致するため、文字`c`で始まり、その後にゼロ個以上の文字が続くファイル名が一致します。
 
 :::::::::::::::::::::::::
 
-How would the output differ from using this command instead?
+次のコマンドを使用した場合、出力はどのように変わりますか？
 
 ```bash
 $ for filename in *c*
@@ -322,20 +300,18 @@ $ for filename in *c*
 > done
 ```
 
-1. The same files would be listed.
-2. All the files are listed this time.
-3. No files are listed this time.
-4. The files `cubane.pdb` and `octane.pdb` will be listed.
-5. Only the file `octane.pdb` will be listed.
+1. 同じファイルがリストされる。
+2. 今回はすべてのファイルがリストされる。
+3. 今回はファイルが何もリストされない。
+4. ファイル`cubane.pdb`と`octane.pdb`がリストされる。
+5. ファイル`octane.pdb`のみがリストされる。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-4 is the correct answer. `*` matches zero or more characters, so a file name with zero or more
-characters before a letter c and zero or more characters after the letter c will be matched.
-
-
+4が正解です。`*`はゼロ個以上の文字に一致するため、文字`c`の前にゼロ個以上の文字があり、
+文字`c`の後にもゼロ個以上の文字があるファイル名が一致します。
 
 :::::::::::::::::::::::::
 
@@ -343,9 +319,9 @@ characters before a letter c and zero or more characters after the letter c will
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Saving to a File in a Loop - Part One
+## ループでファイルに保存する - パート1
 
-In the `shell-lesson-data/exercise-data/alkanes` directory, what is the effect of this loop?
+`shell-lesson-data/exercise-data/alkanes`ディレクトリ内で、このループの効果は何ですか？
 
 ```bash
 for alkanes in *.pdb
@@ -355,24 +331,21 @@ do
 done
 ```
 
-1. Prints `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb` and
-  `propane.pdb`, and the text from `propane.pdb` will be saved to a file called `alkanes.pdb`.
-2. Prints `cubane.pdb`, `ethane.pdb`, and `methane.pdb`, and the text from all three files
-  would be concatenated and saved to a file called `alkanes.pdb`.
-3. Prints `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, and `pentane.pdb`,
-  and the text from `propane.pdb` will be saved to a file called `alkanes.pdb`.
-4. None of the above.
+1. `cubane.pdb`、`ethane.pdb`、`methane.pdb`、`octane.pdb`、`pentane.pdb`、
+  `propane.pdb`が出力され、`propane.pdb`のテキストが`alkanes.pdb`というファイルに保存される。
+2. `cubane.pdb`、`ethane.pdb`、`methane.pdb`が出力され、3つのファイルのテキストが結合されて
+  `alkanes.pdb`というファイルに保存される。
+3. `cubane.pdb`、`ethane.pdb`、`methane.pdb`、`octane.pdb`、`pentane.pdb`が出力され、
+  `propane.pdb`のテキストが`alkanes.pdb`というファイルに保存される。
+4. 上記のどれでもない。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. The text from each file in turn gets written to the `alkanes.pdb` file.
-  However, the file gets overwritten on each loop iteration, so the final content of
-  `alkanes.pdb`
-  is the text from the `propane.pdb` file.
-  
-  
+1. 各ファイルのテキストが順に`alkanes.pdb`に書き込まれます。
+  ただし、ループの各反復でファイルが上書きされるため、
+  最終的な`alkanes.pdb`の内容は`propane.pdb`のテキストになります。
 
 :::::::::::::::::::::::::
 
@@ -380,10 +353,10 @@ done
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Saving to a File in a Loop - Part Two
+## ループでファイルに保存する - パート2
 
-Also in the `shell-lesson-data/exercise-data/alkanes` directory,
-what would be the output of the following loop?
+同じく`shell-lesson-data/exercise-data/alkanes`ディレクトリ内で、
+以下のループの出力はどうなりますか？
 
 ```bash
 for datafile in *.pdb
@@ -392,30 +365,27 @@ do
 done
 ```
 
-1. All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, and
-  `pentane.pdb` would be concatenated and saved to a file called `all.pdb`.
-2. The text from `ethane.pdb` will be saved to a file called `all.pdb`.
-3. All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb`
-  and `propane.pdb` would be concatenated and saved to a file called `all.pdb`.
-4. All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb`
-  and `propane.pdb` would be printed to the screen and saved to a file called `all.pdb`.
+1. `cubane.pdb`、`ethane.pdb`、`methane.pdb`、`octane.pdb`、`pentane.pdb`のすべてのテキストが結合され、
+  `all.pdb`というファイルに保存される。
+2. `ethane.pdb`のテキストが`all.pdb`というファイルに保存される。
+3. `cubane.pdb`、`ethane.pdb`、`methane.pdb`、`octane.pdb`、`pentane.pdb`、
+  `propane.pdb`のすべてのテキストが結合され、`all.pdb`というファイルに保存される。
+4. `cubane.pdb`、`ethane.pdb`、`methane.pdb`、`octane.pdb`、`pentane.pdb`、
+  `propane.pdb`のすべてのテキストが画面に出力され、`all.pdb`というファイルにも保存される。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-3 is the correct answer. `>>` appends to a file, rather than overwriting it with the redirected
-output from a command.
-Given the output from the `cat` command has been redirected, nothing is printed to the screen.
-
-
+3が正解です。`>>`はファイルを上書きせずに追記するため、各ファイルのテキストが`all.pdb`に追加されます。
+`cat`コマンドの出力はリダイレクトされているため、画面には何も表示されません。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Let's continue with our example in the `shell-lesson-data/exercise-data/creatures` directory.
-Here's a slightly more complicated loop:
+次に、`shell-lesson-data/exercise-data/creatures`ディレクトリでの例を続けます。
+ここに少し複雑なループがあります：
 
 ```bash
 $ for filename in *.dat
@@ -425,26 +395,26 @@ $ for filename in *.dat
 > done
 ```
 
-The shell starts by expanding `*.dat` to create the list of files it will process.
-The **loop body**
-then executes two commands for each of those files.
-The first command, `echo`, prints its command-line arguments to standard output.
-For example:
+シェルは`*.dat`を展開して処理するファイルのリストを作成します。
+**ループ本体**は、これらのファイルごとに2つのコマンドを実行します。
+最初のコマンド`echo`はコマンドライン引数を標準出力に表示します。
+例えば：
 
 ```bash
 $ echo hello there
 ```
 
-prints:
+出力：
 
 ```output
 hello there
 ```
 
-In this case,
-since the shell expands `$filename` to be the name of a file,
-`echo $filename` prints the name of the file.
-Note that we can't write this as:
+この
+
+場合、シェルは`$filename`を現在のファイル名に展開するため、
+`echo $filename`はそのファイル名を出力します。
+以下のように書くことはできません：
 
 ```bash
 $ for filename in *.dat
@@ -454,30 +424,27 @@ $ for filename in *.dat
 > done
 ```
 
-because then the first time through the loop,
-when `$filename` expanded to `basilisk.dat`, the shell would try to run `basilisk.dat` as
-a program.
-Finally,
-the `head` and `tail` combination selects lines 81-100
-from whatever file is being processed
-(assuming the file has at least 100 lines).
+この場合、ループの最初の反復で`$filename`が`basilisk.dat`に展開されると、
+シェルは`basilisk.dat`をプログラムとして実行しようとするからです。
+最後に、`head`と`tail`の組み合わせは、
+処理対象のファイルから81行目から100行目を選択します
+（ファイルに少なくとも100行があると仮定します）。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Spaces in Names
+## 名前にスペースを含める
 
-Spaces are used to separate the elements of the list
-that we are going to loop over. If one of those elements
-contains a space character, we need to surround it with
-quotes, and do the same thing to our loop variable.
-Suppose our data files are named:
+スペースは、ループで繰り返すリスト要素を区切るために使用されます。
+もしこれらの要素の中にスペースが含まれている場合は、引用符で囲み、
+ループ変数も同様に引用符で囲む必要があります。
+データファイルが以下のように名前付けされているとします：
 
 ```source
 red dragon.dat
 purple unicorn.dat
 ```
 
-To loop over these files, we would need to add double quotes like so:
+これらのファイルをループで処理するには、次のようにダブルクォートを追加する必要があります：
 
 ```bash
 $ for filename in "red dragon.dat" "purple unicorn.dat"
@@ -486,20 +453,18 @@ $ for filename in "red dragon.dat" "purple unicorn.dat"
 > done
 ```
 
-It is simpler to avoid using spaces (or other special characters) in filenames.
+スペース（やその他の特殊文字）をファイル名に使用しない方が簡単です。
 
-The files above don't exist, so if we run the above code, the `head` command will be unable
-to find them; however, the error message returned will show the name of the files it is
-expecting:
+上記のファイルは存在しないため、コードを実行すると`head`コマンドがファイルを見つけられず、
+次のようなエラーメッセージが返されます。ただし、エラーには期待されるファイル名が表示されます：
 
 ```error
 head: cannot open ‘red dragon.dat' for reading: No such file or directory
 head: cannot open ‘purple unicorn.dat' for reading: No such file or directory
 ```
 
-Try removing the quotes around `$filename` in the loop above to see the effect of the quote
-marks on spaces. Note that we get a result from the loop command for unicorn.dat
-when we run this code in the `creatures` directory:
+上記のループで`$filename`から引用符を削除すると、スペースの影響がどのように出るか確認できます。
+`creatures`ディレクトリでこのコードを実行すると、`unicorn.dat`に関する結果が得られることに注意してください：
 
 ```output
 head: cannot open ‘red' for reading: No such file or directory
@@ -513,31 +478,33 @@ CAAGTGTTCC
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-We would like to modify each of the files in `shell-lesson-data/exercise-data/creatures`,
-but also save a version of the original files. We want to copy the original files to new
-files named `original-basilisk.dat` and `original-unicorn.dat`, for example. We can't use:
+`shell-lesson-data/exercise-data/creatures`ディレクトリの各ファイルを修正したいですが、
+オリジナルのファイルも保存したいと考えています。
+たとえば、オリジナルファイルを`original-basilisk.dat`や`original-unicorn.dat`のように
+名前を付けてコピーします。しかし次のコマンドは使えません：
 
 ```bash
 $ cp *.dat original-*.dat
 ```
 
-because that would expand to:
+なぜなら、これを展開すると次のようになるからです：
 
 ```bash
 $ cp basilisk.dat minotaur.dat unicorn.dat original-*.dat
 ```
 
-This wouldn't back up our files, instead we get an error:
+これではファイルがバックアップされず、エラーが発生します：
 
 ```error
 cp: target `original-*.dat' is not a directory
 ```
 
-This problem arises when `cp` receives more than two inputs. When this happens, it expects the
-last input to be a directory where it can copy all the files it was passed. Since there is
-no directory named `original-*.dat` in the `creatures` directory, we get an error.
+この問題は、`cp`が2つ以上の入力を受け取る場合に発生します。この場合、
+最後の入力をディレクトリと解釈してすべてのファイルをそこにコピーしようとします。
+`creatures`ディレクトリに`original-*.dat`というディレクトリが存在しないため、
+エラーが出ます。
 
-Instead, we can use a loop:
+その代わりに、ループを使用します：
 
 ```bash
 $ for filename in *.dat
@@ -546,53 +513,47 @@ $ for filename in *.dat
 > done
 ```
 
-This loop runs the `cp` command once for each filename.
-The first time,
-when `$filename` expands to `basilisk.dat`,
-the shell executes:
+このループは各ファイル名に対して`cp`コマンドを1回ずつ実行します。
+最初の反復では、`$filename`が`basilisk.dat`に展開され、次のコマンドが実行されます：
 
 ```bash
 cp basilisk.dat original-basilisk.dat
 ```
 
-The second time, the command is:
+2回目は次のコマンドになります：
 
 ```bash
 cp minotaur.dat original-minotaur.dat
 ```
 
-The third and last time, the command is:
+3回目、最後の反復では次のコマンドになります：
 
 ```bash
 cp unicorn.dat original-unicorn.dat
 ```
 
-Since the `cp` command does not normally produce any output, it's hard to check
-that the loop is working correctly. However, we learned earlier how to print strings
-using `echo`, and we can modify the loop to use `echo` to print our commands without
-actually executing them. As such we can check what commands *would be* run in the
-unmodified loop.
+通常、`cp`コマンドは何も出力を表示しないため、ループが正しく動作しているかどうかを確認するのは難しいです。
+ただし、以前学んだ`echo`を使用して文字列を出力する方法を使えば、
+実際にループ内で実行されるコマンドを確認できます。
+次の図は、修正されたループを実行した際の動作を示しており、
+`echo`を使ったデバッグ技術の重要性を説明しています。
 
-The following diagram
-shows what happens when the modified loop is executed and demonstrates how the
-judicious use of `echo` is a good debugging technique.
+![](fig/shell_script_for_loop_flow_chart.svg){alt='ループ "for filename in .dat; do echo cp $filename original-$filename;done" は、現在のディレクトリ内のすべての".dat"ファイルの名前を$filename変数に代入し、それぞれのファイルについてechoコマンドを実行します。"basilisk.dat"、"minotaur.dat"、"unicorn.dat" の場合、それぞれ "cp basilisk.dat original-basilisk.dat"、"cp minotaur.dat original-minotaur.dat"、"cp unicorn.dat original-unicorn.dat" と表示されます。'}
 
-![](fig/shell_script_for_loop_flow_chart.svg){alt='The for loop "for filename in .dat; do echo cp $filename original-$filename;done" will successively assign the names of all ".dat" files in your currentdirectory to the variable "$filename" and then execute the command. With thefiles "basilisk.dat", "minotaur.dat" and "unicorn.dat" in the current directorythe loop will successively call the echo command three times and print threelines: "cp basislisk.dat original-basilisk.dat", then "cp minotaur.datoriginal-minotaur.dat" and finally "cp unicorn.datoriginal-unicorn.dat"'}
+## Nelleのパイプライン：ファイルの処理
 
-## Nelle's Pipeline: Processing Files
+Nelleは`goostats.sh`というシェルスクリプトを使ってデータファイルを処理する準備ができました。
+このスクリプトは、タンパク質サンプルファイルから統計情報を計算し、
+2つの引数を受け取ります：
 
-Nelle is now ready to process her data files using `goostats.sh` ---
-a shell script written by her supervisor. This calculates some statistics from a
-protein sample file and takes two arguments:
+1. 入力ファイル（生データを含む）
+2. 出力ファイル（計算結果を保存する）
 
-1. an input file (containing the raw data)
-2. an output file (to store the calculated statistics)
-
-Since she's still learning how to use the shell,
-she decides to build up the required commands in stages.
-Her first step is to make sure that she can select the right input files --- remember,
-these are ones whose names end in 'A' or 'B', rather than 'Z'.
-Moving to the `north-pacific-gyre` directory, Nelle types:
+Nelleはシェルの使い方をまだ学んでいる最中なので、
+必要なコマンドを段階的に構築していきます。
+まず、適切な入力ファイルを選択できることを確認します。
+これらのファイル名は`A`または`B`で終わり、`Z`では終わらないことを覚えておいてください。
+`north-pacific-gyre`ディレクトリに移動し、次のコマンドを入力します：
 
 ```bash
 $ cd
@@ -613,10 +574,9 @@ NENE02040B.txt
 NENE02043B.txt
 ```
 
-Her next step is to decide
-what to call the files that the `goostats.sh` analysis program will create.
-Prefixing each input file's name with 'stats' seems simple,
-so she modifies her loop to do that:
+次に、`goostats.sh`解析プログラムが作成するファイルの名前を決定します。
+各入力ファイル名に`stats`をプレフィックスとして追加するのが簡単そうです。
+そこで、ループを次のように変更します：
 
 ```bash
 $ for datafile in NENE*A.txt NENE*B.txt
@@ -627,62 +587,57 @@ $ for datafile in NENE*A.txt NENE*B.txt
 
 ```output
 NENE01729A.txt stats-NENE01729A.txt
-NENE01736A.txt stats-NENE01729A.txt
-NENE01751A.txt stats-NENE01729A.txt
+NENE01736A.txt stats-NENE01736A.txt
+NENE01751A.txt stats-NENE01751A.txt
 ...
 NENE02040B.txt stats-NENE02040B.txt
 NENE02043B.txt stats-NENE02043B.txt
 ```
 
-She hasn't actually run `goostats.sh` yet,
-but now she's sure she can select the right files and generate the right output filenames.
+`goostats.sh`を実際にはまだ実行していませんが、
+これで正しいファイルを選択し、正しい出力ファイル名を生成できることを確認しました。
 
-Typing in commands over and over again is becoming tedious,
-though,
-and Nelle is worried about making mistakes,
-so instead of re-entering her loop,
-she presses <kbd>↑</kbd>.
-In response,
-the shell redisplays the whole loop on one line
-(using semi-colons to separate the pieces):
+同じコマンドを何度も入力するのが面倒になってきたNelleは、
+ミスを防ぐためにループを再入力する代わりに、
+<kbd>↑</kbd>を押します。
+すると、シェルはループ全体を1行に再表示します
+（セミコロンで各部分を区切ります）：
 
 ```bash
 $ for datafile in NENE*A.txt NENE*B.txt; do echo $datafile stats-$datafile; done
 ```
 
-Using the <kbd>←</kbd>,
-Nelle navigates to the `echo` command and changes it to `bash goostats.sh`:
+<kbd>←</kbd>を使用して`echo`コマンドに移動し、それを`bash goostats.sh`に変更します：
 
 ```bash
 $ for datafile in NENE*A.txt NENE*B.txt; do bash goostats.sh $datafile stats-$datafile; done
 ```
 
-When she presses <kbd>Enter</kbd>,
-the shell runs the modified command.
-However, nothing appears to happen --- there is no output.
-After a moment, Nelle realizes that since her script doesn't print anything to the screen
-any longer, she has no idea whether it is running, much less how quickly.
-She kills the running command by typing <kbd>Ctrl</kbd>\+<kbd>C</kbd>,
-uses <kbd>↑</kbd> to repeat the command,
-and edits it to read:
+<kbd>Enter</kbd>を押すと、シェルが修正されたコマンドを実行します。
+ただし、何も起こらないように見えます。
+これは、スクリプトが画面に何も表示しなくなったため、
+実行中かどうか、どれくらいの速さで進んでいるのかが分からないからです。
+Nelleは<kbd>Ctrl</kbd>\+<kbd>C</kbd>を入力してコマンドを中断し、
+<kbd>↑</kbd>を押してコマンドを再実行し、
+次のように
+
+修正します：
 
 ```bash
 $ for datafile in NENE*A.txt NENE*B.txt; do echo $datafile;
 bash goostats.sh $datafile stats-$datafile; done
 ```
 
+```markdown
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Beginning and End
+## 開始位置と終了位置の移動
 
-We can move to the beginning of a line in the shell by typing <kbd>Ctrl</kbd>\+<kbd>A</kbd>
-and to the end using <kbd>Ctrl</kbd>\+<kbd>E</kbd>.
-
+シェルで行の先頭に移動するには<kbd>Ctrl</kbd>\+<kbd>A</kbd>を、行の末尾に移動するには<kbd>Ctrl</kbd>\+<kbd>E</kbd>を使用します。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-When she runs her program now,
-it produces one line of output every five seconds or so:
+彼女がプログラムを実行すると、約5秒ごとに1行の出力が生成されるようになりました：
 
 ```output
 NENE01729A.txt
@@ -691,32 +646,29 @@ NENE01751A.txt
 ...
 ```
 
-1518 times 5 seconds,
-divided by 60,
-tells her that her script will take about two hours to run.
-As a final check,
-she opens another terminal window,
-goes into `north-pacific-gyre`,
-and uses `cat stats-NENE01729B.txt`
-to examine one of the output files.
-It looks good,
-so she decides to get some coffee and catch up on her reading.
+1518ファイル × 5秒 ÷ 60秒を計算すると、スクリプトの実行には約2時間かかることがわかります。  
+最終チェックとして、彼女は別のターミナルウィンドウを開き、`north-pacific-gyre`ディレクトリに移動し、次のコマンドを使用して出力ファイルの1つを確認します：
+
+```bash
+$ cat stats-NENE01729B.txt
+```
+
+内容が良好であることを確認したNelleは、コーヒーを飲みながら読書をすることにしました。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Those Who Know History Can Choose to Repeat It
+## 履歴を活用する
 
-Another way to repeat previous work is to use the `history` command to
-get a list of the last few hundred commands that have been executed, and
-then to use `!123` (where '123' is replaced by the command number) to
-repeat one of those commands. For example, if Nelle types this:
+以前の作業を繰り返すもう1つの方法は、`history`コマンドを使用して過去数百件の実行コマンドをリスト表示し、  
+その中から番号を指定して`!123`のように入力することです（ここで`123`はコマンド番号です）。  
+例えば、Nelleが次のように入力した場合：
 
 ```bash
 $ history | tail -n 5
 ```
 
 ```output
-456  for datafile in NENE*A.txt NENE*B.txt; do   echo $datafile stats-$datafile; done
+456  for datafile in NENE*A.txt NENE*B.txt; do echo $datafile stats-$datafile; done
 457  for datafile in NENE*A.txt NENE*B.txt; do echo $datafile stats-$datafile; done
 458  for datafile in NENE*A.txt NENE*B.txt; do bash goostats.sh $datafile stats-$datafile; done
 459  for datafile in NENE*A.txt NENE*B.txt; do echo $datafile; bash goostats.sh $datafile
@@ -724,57 +676,36 @@ stats-$datafile; done
 460  history | tail -n 5
 ```
 
-then she can re-run `goostats.sh` on the files simply by typing
-`!459`.
-
+彼女は`!459`と入力するだけで、ファイルに対して再度`goostats.sh`を実行できます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Other History Commands
+## その他の履歴ショートカット
 
-There are a number of other shortcut commands for getting at the history.
+履歴を操作するための他の便利なショートカットコマンドもあります。
 
-- <kbd>Ctrl</kbd>\+<kbd>R</kbd> enters a history search mode 'reverse-i-search' and finds the
-  most recent command in your history that matches the text you enter next.
-  Press <kbd>Ctrl</kbd>\+<kbd>R</kbd> one or more additional times to search for earlier matches.
-  You can then use the left and right arrow keys to choose that line and edit
-  it then hit <kbd>Return</kbd> to run the command.
-- `!!` retrieves the immediately preceding command
-  (you may or may not find this more convenient than using <kbd>↑</kbd>)
-- `!$` retrieves the last word of the last command.
-  That's useful more often than you might expect: after
-  `bash goostats.sh NENE01729B.txt stats-NENE01729B.txt`, you can type
-  `less !$` to look at the file `stats-NENE01729B.txt`, which is
-  quicker than doing <kbd>↑</kbd> and editing the command-line.
+- <kbd>Ctrl</kbd>\+<kbd>R</kbd>: 履歴検索モード「reverse-i-search」に入り、次に入力する文字列と一致する最新のコマンドを検索します。
+  <kbd>Ctrl</kbd>\+<kbd>R</kbd>をさらに押すことで、以前の一致項目を順に検索できます。その後、矢印キーで選択して編集し、<kbd>Return</kbd>を押してコマンドを実行できます。
+- `!!`: 直前のコマンドを取得して再実行します（<kbd>↑</kbd>キーを使用するより便利と感じる場合があります）。
+- `!$`: 直前のコマンドの最後の単語を取得します。
+  これは意外と便利です。例えば、`bash goostats.sh NENE01729B.txt stats-NENE01729B.txt`の後に`less !$`と入力すれば、`stats-NENE01729B.txt`ファイルをすばやく確認できます。
   
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Doing a Dry Run
+## ドライラン（Dry Run）を行う
 
-A loop is a way to do many things at once --- or to make many mistakes at
-once if it does the wrong thing. One way to check what a loop *would* do
-is to `echo` the commands it would run instead of actually running them.
+ループは、一度に多くの操作を行う手段ですが、誤っている場合は多くのミスを一度に引き起こします。  
+ループが実行するコマンドを実際に実行せずにプレビューする方法は、コマンドを`echo`することです。
 
-Suppose we want to preview the commands the following loop will execute
-without actually running those commands:
+以下のループが実行するコマンドをプレビューしたい場合、次の2つのバージョンのどちらを使用するべきでしょうか？
 
 ```bash
-$ for datafile in *.pdb
-> do
->     cat $datafile >> all.pdb
-> done
-```
-
-What is the difference between the two loops below, and which one would we
-want to run?
-
-```bash
-# Version 1
+# バージョン1
 $ for datafile in *.pdb
 > do
 >     echo cat $datafile >> all.pdb
@@ -782,7 +713,7 @@ $ for datafile in *.pdb
 ```
 
 ```bash
-# Version 2
+# バージョン2
 $ for datafile in *.pdb
 > do
 >     echo "cat $datafile >> all.pdb"
@@ -791,23 +722,17 @@ $ for datafile in *.pdb
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The second version is the one we want to run.
-This prints to screen everything enclosed in the quote marks, expanding the
-loop variable name because we have prefixed it with a dollar sign.
-It also *does not* modify nor create the file `all.pdb`, as the `>>`
-is treated literally as part of a string rather than as a
-redirection instruction.
+バージョン2を実行するべきです。  
+このバージョンでは、引用符で囲まれたすべての内容を画面に表示し、変数名（$付き）は展開されます。  
+さらに、`>>`は文字列の一部として扱われるため、リダイレクト命令としては解釈されず、  
+`all.pdb`ファイルは変更も作成もされません。
 
-The first version appends the output from the command `echo cat $datafile`
-to the file, `all.pdb`. This file will just contain the list;
-`cat cubane.pdb`, `cat ethane.pdb`, `cat methane.pdb` etc.
+一方、バージョン1は`echo cat $datafile`コマンドの出力を`all.pdb`に追加します。  
+このファイルには、`cat cubane.pdb`、`cat ethane.pdb`、`cat methane.pdb`などのリストが保存されるだけです。
 
-Try both versions for yourself to see the output! Be sure to open the
-`all.pdb` file to view its contents.
-
-
+両方のバージョンを試してみて、結果を確認してください！`all.pdb`ファイルの内容も確認してみましょう。
 
 :::::::::::::::::::::::::
 
@@ -815,12 +740,10 @@ Try both versions for yourself to see the output! Be sure to open the
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Nested Loops
+## ネストされたループ
 
-Suppose we want to set up a directory structure to organize
-some experiments measuring reaction rate constants with different compounds
-*and* different temperatures.  What would be the
-result of the following code:
+複数の化合物や異なる温度で反応速度定数を測定する実験を整理するために、ディレクトリ構造を設定したいとします。  
+次のコードを実行した結果はどうなりますか？
 
 ```bash
 $ for species in cubane ethane methane
@@ -834,32 +757,27 @@ $ for species in cubane ethane methane
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-We have a nested loop, i.e. contained within another loop, so for each species
-in the outer loop, the inner loop (the nested loop) iterates over the list of
-temperatures, and creates a new directory for each combination.
+これはネストされたループであり、外側のループで指定された各化合物について、  
+内側のループ（ネストされたループ）は温度のリストを反復処理します。そして、各組み合わせのディレクトリが作成されます。
 
-Try running the code for yourself to see which directories are created!
-
-
+実際にコードを実行して、どのディレクトリが作成されるか確認してみてください！
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- A `for` loop repeats commands once for every thing in a list.
-- Every `for` loop needs a variable to refer to the thing it is currently operating on.
-- Use `$name` to expand a variable (i.e., get its value). `${name}` can also be used.
-- Do not use spaces, quotes, or wildcard characters such as '\*' or '?' in filenames, as it complicates variable expansion.
-- Give files consistent names that are easy to match with wildcard patterns to make it easy to select them for looping.
-- Use the up-arrow key to scroll up through previous commands to edit and repeat them.
-- Use <kbd>Ctrl</kbd>\+<kbd>R</kbd> to search through the previously entered commands.
-- Use `history` to display recent commands, and `![number]` to repeat a command by number.
+- `for`ループは、リスト内の各要素に対してコマンドを繰り返します。
+- 各`for`ループには、現在処理中の項目を参照する変数が必要です。
+- 変数を展開（値を取得）するには`$name`または`${name}`を使用します。
+- ファイル名にはスペース、引用符、ワイルドカード（`*`や`?`など）を使用しないでください。変数展開が複雑になります。
+- ファイルに一貫した名前を付け、ワイルドカードパターンで簡単に選択できるようにすることで、ループ処理が容易になります。
+- <kbd>↑</kbd>キーを使用して以前のコマンドをスクロール表示し、編集して再実行できます。
+- <kbd>Ctrl</kbd>\+<kbd>R</kbd>で、以前に入力したコマンドを検索できます。
+- `history`を使用して最近のコマンドを表示し、`![番号]`を使用して特定のコマンドを再実行できます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

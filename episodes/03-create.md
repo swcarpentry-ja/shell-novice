@@ -1,37 +1,37 @@
 ---
-title: Working With Files and Directories
+title: ファイルとディレクトリの操作
 teaching: 30
 exercises: 20
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Create a directory hierarchy that matches a given diagram.
-- Create files in that hierarchy using an editor or by copying and renaming existing files.
-- Delete, copy and move specified files and/or directories.
+- 指定された図に一致するディレクトリ階層を作成する。
+- エディターを使用して、または既存のファイルをコピーおよびリネームして、その階層内にファイルを作成する。
+- 指定されたファイルやディレクトリを削除、コピー、移動する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I create, copy, and delete files and directories?
-- How can I edit files?
+- ファイルやディレクトリをどのように作成、コピー、削除できますか？
+- ファイルをどのように編集できますか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-## Creating directories
+## ディレクトリの作成
 
-We now know how to explore files and directories,
-but how do we create them in the first place?
+これまでにファイルやディレクトリを探索する方法を学びましたが、
+それらを最初に作成する方法はどうすれば良いでしょうか？
 
-In this episode we will learn about creating and moving files and directories,
-using the `exercise-data/writing` directory as an example.
+このセクションでは、`exercise-data/writing`ディレクトリを例として使用して、
+ファイルやディレクトリを作成および移動する方法を学びます。
 
-### Step one: see where we are and what we already have
+### ステップ1: 現在の場所と既存の内容を確認する
 
-We should still be in the `shell-lesson-data` directory on the Desktop,
-which we can check using:
+まだDesktop上の`shell-lesson-data`ディレクトリ内にいるはずです。
+これを確認するには以下を使用します：
 
 ```bash
 $ pwd
@@ -41,7 +41,7 @@ $ pwd
 /Users/nelle/Desktop/shell-lesson-data
 ```
 
-Next we'll move to the `exercise-data/writing` directory and see what it contains:
+次に、`exercise-data/writing`ディレクトリに移動してその内容を確認します：
 
 ```bash
 $ cd exercise-data/writing/
@@ -52,20 +52,20 @@ $ ls -F
 haiku.txt  LittleWomen.txt
 ```
 
-### Create a directory
+### ディレクトリを作成する
 
-Let's create a new directory called `thesis` using the command `mkdir thesis`
-(which has no output):
+`mkdir thesis`コマンドを使用して、`thesis`という名前の新しいディレクトリを作成します
+（このコマンドは出力を生成しません）。
 
 ```bash
 $ mkdir thesis
 ```
 
-As you might guess from its name,
-`mkdir` means 'make directory'.
-Since `thesis` is a relative path
-(i.e., does not have a leading slash, like `/what/ever/thesis`),
-the new directory is created in the current working directory:
+名前から想像できるように、
+`mkdir`は「ディレクトリを作成する」（make directory）を意味します。
+`thesis`は相対パスであるため
+（つまり、`/what/ever/thesis`のようにスラッシュが先頭についていない）、
+新しいディレクトリは現在の作業ディレクトリに作成されます：
 
 ```bash
 $ ls -F
@@ -75,23 +75,22 @@ $ ls -F
 haiku.txt  LittleWomen.txt  thesis/
 ```
 
-Since we've just created the `thesis` directory, there's nothing in it yet:
+`thesis`ディレクトリを作成したばかりなので、中にはまだ何もありません：
 
 ```bash
 $ ls -F thesis
 ```
 
-Note that `mkdir` is not limited to creating single directories one at a time.
-The `-p` option allows `mkdir` to create a directory with nested subdirectories
-in a single operation:
+`mkdir`は1回で単一のディレクトリを作成するだけではありません。
+`-p`オプションを使用すると、ネストされたサブディレクトリを
+1回の操作で作成することができます：
 
 ```bash
 $ mkdir -p ../project/data ../project/results
 ```
 
-The `-R` option to the `ls` command will list all nested subdirectories within a directory.
-Let's use `ls -FR` to recursively list the new directory hierarchy we just created in the
-`project` directory:
+`ls`コマンドの`-R`オプションは、ディレクトリ内のすべてのネストされたサブディレクトリをリストします。
+先ほど作成した`project`ディレクトリの新しいディレクトリ階層を再帰的にリストしてみましょう：
 
 ```bash
 $ ls -FR ../project
@@ -108,65 +107,65 @@ data/  results/
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Two ways of doing the same thing
+## 同じことを行う2つの方法
 
-Using the shell to create a directory is no different than using a file explorer.
-If you open the current directory using your operating system's graphical file explorer,
-the `thesis` directory will appear there too.
-While the shell and the file explorer are two different ways of interacting with the files,
-the files and directories themselves are the same.
+シェルを使用してディレクトリを作成することは、
+ファイルエクスプローラーを使用することと何ら変わりありません。
+オペレーティングシステムのグラフィカルファイルエクスプローラーで現在のディレクトリを開くと、
+`thesis`ディレクトリがそこにも表示されます。
+シェルとファイルエクスプローラーはファイルを操作するための2つの異なる方法ですが、
+ファイルやディレクトリ自体は同じものです。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Good names for files and directories
+## ファイルやディレクトリの良い名前付け
 
-Complicated names of files and directories can make your life painful
-when working on the command line. Here we provide a few useful
-tips for the names of your files and directories.
+複雑な名前のファイルやディレクトリは、
+コマンドラインで作業する際に苦労の原因になります。
+ここでは、ファイルやディレクトリ名に関するいくつかの有用なヒントを紹介します。
 
-1. Don't use spaces.
+1. スペースを使用しない。
 
-Spaces can make a name more meaningful,
-but since spaces are used to separate arguments on the command line
-it is better to avoid them in names of files and directories.
-You can use `-` or `_` instead (e.g. `north-pacific-gyre/` rather than `north pacific gyre/`).
-To test this out, try typing `mkdir north pacific gyre` and see what directory (or directories!)
-are made when you check with `ls -F`.
+スペースは名前をより意味のあるものにしますが、
+スペースはコマンドラインで引数を区切るために使用されるため、
+ファイルやディレクトリ名にスペースを使用しない方が良いです。
+代わりに`-`や`_`を使用できます（例：`north-pacific-gyre/`の代わりに`north pacific gyre/`）。
+これを試してみるには、`mkdir north pacific gyre`を入力して、
+`ls -F`で作成されたディレクトリを確認してください。
 
-2. Don't begin the name with `-` (dash).
+2. 名前を`-`（ダッシュ）で始めない。
 
-Commands treat names starting with `-` as options.
+コマンドは、`-`で始まる名前をオプションとして処理します。
 
-3. Stick with letters, numbers, `.` (period or 'full stop'), `-` (dash) and `_` (underscore).
+3. 文字、数字、`.`（ピリオド）、`-`（ダッシュ）、および`_`（アンダースコア）を使用する。
 
-Many other characters have special meanings on the command line.
-We will learn about some of these during this lesson.
-There are special characters that can cause your command to not work as
-expected and can even result in data loss.
+その他の多くの文字にはコマンドラインで特別な意味があります。
+これについては、このレッスンで学びます。
+特定の特殊文字を使用すると、コマンドが期待通りに動作しなかったり、
+データ損失を引き起こす可能性があります。
 
-If you need to refer to names of files or directories that have spaces
-or other special characters, you should surround the name in single
-[quotes](https://www.gnu.org/software/bash/manual/html_node/Quoting.html) (`''`).
+スペースやその他の特殊文字を含むファイルやディレクトリの名前を参照する必要がある場合は、
+その名前をシングルクオート（`'`）で囲む必要があります。
+詳細は[GNUのクオートに関するドキュメント](https://www.gnu.org/software/bash/manual/html_node/Quoting.html)を参照してください。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::  instructor
 
-Learners can sometimes get trapped within command-line text editors
-such as Vim, Emacs, or Nano. Closing the terminal emulator and opening
-a new one can be frustrating as learners will have to navigate to the
-correct folder again. Our recommendation to mitigate this problem is that
-instructors should use the same text editor as the learners during workshops
-(in most cases Nano).
+学習者がVim、Emacs、Nanoなどのコマンドラインテキストエディタ内で行き詰まることがあります。
+ターミナルエミュレーターを閉じて新しいものを開くと、
+学習者は再び正しいフォルダに移動しなければならず、フラストレーションを感じることがあります。
+この問題を軽減するために、ワークショップ中はインストラクターが学習者と同じテキストエディタを使用することをお勧めします
+（ほとんどの場合、Nanoが適しています）。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Create a text file
+### テキストファイルを作成する
 
-Let's change our working directory to `thesis` using `cd`,
-then run a text editor called Nano to create a file called `draft.txt`:
+`cd`を使用して作業ディレクトリを`thesis`に変更し、
+`nano`というテキストエディタを実行して`draft.txt`というファイルを作成しましょう：
 
 ```bash
 $ cd thesis
@@ -175,52 +174,52 @@ $ nano draft.txt
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Which Editor?
+## どのエディタを使うべき？
 
-When we say, '`nano` is a text editor' we really do mean 'text'. It can
-only work with plain character data, not tables, images, or any other
-human-friendly media. We use it in examples because it is one of the
-least complex text editors. However, because of this trait, it may
-not be powerful enough or flexible enough for the work you need to do
-after this workshop. On Unix systems (such as Linux and macOS),
-many programmers use [Emacs](https://www.gnu.org/software/emacs/) or
-[Vim](https://www.vim.org/) (both of which require more time to learn),
-or a graphical editor such as [Gedit](https://projects.gnome.org/gedit/)
-or [VScode](https://code.visualstudio.com/). On Windows, you may wish to
-use [Notepad++](https://notepad-plus-plus.org/).  Windows also has a built-in
-editor called `notepad` that can be run from the command line in the same
-way as `nano` for the purposes of this lesson.
+ここで「`nano`はテキストエディタです」と言うとき、私たちは本当に「テキスト」を意味します。
+それはプレーンな文字データのみを扱うことができ、
+表や画像、その他の人間に優しいメディアは扱えません。
+私たちはそのシンプルさゆえに例として使用しますが、
+そのために十分な機能や柔軟性を欠く可能性があります。
+Unixシステム（LinuxやmacOSなど）では、
+多くのプログラマーが[Emacs](https://www.gnu.org/software/emacs/)や
+[Vim](https://www.vim.org/)（どちらも学習に時間が必要）、
+または[gedit](https://projects.gnome.org/gedit/)や
+[VScode](https://code.visualstudio.com/)などのグラフィカルエディタを使用します。
+Windowsでは、[Notepad++](https://notepad-plus-plus.org/)を使用することをお勧めします。
+Windowsには`notepad`という組み込みのエディタもあり、このレッスンの目的では`nano`と同様にコマンドラインから実行できます。
 
-No matter what editor you use, you will need to know where it searches
-for and saves files. If you start it from the shell, it will (probably)
-use your current working directory as its default location. If you use
-your computer's start menu, it may want to save files in your Desktop or
-Documents directory instead. You can change this by navigating to
-another directory the first time you 'Save As...'
+どのエディタを使用する場合でも、
+それがファイルを検索し保存する場所を知る必要があります。
+シェルからエディタを起動すると、
+おそらく現在の作業ディレクトリをデフォルトの保存場所として使用します。
+コンピュータのスタートメニューを使用する場合は、
+デスクトップやドキュメントディレクトリに保存するように求められるかもしれません。
+これは、初めて「名前を付けて保存」するときに別のディレクトリに移動することで変更
+
+できます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 Let's type in a few lines of text.
 
-![](fig/nano-screenshot.png){alt="screenshot of nano text editor in action with the text It's not publish or perish any more, it's share and thrive"}
+![](fig/nano-screenshot.png){alt="nanoテキストエディタの動作中のスクリーンショット。テキストは「It's not publish or perish any more, it's share and thrive」"}
 
-Once we're happy with our text, we can press <kbd>Ctrl</kbd>\+<kbd>O</kbd>
-(press the <kbd>Ctrl</kbd> or <kbd>Control</kbd> key and, while
-holding it down, press the <kbd>O</kbd> key) to write our data to disk. We will be asked
-to provide a name for the file that will contain our text. Press <kbd>Return</kbd> to accept
-the suggested default of `draft.txt`.
+テキストに満足したら、<kbd>Ctrl</kbd>\+<kbd>O</kbd>
+（<kbd>Ctrl</kbd>または<kbd>Control</kbd>キーを押しながら<kbd>O</kbd>キーを押す）を押して、
+データをディスクに書き込みます。テキストを含むファイルの名前を指定するよう求められます。
+デフォルトで提案された`draft.txt`を受け入れるには、<kbd>Return</kbd>を押してください。
 
-Once our file is saved, we can use <kbd>Ctrl</kbd>\+<kbd>X</kbd> to quit the editor and
-return to the shell.
+ファイルが保存されたら、<kbd>Ctrl</kbd>\+<kbd>X</kbd>を押してエディタを終了し、
+シェルに戻ります。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Control, Ctrl, or ^ Key
+## Control、Ctrl、または^キー
 
-The Control key is also called the 'Ctrl' key. There are various ways
-in which using the Control key may be described. For example, you may
-see an instruction to press the <kbd>Control</kbd> key and, while holding it down,
-press the <kbd>X</kbd> key, described as any of:
+Controlキーは「Ctrl」キーとも呼ばれます。
+Controlキーを使用する方法にはさまざまな記述があります。
+たとえば、<kbd>Control</kbd>キーを押しながら<kbd>X</kbd>キーを押す指示は以下のように記述されることがあります：
 
 - `Control-X`
 - `Control+X`
@@ -229,14 +228,13 @@ press the <kbd>X</kbd> key, described as any of:
 - `^X`
 - `C-x`
 
-In nano, along the bottom of the screen you'll see `^G Get Help ^O WriteOut`.
-This means that you can use `Control-G` to get help and `Control-O` to save your
-file.
+nanoでは、画面の下部に`^G Get Help ^O WriteOut`と表示されます。
+これは、`Control-G`でヘルプを表示し、`Control-O`でファイルを保存できることを意味します。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-`nano` doesn't leave any output on the screen after it exits,
-but `ls` now shows that we have created a file called `draft.txt`:
+`nano`は終了後に画面に何も出力しませんが、
+`ls`を実行すると`draft.txt`というファイルが作成されたことがわかります：
 
 ```bash
 $ ls
@@ -248,50 +246,43 @@ draft.txt
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Creating Files a Different Way
+## 別の方法でファイルを作成する
 
-We have seen how to create text files using the `nano` editor.
-Now, try the following command:
+`nano`エディタを使用してテキストファイルを作成する方法を見ました。
+次に、以下のコマンドを試してください：
 
 ```bash
 $ touch my_file.txt
 ```
 
-1. What did the `touch` command do?
-  When you look at your current directory using the GUI file explorer,
-  does the file show up?
+1. `touch`コマンドは何をしますか？
+   現在のディレクトリをGUIファイルエクスプローラーで見ると、ファイルが表示されますか？
 
-2. Use `ls -l` to inspect the files.  How large is `my_file.txt`?
+2. `ls -l`を使用してファイルを調べます。`my_file.txt`のサイズはどれくらいですか？
 
-3. When might you want to create a file this way?
+3. どのような場合にこの方法でファイルを作成したいと思いますか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. The `touch` command generates a new file called `my_file.txt` in
-  your current directory.  You
-  can observe this newly generated file by typing `ls` at the
-  command line prompt.  `my_file.txt` can also be viewed in your
-  GUI file explorer.
+1. `touch`コマンドは、現在のディレクトリに`my_file.txt`という新しいファイルを生成します。
+   コマンドラインプロンプトで`ls`を入力すると、この新しく生成されたファイルを確認できます。
+   また、GUIファイルエクスプローラーでも`my_file.txt`を見ることができます。
 
-2. When you inspect the file with `ls -l`, note that the size of
-  `my_file.txt` is 0 bytes.  In other words, it contains no data.
-  If you open `my_file.txt` using your text editor it is blank.
+2. `ls -l`でファイルを調べると、`my_file.txt`のサイズは0バイトであることがわかります。
+   つまり、データが含まれていません。テキストエディタで`my_file.txt`を開くと空白です。
 
-3. Some programs do not generate output files themselves, but
-  instead require that empty files have already been generated.
-  When the program is run, it searches for an existing file to
-  populate with its output.  The touch command allows you to
-  efficiently generate a blank text file to be used by such
-  programs.
+3. 一部のプログラムは、出力ファイルを自分で生成するのではなく、
+   空のファイルが既に生成されていることを要求します。
+   プログラムが実行されると、既存のファイルを検索し、そこに出力を記録します。
+   `touch`コマンドを使用すると、このようなプログラム用に空のテキストファイルを効率的に生成できます。
 
 :::::::::::::::::::::::::
 
-To avoid confusion later on,
-we suggest removing the file you've just created before proceeding with the rest
-of the episode, otherwise future outputs may vary from those given in the lesson.
-To do this, use the following command:
+混乱を避けるために、作成したファイルをこのエピソードの残りを進める前に削除することをお勧めします。
+そうしないと、将来の出力がレッスンで示されているものと異なる場合があります。
+削除するには、次のコマンドを使用します：
 
 ```bash
 $ rm my_file.txt
@@ -301,57 +292,50 @@ $ rm my_file.txt
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## What's In A Name?
+## 名前に何が含まれているのか？
 
-You may have noticed that all of Nelle's files are named 'something dot
-something', and in this part of the lesson, we always used the extension
-`.txt`.  This is just a convention; we can call a file `mythesis` or
-almost anything else we want. However, most people use two-part names
-most of the time to help them (and their programs) tell different kinds
-of files apart. The second part of such a name is called the
-**filename extension** and indicates
-what type of data the file holds: `.txt` signals a plain text file, `.pdf`
-indicates a PDF document, `.cfg` is a configuration file full of parameters
-for some program or other, `.png` is a PNG image, and so on.
+Nelleのすべてのファイルが「何か.何か」という形式の名前であることに気づいたかもしれません。
+このレッスンでは常に拡張子`.txt`を使用しました。
+これは単なる慣例ですが、ファイルを`mythesis`やその他ほとんど任意の名前で呼ぶこともできます。
+しかし、ほとんどの人は異なる種類のファイルを区別するために、2部構成の名前を使います。
+その名前の後半部分は**ファイル拡張子**と呼ばれ、ファイルが保持するデータの種類を示します：
+たとえば、`.txt`はプレーンテキストファイル、`.pdf`はPDFドキュメント、
+`.cfg`はプログラムのパラメータを含む設定ファイル、`.png`はPNG画像などです。
 
-This is just a convention, albeit an important one. Files merely contain
-bytes; it's up to us and our programs to interpret those bytes
-according to the rules for plain text files, PDF documents, configuration
-files, images, and so on.
+これは重要な慣例に過ぎません。ファイルには単にバイトが含まれるだけで、
+そのバイトをプレーンテキストファイル、PDFドキュメント、設定ファイル、画像などのルールに従って解釈するのは私たちとプログラム次第です。
 
-Naming a PNG image of a whale as `whale.mp3` doesn't somehow
-magically turn it into a recording of whale song, though it *might*
-cause the operating system to associate the file with a music player
-program. In this case, if someone double-clicked `whale.mp3` in a file
-explorer program, the music player will automatically (and erroneously)
-attempt to open the `whale.mp3` file.
+例えば、クジラのPNG画像を`whale.mp3`と名付けても、
+それがクジラの歌の録音になるわけではありません。
+ただし、オペレーティングシステムがそのファイルを音楽プレーヤーに関連付ける場合があります。
+この場合、ファイルエクスプローラーで`whale.mp3`をダブルクリックすると、
+音楽プレーヤーが自動的に（そして誤って）そのファイルを開こうとします。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Moving files and directories
+## ファイルとディレクトリを移動する
 
-Returning to the `shell-lesson-data/exercise-data/writing` directory,
+`shell-lesson-data/exercise-data/writing`ディレクトリに戻ります：
 
 ```bash
 $ cd ~/Desktop/shell-lesson-data/exercise-data/writing
 ```
 
-In our `thesis` directory we have a file `draft.txt`
-which isn't a particularly informative name,
-so let's change the file's name using `mv`,
-which is short for 'move':
+`thesis`ディレクトリには`draft.txt`というファイルがありますが、
+これは特に情報量の多い名前ではありません。
+そこで、`mv`を使用してファイル名を変更しましょう。
+`mv`は「move」の略です：
 
 ```bash
 $ mv thesis/draft.txt thesis/quotes.txt
 ```
 
-The first argument tells `mv` what we're 'moving',
-while the second is where it's to go.
-In this case,
-we're moving `thesis/draft.txt` to `thesis/quotes.txt`,
-which has the same effect as renaming the file.
-Sure enough,
-`ls` shows us that `thesis` now contains one file called `quotes.txt`:
+最初の引数は「移動するもの」、2番目の引数は「移動先」を指定します。
+この場合、
+`thesis/draft.txt`を`thesis/quotes.txt`に移動しています。
+これにより、ファイル名を変更するのと同じ効果が得られます。
+`ls`を実行すると、
+`thesis`には`quotes.txt`という1つのファイルが含まれていることがわかります：
 
 ```bash
 $ ls thesis
@@ -361,29 +345,27 @@ $ ls thesis
 quotes.txt
 ```
 
-One must be careful when specifying the target file name, since `mv` will
-silently overwrite any existing file with the same name, which could
-lead to data loss. By default, `mv` will not ask for confirmation before overwriting files.
-However, an additional option, `mv -i` (or `mv --interactive`), will cause `mv` to request
-such confirmation.
+ターゲットファイル名を指定する際は注意が必要です。
+`mv`は既存のファイルを上書きする場合、警告なしに実行されるため、データ損失につながる可能性があります。
+ただし、`mv -i`（または`mv --interactive`）オプションを使用すると、
+上書きする前に確認を求めるようになります。
 
-Note that `mv` also works on directories.
+なお、`mv`はディレクトリにも使用できます。
 
-Let's move `quotes.txt` into the current working directory.
-We use `mv` once again,
-but this time we'll use just the name of a directory as the second argument
-to tell `mv` that we want to keep the filename
-but put the file somewhere new.
-(This is why the command is called 'move'.)
-In this case,
-the directory name we use is the special directory name `.` that we mentioned earlier.
+次に、`quotes.txt`を現在の作業ディレクトリに移動します。
+再び`mv`を使用しますが、
+今回は2番目の引数としてディレクトリ名だけを使用し、
+ファイル名を保持しつつ別の場所に移動させることを指定します。
+（これが「move」と呼ばれる理由です。）
+この場合、
+使用するディレクトリ名は、前述の特殊なディレクトリ名`.`です。
 
 ```bash
 $ mv thesis/quotes.txt .
 ```
 
-The effect is to move the file from the directory it was in to the current working directory.
-`ls` now shows us that `thesis` is empty:
+この操作により、ファイルは元のディレクトリから現在の作業ディレクトリに移動されます。
+`ls`を実行すると、`thesis`が空であることがわかります：
 
 ```bash
 $ ls thesis
@@ -393,8 +375,8 @@ $ ls thesis
 $
 ```
 
-Alternatively, we can confirm the file `quotes.txt` is no longer present in the `thesis` directory
-by explicitly trying to list it:
+または、`quotes.txt`が`thesis`ディレクトリに存在しないことを
+明示的にリストして確認することもできます：
 
 ```bash
 $ ls thesis/quotes.txt
@@ -404,9 +386,12 @@ $ ls thesis/quotes.txt
 ls: cannot access 'thesis/quotes.txt': No such file or directory
 ```
 
-`ls` with a filename or directory as an argument only lists the requested file or directory.
-If the file given as the argument doesn't exist, the shell returns an error as we saw above.
-We can use this to see that `quotes.txt` is now present in our current directory:
+`ls`にファイル名やディレクトリを引数として指定すると、その指定された
+
+ファイルやディレクトリだけをリストします。
+引数として指定したファイルが存在しない場合、
+シェルは上記のようにエラーを返します。
+これにより、現在のディレクトリに`quotes.txt`が存在することを確認できます：
 
 ```bash
 $ ls quotes.txt
@@ -418,11 +403,11 @@ quotes.txt
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Moving Files to a new folder
+## ファイルを新しいフォルダに移動する
 
-After running the following commands,
-Jamie realizes that she put the files `sucrose.dat` and `maltose.dat` into the wrong folder.
-The files should have been placed in the `raw` folder.
+以下のコマンドを実行した後、
+Jamieはファイル`sucrose.dat`と`maltose.dat`を間違ったフォルダに入れてしまったことに気付きます。
+これらのファイルは`raw`フォルダに置くべきでした。
 
 ```bash
 $ ls -F
@@ -432,8 +417,8 @@ fructose.dat glucose.dat maltose.dat sucrose.dat
 $ cd analyzed
 ```
 
-Fill in the blanks to move these files to the `raw/` folder
-(i.e. the one she forgot to put them in)
+以下の空欄を埋めて、これらのファイルを`raw/`フォルダに移動してください
+（つまり、置き忘れたフォルダに移動します）。
 
 ```bash
 $ mv sucrose.dat maltose.dat ____/____
@@ -441,26 +426,26 @@ $ mv sucrose.dat maltose.dat ____/____
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```bash
 $ mv sucrose.dat maltose.dat ../raw
 ```
 
-Recall that `..` refers to the parent directory (i.e. one above the current directory)
-and that `.` refers to the current directory.
+`..`は親ディレクトリ（現在のディレクトリの1つ上）を指し、
+`.`は現在のディレクトリを指します。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Copying files and directories
+## ファイルとディレクトリをコピーする
 
-The `cp` command works very much like `mv`,
-except it copies a file instead of moving it.
-We can check that it did the right thing using `ls`
-with two paths as arguments --- like most Unix commands,
-`ls` can be given multiple paths at once:
+`cp`コマンドは`mv`と非常によく似ていますが、
+ファイルを移動するのではなくコピーします。
+正しく動作したことを確認するには、
+`ls`を2つのパスを引数として使用します。
+ほとんどのUnixコマンドと同様に、`ls`には複数のパスを指定できます：
 
 ```bash
 $ cp quotes.txt thesis/quotations.txt
@@ -471,15 +456,15 @@ $ ls quotes.txt thesis/quotations.txt
 quotes.txt   thesis/quotations.txt
 ```
 
-We can also copy a directory and all its contents by using the
-[recursive](https://en.wikipedia.org/wiki/Recursion) option `-r`,
-e.g. to back up a directory:
+ディレクトリとそのすべての内容をコピーするには、
+再帰的なオプション`-r`を使用できます。
+例えば、ディレクトリをバックアップするには：
 
 ```bash
 $ cp -r thesis thesis_backup
 ```
 
-We can check the result by listing the contents of both the `thesis` and `thesis_backup` directory:
+結果を確認するために、`thesis`ディレクトリと`thesis_backup`ディレクトリの内容をリストします：
 
 ```bash
 $ ls thesis thesis_backup
@@ -493,24 +478,23 @@ thesis_backup:
 quotations.txt
 ```
 
-It is important to include the `-r` flag. If you want to copy a directory and you omit this option
-you will see a message that the directory has been omitted because `-r not specified`.
+ディレクトリをコピーする場合、`-r`フラグを含めることが重要です。
+このオプションを省略すると、ディレクトリが省略されたというメッセージが表示されます：
 
-``` bash
+```bash
 $ cp thesis thesis_backup
 cp: -r not specified; omitting directory 'thesis'
 ```
 
-
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Renaming Files
+## ファイルのリネーム
 
-Suppose that you created a plain-text file in your current directory to contain a list of the
-statistical tests you will need to do to analyze your data, and named it `statstics.txt`
+現在のディレクトリにデータを分析するために必要な統計テストのリストを含むプレーンテキストファイルを作成し、
+`statstics.txt`という名前を付けたと仮定します。
 
-After creating and saving this file you realize you misspelled the filename! You want to
-correct the mistake, which of the following commands could you use to do so?
+ファイルを作成して保存した後で、名前のスペルミスに気付いた場合、
+このミスを修正するには以下のコマンドのどれを使用できますか？
 
 1. `cp statstics.txt statistics.txt`
 2. `mv statstics.txt statistics.txt`
@@ -519,17 +503,15 @@ correct the mistake, which of the following commands could you use to do so?
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. No.  While this would create a file with the correct name,
-  the incorrectly named file still exists in the directory
-  and would need to be deleted.
-2. Yes, this would work to rename the file.
-3. No, the period(.) indicates where to move the file, but does not provide a new file name;
-  identical file names
-  cannot be created.
-4. No, the period(.) indicates where to copy the file, but does not provide a new file name;
-  identical file names cannot be created.
+1. いいえ。これにより正しい名前のファイルが作成されますが、
+   間違った名前のファイルがディレクトリ内に残り、それを削除する必要があります。
+2. はい。このコマンドを使用するとファイル名を変更できます。
+3. いいえ。ピリオド（`.`）はファイルの移動先を示しますが、新しいファイル名を提供しません。
+   同じ名前のファイルは作成できません。
+4. いいえ。ピリオド（`.`）はファイルのコピー先を示しますが、新しいファイル名を提供しません。
+   同じ名前のファイルは作成できません。
 
 :::::::::::::::::::::::::
 
@@ -537,9 +519,9 @@ correct the mistake, which of the following commands could you use to do so?
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Moving and Copying
+## ファイルの移動とコピー
 
-What is the output of the closing `ls` command in the sequence shown below?
+以下のコマンドシーケンスで、最後の`ls`コマンドの出力はどうなりますか？
 
 ```bash
 $ pwd
@@ -571,37 +553,37 @@ $ ls
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-We start in the `/Users/jamie/data` directory, and create a new folder called `recombined`.
-The second line moves (`mv`) the file `proteins.dat` to the new folder (`recombined`).
-The third line makes a copy of the file we just moved.
-The tricky part here is where the file was copied to.
-Recall that `..` means 'go up a level', so the copied file is now in `/Users/jamie`.
-Notice that `..` is interpreted with respect to the current working
-directory, **not** with respect to the location of the file being copied.
-So, the only thing that will show using ls (in `/Users/jamie/data`) is the recombined folder.
+最初に`/Users/jamie/data`ディレクトリにいて、新しいフォルダ`recombined`を作成します。
+次の行で、`mv`コマンドを使用して`proteins.dat`ファイルを新しいフォルダ`recombined`に移動します。
+その後、移動したファイルをコピーします。
+ここでのポイントは、ファイルがどこにコピーされたかです。
+`..`は「1レベル上に移動」を意味するため、コピーされたファイルは`/Users/jamie`にあります。
+注意すべき点は、`..`が現在の作業ディレクトリに基づいて解釈されることであり、
+コピー元のファイルの場所には基づいていないということです。
+したがって、`ls`（`/Users/jamie/data`内で実行）で表示されるのは`recombined`フォルダだけです。
 
-1. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
-2. Yes
-3. No, see explanation above.  `proteins.dat` is located at `/Users/jamie/data/recombined`
-4. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
+1. いいえ。説明の通り、`proteins-saved.dat`は`/Users/jamie`にあります。
+2. はい。
+3. いいえ。説明の通り、`proteins.dat`は`/Users/jamie/data/recombined`にあります。
+4. いいえ。説明の通り、`proteins-saved.dat`は`/Users/jamie`にあります。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Removing files and directories
+## ファイルとディレクトリの削除
 
-Returning to the `shell-lesson-data/exercise-data/writing` directory,
-let's tidy up this directory by removing the `quotes.txt` file we created.
-The Unix command we'll use for this is `rm` (short for 'remove'):
+`shell-lesson-data/exercise-data/writing`ディレクトリに戻り、
+作成した`quotes.txt`ファイルを削除して、このディレクトリを整理しましょう。
+このために使用するUnixコマンドは`rm`（「remove」の略）です：
 
 ```bash
 $ rm quotes.txt
 ```
 
-We can confirm the file has gone using `ls`:
+ファイルが削除されたことを確認するには、`ls`を使用します：
 
 ```bash
 $ ls quotes.txt
@@ -613,45 +595,44 @@ ls: cannot access 'quotes.txt': No such file or directory
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Deleting Is Forever
+## 削除は永久的です
 
-The Unix shell doesn't have a trash bin that we can recover deleted
-files from (though most graphical interfaces to Unix do).  Instead,
-when we delete files, they are unlinked from the file system so that
-their storage space on disk can be recycled. Tools for finding and
-recovering deleted files do exist, but there's no guarantee they'll
-work in any particular situation, since the computer may recycle the
-file's disk space right away.
+Unixシェルには削除したファイルを回復するためのゴミ箱がありません
+（ただし、ほとんどのUnix向けグラフィカルインターフェースにはゴミ箱があります）。
+代わりに、ファイルを削除すると、それらはファイルシステムからリンクが解除され、
+ディスク上のストレージ領域が再利用できるようになります。
+削除されたファイルを見つけて回復するためのツールは存在しますが、
+特定の状況で動作する保証はありません。
+削除されたファイルのディスクスペースがすぐに再利用される可能性があるためです。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Using `rm` Safely
+## `rm`を安全に使用する
 
-What happens when we execute `rm -i thesis_backup/quotations.txt`?
-Why would we want this protection when using `rm`?
+`rm -i thesis_backup/quotations.txt`を実行するとどうなりますか？
+`rm`を使用する際に、この保護が必要な理由は何ですか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```output
 rm: remove regular file 'thesis_backup/quotations.txt'? y
 ```
 
-The `-i` option will prompt before (every) removal (use <kbd>Y</kbd> to confirm deletion
-or <kbd>N</kbd> to keep the file).
-The Unix shell doesn't have a trash bin, so all the files removed will disappear forever.
-By using the `-i` option, we have the chance to check that we are deleting only the files
-that we want to remove.
+`-i`オプションは、削除前に確認を求めます（<kbd>Y</kbd>で削除を確認、
+<kbd>N</kbd>でファイルを保持します）。
+Unixシェルにはゴミ箱がないため、一度削除されたファイルは永久に消えます。
+`-i`オプションを使用することで、
+削除するのが本当に必要なファイルだけであることを確認する機会が得られます。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-If we try to remove the `thesis` directory using `rm thesis`,
-we get an error message:
+`rm`コマンドを使用して`thesis`ディレクトリを削除しようとすると、エラーメッセージが表示されます：
 
 ```bash
 $ rm thesis
@@ -661,41 +642,43 @@ $ rm thesis
 rm: cannot remove 'thesis': Is a directory
 ```
 
-This happens because `rm` by default only works on files, not directories.
+これは、`rm`がデフォルトではファイルに対してのみ動作し、ディレクトリには動作しないためです。
 
-`rm` can remove a directory *and all its contents* if we use the
-recursive option `-r`, and it will do so *without any confirmation prompts*:
+`rm`コマンドは、再帰オプション`-r`を使用することで
+*ディレクトリとその内容をすべて*削除できますが、
+*確認のプロンプトは表示されません*：
 
 ```bash
 $ rm -r thesis
 ```
 
-Given that there is no way to retrieve files deleted using the shell,
-`rm -r` *should be used with great caution*
-(you might consider adding the interactive option `rm -r -i`).
+シェルを使用して削除されたファイルは回復できないため、
+`rm -r`は*慎重に使用する必要があります*。
+インタラクティブなオプション`rm -r -i`を追加することを検討してください。
 
-## Operations with multiple files and directories
+## 複数のファイルやディレクトリの操作
 
-Oftentimes one needs to copy or move several files at once.
-This can be done by providing a list of individual filenames,
-or specifying a naming pattern using wildcards. Wildcards are
-special characters that can be used to represent unknown characters
-or sets of characters when navigating the Unix file system.
+複数のファイルを一度にコピーまたは移動する必要がある場合があります。
+これは、個別のファイル名のリストを指定するか、
+ワイルドカードを使用して命名パターンを指定することで実行できます。
+ワイルドカードは、Unixファイルシステムをナビゲートするときに
+不明な文字や文字のセットを表すために使用される特殊な文字です。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Copy with Multiple Filenames
+## 複数のファイルをコピーする
 
-For this exercise, you can test the commands in the `shell-lesson-data/exercise-data` directory.
+この演習では、`shell-lesson-data/exercise-data`ディレクトリ内でコマンドをテストできます。
 
-In the example below, what does `cp` do when given several filenames and a directory name?
+以下の例では、複数のファイル名とディレクトリ名が指定された場合、
+`cp`は何を行いますか？
 
 ```bash
 $ mkdir backup
 $ cp creatures/minotaur.dat creatures/unicorn.dat backup/
 ```
 
-In the example below, what does `cp` do when given three or more file names?
+以下の例では、3つ以上のファイル名が指定された場合、`cp`は何を行いますか？
 
 ```bash
 $ cd creatures
@@ -712,14 +695,14 @@ $ cp minotaur.dat unicorn.dat basilisk.dat
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-If given more than one file name followed by a directory name
-(i.e. the destination directory must be the last argument),
-`cp` copies the files to the named directory.
+複数のファイル名に続いてディレクトリ名が指定された場合
+（つまり、宛先ディレクトリは最後の引数でなければなりません）、
+`cp`はファイルを指定されたディレクトリにコピーします。
 
-If given three file names, `cp` throws an error such as the one below,
-because it is expecting a directory name as the last argument.
+3つ以上のファイル名が指定された場合、`cp`は以下のようなエラーを出します。
+これは、`cp`が最後の引数をディレクトリ名として期待しているためです。
 
 ```error
 cp: target 'basilisk.dat' is not a directory
@@ -729,47 +712,44 @@ cp: target 'basilisk.dat' is not a directory
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Using wildcards for accessing multiple files at once
+### ワイルドカードを使用して複数のファイルにアクセスする
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Wildcards
+## ワイルドカード
 
-`*` is a **wildcard**, which represents zero or more other characters.
-Let's consider the `shell-lesson-data/exercise-data/alkanes` directory:
-`*.pdb` represents `ethane.pdb`, `propane.pdb`, and every
-file that ends with '.pdb'. On the other hand, `p*.pdb` only represents
-`pentane.pdb` and `propane.pdb`, because the 'p' at the front can only
-represent filenames that begin with the letter 'p'.
+`*`は**ワイルドカード**で、0個以上の他の文字を表します。
+`shell-lesson-data/exercise-data/alkanes`ディレクトリを考えてみましょう：
+`*.pdb`は`ethane.pdb`、`propane.pdb`、および'.pdb'で終わるすべてのファイルを表します。
+一方、`p*.pdb`は`pentane.pdb`と`propane.pdb`のみを表します。
+これは、先頭の'p'がファイル名の最初の文字'p'で始まるものだけを表すためです。
 
-`?` is also a wildcard, but it represents exactly one character.
-So `?ethane.pdb` could represent `methane.pdb` whereas
-`*ethane.pdb` represents both `ethane.pdb` and `methane.pdb`.
+`?`もワイルドカードですが、これは正確に1文字を表します。
+したがって、`?ethane.pdb`は`methane.pdb`を表す可能性があり、
+`*ethane.pdb`は`ethane.pdb`と`methane.pdb`の両方を表します。
 
-Wildcards can be used in combination with each other. For example,
-`???ane.pdb` indicates three characters followed by `ane.pdb`,
-giving `cubane.pdb  ethane.pdb  octane.pdb`.
+ワイルドカードは互いに組み合わせて使用できます。たとえば、
+`???ane.pdb`は3文字に続いて`ane.pdb`を示し、
+`cubane.pdb`、`ethane.pdb`、`octane.pdb`を表します。
 
-When the shell sees a wildcard, it expands the wildcard to create a
-list of matching filenames *before* running the preceding command.
-As an exception, if a wildcard expression does not match
-any file, Bash will pass the expression as an argument to the command
-as it is. For example, typing `ls *.pdf` in the `alkanes` directory
-(which contains only files with names ending with `.pdb`) results in
-an error message that there is no file called `*.pdf`.
-However, generally commands like `wc` and `ls` see the lists of
-file names matching these expressions, but not the wildcards
-themselves. It is the shell, not the other programs, that expands
-the wildcards.
+シェルがワイルドカードを見ると、それを展開して一致するファイル名のリストを作成し、
+*コマンドを実行する前に*処理します。
+例外として、ワイルドカード式が一致するファイルを見つけられなかった場合、
+Bashはその式をコマンドにそのまま引数として渡します。
+たとえば、`alkanes`ディレクトリで`ls *.pdf`を入力すると、
+（`.pdb`で終わるファイルしか含まれていない場合）
+`*.pdf`というファイルが存在しないというエラーメッセージが表示されます。
+一般的に、`wc`や`ls`などのコマンドは、これらの式に一致するファイル名のリストを処理しますが、
+ワイルドカード自体は処理しません。
+ワイルドカードを展開するのはシェルであり、他のプログラムではありません。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## List filenames matching a pattern
+## パターンに一致するファイル名をリストする
 
-When run in the `alkanes` directory, which `ls` command(s) will
-produce this output?
+`alkanes`ディレクトリで実行すると、どの`ls`コマンドが次の出力を生成しますか？
 
 `ethane.pdb   methane.pdb`
 
@@ -780,25 +760,22 @@ produce this output?
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The solution is `3.`
+解答は`3.`です。
 
-`1.` shows all files whose names contain zero or more characters (`*`)
-followed by the letter `t`,
-then zero or more characters (`*`) followed by `ane.pdb`.
-This gives `ethane.pdb  methane.pdb  octane.pdb  pentane.pdb`.
+`1.`は、ゼロ個以上の文字（`*`）に続いて`t`、
+さらにゼロ個以上の文字（`*`）に続いて`ane.pdb`を含むすべてのファイルを表示します。
+これには`ethane.pdb`、`methane.pdb`、`octane.pdb`、`pentane.pdb`が含まれます。
 
-`2.` shows all files whose names start with zero or more characters (`*`) followed by
-the letter `t`,
-then a single character (`?`), then `ne.` followed by zero or more characters (`*`).
-This will give us `octane.pdb` and `pentane.pdb` but doesn't match anything
-which ends in `thane.pdb`.
+`2.`は、ゼロ個以上の文字（`*`）に続いて`t`、
+次に1文字（`?`）、`ne.`に続いてゼロ個以上の文字（`*`）を含むすべてのファイルを表示します。
+これにより`octane.pdb`と`pentane.pdb`が表示されますが、`thane.pdb`で終わるものは一致しません。
 
-`3.` fixes the problems of option 2 by matching two characters (`??`) between `t` and `ne`.
-This is the solution.
+`3.`は、`t`と`ne`の間に2文字（`??`）を含むものを一致させることで、`2.`の問題を修正します。
+これが正解です。
 
-`4.` only shows files starting with `ethane.`.
+`4.`は`ethane.`で始まるファイルのみを表示します。
 
 :::::::::::::::::::::::::
 
@@ -806,10 +783,9 @@ This is the solution.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## More on Wildcards
+## ワイルドカードについてもっと学ぶ
 
-Sam has a directory containing calibration data, datasets, and descriptions of
-the datasets:
+Samは、キャリブレーションデータ、データセット、およびデータセットの説明を含むディレクトリを持っています：
 
 ```bash
 .
@@ -833,9 +809,9 @@ the datasets:
     └── all_november_files
 ```
 
-Before heading off to another field trip, she wants to back up her data and
-send some datasets to her colleague Bob. Sam uses the following commands
-to get the job done:
+次のフィールド作業に出発する前に、Samはデータをバックアップし、
+いくつかのデータセットを同僚のBobに送信したいと考えています。
+彼女は以下のコマンドを使用して作業を完了します：
 
 ```bash
 $ cp *dataset* backup/datasets
@@ -844,9 +820,9 @@ $ cp 2015-____-____ send_to_bob/all_november_files/
 $ cp ____ send_to_bob/all_datasets_created_on_a_23rd/
 ```
 
-Help Sam by filling in the blanks.
+空欄を埋めて、Samを手助けしてください。
 
-The resulting directory structure should look like this
+最終的なディレクトリ構造は以下のようになります：
 
 ```bash
 .
@@ -894,7 +870,7 @@ The resulting directory structure should look like this
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```bash
 $ cp *calibration.txt backup/calibration
@@ -908,10 +884,9 @@ $ cp *-23-dataset* send_to_bob/all_datasets_created_on_a_23rd/
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Organizing Directories and Files
+## ディレクトリとファイルの整理
 
-Jamie is working on a project, and she sees that her files aren't very well
-organized:
+Jamieはプロジェクトに取り組んでいますが、ファイルがあまり整理されていないことに気づきました：
 
 ```bash
 $ ls -F
@@ -921,9 +896,8 @@ $ ls -F
 analyzed/  fructose.dat    raw/   sucrose.dat
 ```
 
-The `fructose.dat` and `sucrose.dat` files contain output from her data
-analysis. What command(s) covered in this lesson does she need to run
-so that the commands below will produce the output shown?
+`fructose.dat`と`sucrose.dat`のファイルはデータ解析の出力を含んでいます。
+以下のコマンドが示す出力を得るために、Jamieはどのコマンドを実行する必要がありますか？
 
 ```bash
 $ ls -F
@@ -943,15 +917,15 @@ fructose.dat    sucrose.dat
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```bash
 mv *.dat analyzed
 ```
 
-Jamie needs to move her files `fructose.dat` and `sucrose.dat` to the `analyzed` directory.
-The shell will expand \*.dat to match all .dat files in the current directory.
-The `mv` command then moves the list of .dat files to the 'analyzed' directory.
+Jamieは、`fructose.dat`と`sucrose.dat`ファイルを`analyzed`ディレクトリに移動する必要があります。
+シェルは`*.dat`を展開して現在のディレクトリ内のすべての`.dat`ファイルに一致させます。
+その後、`mv`コマンドでこれらの.datファイルを`analyzed`ディレクトリに移動します。
 
 :::::::::::::::::::::::::
 
@@ -959,16 +933,15 @@ The `mv` command then moves the list of .dat files to the 'analyzed' directory.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Reproduce a folder structure
+## フォルダ構造を再現する
 
-You're starting a new experiment and would like to duplicate the directory
-structure from your previous experiment so you can add new data.
+新しい実験を開始するにあたり、以前の実験のディレクトリ構造を複製して、
+新しいデータを追加できるようにしたいと考えています。
 
-Assume that the previous experiment is in a folder called `2016-05-18`,
-which contains a `data` folder that in turn contains folders named `raw` and
-`processed` that contain data files.  The goal is to copy the folder structure
-of the `2016-05-18` folder into a folder called `2016-05-20`
-so that your final directory structure looks like this:
+以前の実験は`2016-05-18`というフォルダにあり、この中には`data`フォルダが含まれています。
+さらに、このフォルダには`raw`と`processed`という名前のフォルダが含まれ、それぞれデータファイルを持っています。
+目標は、`2016-05-18`フォルダのフォルダ構造を`2016-05-20`フォルダにコピーして、
+最終的なディレクトリ構造を以下のようにすることです：
 
 ```output
 2016-05-20/
@@ -977,8 +950,8 @@ so that your final directory structure looks like this:
    └── raw
 ```
 
-Which of the following set of commands would achieve this objective?
-What would the other commands do?
+以下のどのコマンドセットがこの目標を達成しますか？
+他のコマンドセットは何をするでしょうか？
 
 ```bash
 $ mkdir 2016-05-20
@@ -1014,22 +987,21 @@ $ mkdir raw processed
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The first two sets of commands achieve this objective.
-The first set uses relative paths to create the top-level directory before
-the subdirectories.
+最初の2つのコマンドセットは、この目標を達成します。
+最初のセットは、トップレベルのディレクトリを作成してからサブディレクトリを作成します。
 
-The third set of commands will give an error because the default behavior of `mkdir`
-won't create a subdirectory of a non-existent directory:
-the intermediate level folders must be created first.
+3番目のコマンドセットはエラーになります。
+`mkdir`のデフォルトの動作では、存在しないディレクトリのサブディレクトリを作成できないためです。
+中間レベルのフォルダを最初に作成する必要があります。
 
-The fourth set of commands achieve this objective. Remember, the `-p` option,
-followed by a path of one or more
-directories, will cause `mkdir` to create any intermediate subdirectories as required.
+4番目のコマンドセットは、この目標を達成します。
+`-p`オプションを使用すると、必要に応じて中間のサブディレクトリも
 
-The final set of commands generates the 'raw' and 'processed' directories at the same level
-as the 'data' directory.
+作成できます。
+
+最後のコマンドセットでは、`raw`と`processed`ディレクトリが`data`ディレクトリと同じレベルに作成されます。
 
 :::::::::::::::::::::::::
 
@@ -1037,15 +1009,15 @@ as the 'data' directory.
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- `cp [old] [new]` copies a file.
-- `mkdir [path]` creates a new directory.
-- `mv [old] [new]` moves (renames) a file or directory.
-- `rm [path]` removes (deletes) a file.
-- `*` matches zero or more characters in a filename, so `*.txt` matches all files ending in `.txt`.
-- `?` matches any single character in a filename, so `?.txt` matches `a.txt` but not `any.txt`.
-- Use of the Control key may be described in many ways, including `Ctrl-X`, `Control-X`, and `^X`.
-- The shell does not have a trash bin: once something is deleted, it's really gone.
-- Most files' names are `something.extension`. The extension isn't required, and doesn't guarantee anything, but is normally used to indicate the type of data in the file.
-- Depending on the type of work you do, you may need a more powerful text editor than Nano.
+- `cp [old] [new]`はファイルをコピーします。
+- `mkdir [path]`は新しいディレクトリを作成します。
+- `mv [old] [new]`はファイルまたはディレクトリを移動（リネーム）します。
+- `rm [path]`はファイルを削除します。
+- `*`はファイル名内で0文字以上の任意の文字に一致します。例えば、`*.txt`は`.txt`で終わるすべてのファイルに一致します。
+- `?`はファイル名内で任意の1文字に一致します。例えば、`?.txt`は`a.txt`に一致しますが、`any.txt`には一致しません。
+- Controlキーの使用法は`Ctrl-X`、`Control-X`、`^X`などさまざまな方法で表現されることがあります。
+- シェルにはゴミ箱がありません。一度削除すると、完全に消えます。
+- ほとんどのファイル名は`something.extension`の形式です。拡張子は必須ではありませんが、通常ファイル内のデータの種類を示します。
+- 作業内容によっては、Nanoよりも強力なテキストエディタが必要になる場合があります。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -1,32 +1,31 @@
 ---
-title: Pipes and Filters
+title: パイプとフィルタ
 teaching: 25
 exercises: 10
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain the advantage of linking commands with pipes and filters.
-- Combine sequences of commands to get new output
-- Redirect a command's output to a file.
-- Explain what usually happens if a program or pipeline isn't given any input to process.
+- パイプとフィルタを使用してコマンドをリンクする利点を説明する。
+- コマンドのシーケンスを組み合わせて新しい出力を得る。
+- コマンドの出力をファイルにリダイレクトする。
+- プログラムやパイプラインが処理する入力を与えられない場合に通常何が起こるかを説明する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I combine existing commands to produce a desired output?
-- How can I show only part of the output? 
+- 既存のコマンドを組み合わせて、目的の出力を得るにはどうすればよいですか？
+- 出力の一部だけを表示するにはどうすればよいですか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Now that we know a few basic commands,
-we can finally look at the shell's most powerful feature:
-the ease with which it lets us combine existing programs in new ways.
-We'll start with the directory `shell-lesson-data/exercise-data/alkanes`
-that contains six files describing some simple organic molecules.
-The `.pdb` extension indicates that these files are in Protein Data Bank format,
-a simple text format that specifies the type and position of each atom in the molecule.
+いくつかの基本的なコマンドを学んだので、シェルの最も強力な機能に目を向けましょう：
+既存のプログラムを新しい方法で簡単に組み合わせることができる点です。
+`shell-lesson-data/exercise-data/alkanes`ディレクトリを使用して、
+いくつかの簡単な有機分子を記述した6つのファイルを調べます。
+`.pdb`拡張子は、これらのファイルがProtein Data Bank形式であることを示しています。
+これは、分子内の各原子の種類と位置を指定するシンプルなテキスト形式です。
 
 ```bash
 $ ls
@@ -37,7 +36,7 @@ cubane.pdb    methane.pdb    pentane.pdb
 ethane.pdb    octane.pdb     propane.pdb
 ```
 
-Let's run an example command:
+例として、次のコマンドを実行してみましょう：
 
 ```bash
 $ wc cubane.pdb
@@ -47,12 +46,11 @@ $ wc cubane.pdb
 20  156 1158 cubane.pdb
 ```
 
-`wc` is the 'word count' command:
-it counts the number of lines, words, and characters in files (returning the values
-in that order from left to right).
+`wc`は「ワードカウント」コマンドです：
+ファイル内の行数、単語数、および文字数をカウントします（この順に左から右に値が表示されます）。
 
-If we run the command `wc *.pdb`, the `*` in `*.pdb` matches zero or more characters,
-so the shell turns `*.pdb` into a list of all `.pdb` files in the current directory:
+コマンド`wc *.pdb`を実行すると、`*`は0文字以上に一致するため、
+シェルは`*.pdb`を現在のディレクトリ内のすべての`.pdb`ファイルのリストに展開します：
 
 ```bash
 $ wc *.pdb
@@ -60,18 +58,17 @@ $ wc *.pdb
 
 ```output
   20  156  1158  cubane.pdb
-  12  84   622   ethane.pdb
-   9  57   422   methane.pdb
+  12   84   622  ethane.pdb
+   9   57   422  methane.pdb
   30  246  1828  octane.pdb
   21  165  1226  pentane.pdb
-  15  111  825   propane.pdb
+  15  111   825  propane.pdb
  107  819  6081  total
 ```
 
-Note that `wc *.pdb` also shows the total number of all lines in the last line of the output.
+`wc *.pdb`の最後の行は、すべての行の合計を示しています。
 
-If we run `wc -l` instead of just `wc`,
-the output shows only the number of lines per file:
+`wc`ではなく`wc -l`を実行すると、出力には各ファイルの行数のみが表示されます：
 
 ```bash
 $ wc -l *.pdb
@@ -87,52 +84,52 @@ $ wc -l *.pdb
  107  total
 ```
 
-The `-m` and `-w` options can also be used with the `wc` command to show
-only the number of characters or the number of words, respectively.
+また、`wc`コマンドでは、`-m`オプションで文字数のみ、`-w`オプションで単語数のみを表示できます。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Why Isn't It Doing Anything?
+## 何も起こらない理由は？
 
-What happens if a command is supposed to process a file, but we
-don't give it a filename? For example, what if we type:
+コマンドがファイルを処理することを想定しているにもかかわらず、
+ファイル名を指定しない場合はどうなりますか？
+たとえば、次のように入力した場合：
 
 ```bash
 $ wc -l
 ```
 
-but don't type `*.pdb` (or anything else) after the command?
-Since it doesn't have any filenames, `wc` assumes it is supposed to
-process input given at the command prompt, so it just sits there and waits
-for us to give it some data interactively. From the outside, though, all we
-see is it sitting there, and the command doesn't appear to do anything.
+しかし、`*.pdb`（またはその他のファイル名）をコマンドの後に指定しなかった場合、
+`wc`はコマンドプロンプトで与えられる入力を処理する必要があると仮定します。
+そのため、データを手動で入力するまで待機します。
+外部から見ると、何も起こっていないように見えます。
 
-If you make this kind of mistake, you can escape out of this state by
-holding down the control key (<kbd>Ctrl</kbd>) and pressing the letter
-<kbd>C</kbd> once: <kbd>Ctrl</kbd>\+<kbd>C</kbd>. Then release both keys.
-
+このようなミスをした場合は、<kbd>Ctrl</kbd>キーを押しながら<kbd>C</kbd>キーを押すことで
+状態を脱出できます：<kbd>Ctrl</kbd>\+<kbd>C</kbd>を押した後に両方のキーを離してください。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Capturing output from commands
+## コマンドの出力をキャプチャする
 
-Which of these files contains the fewest lines?
-It's an easy question to answer when there are only six files,
-but what if there were 6000?
-Our first step toward a solution is to run the command:
+どのファイルが最も行数が少ないでしょうか？
+ファイルが6つしかない場合は簡単な質問ですが、
+6000個あった場合はどうでしょう？
+解決の第一歩は、次のコマンドを実行することです：
 
 ```bash
 $ wc -l *.pdb > lengths.txt
 ```
 
-The greater than symbol, `>`, tells the shell to **redirect** the command's output to a
-file instead of printing it to the screen. This command prints no screen output, because
-everything that `wc` would have printed has gone into the file `lengths.txt` instead.
-If the file doesn't exist prior to issuing the command, the shell will create the file.
-If the file exists already, it will be silently overwritten, which may lead to data loss.
-Thus, **redirect** commands require caution.
+大なり記号`>`は、コマンドの出力を画面ではなくファイルに
+**リダイレクト**するようにシェルに指示します。
+このコマンドは画面に何も出力しません。
+なぜなら、`wc`が出力するはずだったすべての内容が
+`lengths.txt`ファイルに保存されるためです。
+このコマンドを発行する前にファイルが存在しない場合、
+シェルはそのファイルを作成します。
+すでに存在する場合、ファイルは黙って上書きされるため、データ損失につながる可能性があります。
+したがって、**リダイレクト**コマンドを使用する際には注意が必要です。
 
-`ls lengths.txt` confirms that the file exists:
+`ls lengths.txt`コマンドでファイルが存在することを確認できます：
 
 ```bash
 $ ls lengths.txt
@@ -142,11 +139,12 @@ $ ls lengths.txt
 lengths.txt
 ```
 
-We can now send the content of `lengths.txt` to the screen using `cat lengths.txt`.
-The `cat` command gets its name from 'concatenate' i.e. join together,
-and it prints the contents of files one after another.
-There's only one file in this case,
-so `cat` just shows us what it contains:
+`lengths.txt`の内容を画面に表示するには、
+`cat lengths.txt`コマンドを使用します。
+`cat`コマンドは「連結」を意味し、
+ファイルの内容を順に表示します。
+この場合、1つのファイルしかないため、
+`cat`はその内容をそのまま表示します：
 
 ```bash
 $ cat lengths.txt
@@ -164,28 +162,27 @@ $ cat lengths.txt
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Output Page by Page
+## 出力をページ単位で表示
 
-We'll continue to use `cat` in this lesson, for convenience and consistency,
-but it has the disadvantage that it always dumps the whole file onto your screen.
-More useful in practice is the command `less` (e.g. `less lengths.txt`).
-This displays a screenful of the file, and then stops.
-You can go forward one screenful by pressing the spacebar,
-or back one by pressing `b`.  Press `q` to quit.
-
+このレッスンでは利便性と一貫性のために`cat`を使用しますが、
+画面全体にファイルを一気に表示するという欠点があります。
+実際には`less`コマンド（例：`less lengths.txt`）の方が便利です。
+これはファイルの1画面分を表示して停止します。
+スペースバーで1画面分進み、
+`b`で1画面分戻ることができます。終了するには`q`を押してください。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Filtering output
+## 出力のフィルタリング
 
-Next we'll use the `sort` command to sort the contents of the `lengths.txt` file.
-But first we'll do an exercise to learn a little about the sort command:
+次に、`sort`コマンドを使用して`lengths.txt`ファイルの内容をソートします。
+その前に、`sort`コマンドについて少し学ぶための練習問題を行います：
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## What Does `sort -n` Do?
+## `sort -n`は何をする？
 
-The file `shell-lesson-data/exercise-data/numbers.txt` contains the following lines:
+ファイル`shell-lesson-data/exercise-data/numbers.txt`には以下の行が含まれています：
 
 ```source
 10
@@ -195,7 +192,7 @@ The file `shell-lesson-data/exercise-data/numbers.txt` contains the following li
 6
 ```
 
-If we run `sort` on this file, the output is:
+このファイルで`sort`を実行すると、出力は次のようになります：
 
 ```output
 10
@@ -205,7 +202,7 @@ If we run `sort` on this file, the output is:
 6
 ```
 
-If we run `sort -n` on the same file, we get this instead:
+同じファイルで`sort -n`を実行すると、次の出力が得られます：
 
 ```output
 2
@@ -215,13 +212,13 @@ If we run `sort -n` on the same file, we get this instead:
 22
 ```
 
-Explain why `-n` has this effect.
+なぜ`-n`がこのような効果を持つのか説明してください。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The `-n` option specifies a numerical rather than an alphanumerical sort.
+`-n`オプションは、アルファベット順ではなく数値順のソートを指定します。
 
 
 
@@ -229,10 +226,8 @@ The `-n` option specifies a numerical rather than an alphanumerical sort.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-We will also use the `-n` option to specify that the sort is
-numerical instead of alphanumerical.
-This does *not* change the file;
-instead, it sends the sorted result to the screen:
+`-n`オプションを使用すると、ソートがアルファベット順ではなく数値順になることを指定します。
+この操作はファイル自体を変更するわけではなく、ソートされた結果を画面に送ります：
 
 ```bash
 $ sort -n lengths.txt
@@ -248,11 +243,9 @@ $ sort -n lengths.txt
 107  total
 ```
 
-We can put the sorted list of lines in another temporary file called `sorted-lengths.txt`
-by putting `> sorted-lengths.txt` after the command,
-just as we used `> lengths.txt` to put the output of `wc` into `lengths.txt`.
-Once we've done that,
-we can run another command called `head` to get the first few lines in `sorted-lengths.txt`:
+`> sorted-lengths.txt`をコマンドの後に付け加えることで、
+ソートされた行のリストを`sorted-lengths.txt`という一時ファイルに保存できます。
+その後、`head`コマンドを使用して`sorted-lengths.txt`の最初の数行を取得します：
 
 ```bash
 $ sort -n lengths.txt > sorted-lengths.txt
@@ -263,40 +256,35 @@ $ head -n 1 sorted-lengths.txt
   9  methane.pdb
 ```
 
-Using `-n 1` with `head` tells it that
-we only want the first line of the file;
-`-n 20` would get the first 20,
-and so on.
-Since `sorted-lengths.txt` contains the lengths of our files ordered from least to greatest,
-the output of `head` must be the file with the fewest lines.
+`-n 1`オプションを`head`に指定すると、ファイルの最初の1行だけが出力されます。
+`-n 20`を指定すると最初の20行が得られる、というように使えます。
+`sorted-lengths.txt`にはファイルの行数が少ない順に並んでいるため、
+`head`の出力は行数が最も少ないファイルとなります。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Redirecting to the same file
+## 同じファイルへのリダイレクト
 
-It's a very bad idea to try redirecting
-the output of a command that operates on a file
-to the same file. For example:
+コマンドの出力をそのコマンドが操作しているファイルに
+リダイレクトするのは非常に危険です。たとえば：
 
 ```bash
 $ sort -n lengths.txt > lengths.txt
 ```
 
-Doing something like this may give you
-incorrect results and/or delete
-the contents of `lengths.txt`.
+このような操作を行うと、不正な結果が得られるか、
+`lengths.txt`の内容が削除される可能性があります。
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## What Does `>>` Mean?
+## `>>`の意味は？
 
-We have seen the use of `>`, but there is a similar operator `>>`
-which works slightly differently.
-We'll learn about the differences between these two operators by printing some strings.
-We can use the `echo` command to print strings e.g.
+`>`の使用法を学びましたが、`>>`という似たオペレーターもあります。
+これは少し異なる動作をします。
+以下のコマンドを実行して、この2つのオペレーターの違いを明らかにしてください：
 
 ```bash
 $ echo The echo command prints text
@@ -306,31 +294,30 @@ $ echo The echo command prints text
 The echo command prints text
 ```
 
-Now test the commands below to reveal the difference between the two operators:
+次のコマンドをテストしてください：
 
 ```bash
 $ echo hello > testfile01.txt
 ```
 
-and:
+と：
 
 ```bash
 $ echo hello >> testfile02.txt
 ```
 
-Hint: Try executing each command twice in a row and then examining the output files.
+ヒント：各コマンドを2回連続で実行し、その後出力ファイルを調べてください。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-In the first example with `>`, the string 'hello' is written to `testfile01.txt`,
-but the file gets overwritten each time we run the command.
+最初の例（`>`を使用）では、文字列`hello`が`testfile01.txt`に書き込まれますが、
+コマンドを再度実行するとファイルが上書きされます。
 
-We see from the second example that the `>>` operator also writes 'hello' to a file
-(in this case `testfile02.txt`),
-but appends the string to the file if it already exists
-(i.e. when we run it for the second time).
+2番目の例（`>>`を使用）では、`hello`がファイルに書き込まれます
+（この場合は`testfile02.txt`）が、すでにファイルが存在する場合は文字列が追加されます。
+つまり、2回目の実行時には追記されます。
 
 
 
@@ -340,34 +327,32 @@ but appends the string to the file if it already exists
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Appending Data
+## データの追記
 
-We have already met the `head` command, which prints lines from the start of a file.
-`tail` is similar, but prints lines from the end of a file instead.
+すでに`head`コマンドを学びました。このコマンドはファイルの先頭から行を出力します。
+`tail`はこれに似ていますが、ファイルの末尾から行を出力します。
 
-Consider the file `shell-lesson-data/exercise-data/animal-counts/animals.csv`.
-After these commands, select the answer that
-corresponds to the file `animals-subset.csv`:
+以下のコマンドの後、`animals-subset.csv`ファイルに対応する答えを選択してください：
 
 ```bash
 $ head -n 3 animals.csv > animals-subset.csv
 $ tail -n 2 animals.csv >> animals-subset.csv
 ```
 
-1. The first three lines of `animals.csv`
-2. The last two lines of `animals.csv`
-3. The first three lines and the last two lines of `animals.csv`
-4. The second and third lines of `animals.csv`
+1. `animals.csv`の最初の3行
+2. `animals.csv`の最後の2行
+3. `animals.csv`の最初の3行と最後の2行
+4. `animals.csv`の2行目と3行目
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-Option 3 is correct.
-For option 1 to be correct we would only run the `head` command.
-For option 2 to be correct we would only run the `tail` command.
-For option 4 to be correct we would have to pipe the output of `head` into `tail -n 2`
-by doing `head -n 3 animals.csv | tail -n 2 > animals-subset.csv`
+正解は選択肢3です。
+選択肢1が正しい場合は、`head`コマンドのみを実行します。
+選択肢2が正しい場合は、`tail`コマンドのみを実行します。
+選択肢4が正しい場合は、次のように`head`の出力を`tail`にパイプで渡す必要があります：
+`head -n 3 animals.csv | tail -n 2 > animals-subset.csv`
 
 
 
@@ -375,14 +360,15 @@ by doing `head -n 3 animals.csv | tail -n 2 > animals-subset.csv`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Passing output to another command
+## 出力を別のコマンドに渡す
 
-In our example of finding the file with the fewest lines,
-we are using two intermediate files `lengths.txt` and `sorted-lengths.txt` to store output.
-This is a confusing way to work because
-even once you understand what `wc`, `sort`, and `head` do,
-those intermediate files make it hard to follow what's going on.
-We can make it easier to understand by running `sort` and `head` together:
+行数が最も少ないファイルを見つける例では、
+出力を保存するために`lengths.txt`と`sorted-lengths.txt`という
+2つの中間ファイルを使用しています。
+しかし、これでは操作がわかりにくくなります。
+`wc`、`sort`、`head`が何をするのか理解していても、
+中間ファイルの存在が混乱を招きます。
+これを簡単に理解できるように、`sort`と`head`を連続して実行します：
 
 ```bash
 $ sort -n lengths.txt | head -n 1
@@ -392,21 +378,19 @@ $ sort -n lengths.txt | head -n 1
   9  methane.pdb
 ```
 
-The vertical bar, `|`, between the two commands is called a **pipe**.
-It tells the shell that we want to use
-the output of the command on the left
-as the input to the command on the right.
+垂直バー`|`は**パイプ**と呼ばれます。
+これは、左側のコマンドの出力を右側のコマンドの入力として使用することをシェルに指示します。
 
-This has removed the need for the `sorted-lengths.txt` file.
+これにより、`sorted-lengths.txt`ファイルは不要になりました。
 
-## Combining multiple commands
+## 複数のコマンドを組み合わせる
 
-Nothing prevents us from chaining pipes consecutively.
-We can for example send the output of `wc` directly to `sort`,
-and then send the resulting output to `head`.
-This removes the need for any intermediate files.
+パイプを連続してチェーンすることも可能です。
+たとえば、`wc`の出力を直接`sort`に送り、
+さらにその結果を`head`に送ることができます。
+これにより、中間ファイルは一切不要になります。
 
-We'll start by using a pipe to send the output of `wc` to `sort`:
+まず、パイプを使用して`wc`の出力を`sort`に送ります：
 
 ```bash
 $ wc -l *.pdb | sort -n
@@ -422,7 +406,7 @@ $ wc -l *.pdb | sort -n
  107 total
 ```
 
-We can then send that output through another pipe, to `head`, so that the full pipeline becomes:
+次に、その出力を`head`に送ることで、完全なパイプラインは次のようになります：
 
 ```bash
 $ wc -l *.pdb | sort -n | head -n 1
@@ -432,21 +416,21 @@ $ wc -l *.pdb | sort -n | head -n 1
    9  methane.pdb
 ```
 
-This is exactly like a mathematician nesting functions like *log(3x)*
-and saying 'the log of three times *x*'.
-In our case,
-the algorithm is 'head of sort of line count of `*.pdb`'.
+これは、数学者が*log(3x)*のように関数をネストして、
+「3xの対数」と説明するのと同じです。
+私たちの場合、アルゴリズムは
+「`*.pdb`の行数をソートして先頭を取得する」というものです。
 
-The redirection and pipes used in the last few commands are illustrated below:
+上記のコマンドで使用されたリダイレクトとパイプの概念を以下に示します：
 
-![](fig/redirects-and-pipes.svg){alt='Redirects and Pipes of different commands: "wc -l \*.pdb" will direct theoutput to the shell. "wc -l \*.pdb > lengths" will direct output to the file"lengths". "wc -l \*.pdb | sort -n | head -n 1" will build a pipeline where theoutput of the "wc" command is the input to the "sort" command, the output ofthe "sort" command is the input to the "head" command and the output of the"head" command is directed to the shell'}
+![](fig/redirects-and-pipes.svg){alt='リダイレクトとパイプの例。"wc -l \*.pdb"はシェルに出力を送る。"wc -l \*.pdb > lengths"は出力をファイル"lengths"に送る。"wc -l \*.pdb | sort -n | head -n 1"はパイプラインを構築し、"wc"コマンドの出力を"sort"コマンドの入力とし、"sort"コマンドの出力を"head"コマンドの入力とし、最終的に"head"コマンドの出力をシェルに送る'}
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Piping Commands Together
+## コマンドをパイプでつなぐ
 
-In our current directory, we want to find the 3 files which have the least number of
-lines. Which command listed below would work?
+現在のディレクトリ内で、行数が最も少ない3つのファイルを見つけたいとします。
+以下のどのコマンドが機能するでしょうか？
 
 1. `wc -l * > sort -n > head -n 3`
 2. `wc -l * | sort -n | head -n 1-3`
@@ -455,48 +439,46 @@ lines. Which command listed below would work?
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-Option 4 is the solution.
-The pipe character `|` is used to connect the output from one command to
-the input of another.
-`>` is used to redirect standard output to a file.
-Try it in the `shell-lesson-data/exercise-data/alkanes` directory!
-
-
+正解は選択肢4です。
+パイプ文字`|`は、あるコマンドの出力を
+別のコマンドの入力として接続するために使用されます。
+`>`は標準出力をファイルにリダイレクトします。
+`shell-lesson-data/exercise-data/alkanes`ディレクトリで試してみてください！
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Tools designed to work together
+## 協力するために設計されたツール
 
-This idea of linking programs together is why Unix has been so successful.
-Instead of creating enormous programs that try to do many different things,
-Unix programmers focus on creating lots of simple tools that each do one job well,
-and that work well with each other.
-This programming model is called 'pipes and filters'.
-We've already seen pipes;
-a **filter** is a program like `wc` or `sort`
-that transforms a stream of input into a stream of output.
-Almost all of the standard Unix tools can work this way.
-Unless told to do otherwise,
-they read from standard input,
-do something with what they've read,
-and write to standard output.
+このプログラムをつなげて使うというアイデアこそが、Unixが成功した理由です。
+多くの異なるタスクを実行する巨大なプログラムを作成する代わりに、
+Unixのプログラマーは、各ツールが1つの仕事をうまくこなし、
+お互いにうまく連携できるようにすることに集中します。
+このプログラミングモデルは「パイプとフィルタ」と呼ばれます。
+私たちはすでにパイプを見てきました。
+**フィルタ**とは、`wc`や`sort`のように、
+入力ストリームを出力ストリームに変換するプログラムのことです。
+標準的なUnixツールのほぼすべてがこのように動作します。
+特別な指示がない限り、
+これらは標準入力から読み取り、
+読み取った内容を処理し、
+標準出力に書き出します。
 
-The key is that any program that reads lines of text from standard input
-and writes lines of text to standard output
-can be combined with every other program that behaves this way as well.
-You can *and should* write your programs this way
-so that you and other people can put those programs into pipes to multiply their power.
+標準入力からテキストの行を読み取り、
+標準出力にテキストの行を書き出すプログラムは、
+同じように振る舞う他のすべてのプログラムと組み合わせることができます。
+プログラムをこのように作成することで、
+自分自身や他の人々がそれらをパイプラインに組み込んで
+その能力を何倍にも拡張できるようにするべきです。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Pipe Reading Comprehension
+## パイプを読む
 
-A file called `animals.csv` (in the `shell-lesson-data/exercise-data/animal-counts` folder)
-contains the following data:
+ファイル`animals.csv`（`shell-lesson-data/exercise-data/animal-counts`フォルダ内）には以下のデータが含まれています：
 
 ```source
 2012-11-05,deer,5
@@ -509,25 +491,25 @@ contains the following data:
 2012-11-07,bear,1
 ```
 
-What text passes through each of the pipes and the final redirect in the pipeline below?
-Note, the `sort -r` command sorts in reverse order.
+以下のパイプラインと最終リダイレクトを通過するテキストは何ですか？
+注：`sort -r`コマンドは逆順にソートします。
 
 ```bash
 $ cat animals.csv | head -n 5 | tail -n 3 | sort -r > final.txt
 ```
 
-Hint: build the pipeline up one command at a time to test your understanding
+ヒント：理解をテストするために、1つずつコマンドを積み上げてパイプラインを構築してみてください。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The `head` command extracts the first 5 lines from `animals.csv`.
-Then, the last 3 lines are extracted from the previous 5 by using the `tail` command.
-With the `sort -r` command those 3 lines are sorted in reverse order.
-Finally, the output is redirected to a file: `final.txt`.
-The content of this file can be checked by executing `cat final.txt`.
-The file should contain the following lines:
+`head`コマンドは`animals.csv`の最初の5行を抽出します。
+次に、`tail`コマンドを使用して、最初の5行から最後の3行を抽出します。
+`sort -r`コマンドを使用して、それらの3行を逆順にソートします。
+最後に、出力は`final.txt`というファイルにリダイレクトされます。
+このファイルの内容は、`cat final.txt`を実行することで確認できます。
+ファイルには次の行が含まれるはずです：
 
 ```source
 2012-11-06,rabbit,19
@@ -541,20 +523,20 @@ The file should contain the following lines:
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Pipe Construction
+## パイプの構築
 
-For the file `animals.csv` from the previous exercise, consider the following command:
+前の演習のファイル`animals.csv`を使用して、次のコマンドを考えます：
 
 ```bash
 $ cut -d , -f 2 animals.csv
 ```
 
-The `cut` command is used to remove or 'cut out' certain sections of each line in the file,
-and `cut` expects the lines to be separated into columns by a <kbd>Tab</kbd> character.
-A character used in this way is called a **delimiter**.
-In the example above we use the `-d` option to specify the comma as our delimiter character.
-We have also used the `-f` option to specify that we want to extract the second field (column).
-This gives the following output:
+`cut`コマンドは、ファイル内の各行から特定の部分を削除または「切り取る」ために使用されます。
+`cut`は、行が<kbd>Tab</kbd>文字で区切られていることを前提としています。
+このように使用される文字は**区切り文字**と呼ばれます。
+上記の例では、`-d`オプションを使用してカンマを区切り文字として指定しています。
+また、`-f`オプションを使用して、2番目のフィールド（列）を抽出することを指定しています。
+これにより、次の出力が得られます：
 
 ```output
 deer
@@ -567,14 +549,13 @@ rabbit
 bear
 ```
 
-The `uniq` command filters out adjacent matching lines in a file.
-How could you extend this pipeline (using `uniq` and another command) to find
-out what animals the file contains (without any duplicates in their
-names)?
+`uniq`コマンドは、ファイル内の隣接する一致する行をフィルタリングします。
+このパイプラインをどのように拡張して、
+ファイルに含まれる動物の名前を重複なしで見つけることができますか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```bash
 $ cut -d , -f 2 animals.csv | sort | uniq
@@ -586,9 +567,9 @@ $ cut -d , -f 2 animals.csv | sort | uniq
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Which Pipe?
+## どのパイプを使用する？
 
-The file `animals.csv` contains 8 lines of data formatted as follows:
+ファイル`animals.csv`には以下のようにフォーマットされた8行のデータが含まれています：
 
 ```output
 2012-11-05,deer,5
@@ -598,11 +579,10 @@ The file `animals.csv` contains 8 lines of data formatted as follows:
 ...
 ```
 
-The `uniq` command has a `-c` option which gives a count of the
-number of times a line occurs in its input.  Assuming your current
-directory is `shell-lesson-data/exercise-data/animal-counts`,
-what command would you use to produce a table that shows
-the total count of each type of animal in the file?
+`uniq`コマンドには、入力内で行が出現した回数をカウントする`-c`オプションがあります。
+現在のディレクトリが`shell-lesson-data/exercise-data/animal-counts`であると仮定して、
+ファイル内の各動物の合計数を示すテーブルを生成するには、
+どのコマンドを使用しますか？
 
 1. `sort animals.csv | uniq -c`
 2. `sort -t, -k2,2 animals.csv | uniq -c`
@@ -612,31 +592,28 @@ the total count of each type of animal in the file?
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-Option 4. is the correct answer.
-If you have difficulty understanding why, try running the commands, or sub-sections of
-the pipelines (make sure you are in the `shell-lesson-data/exercise-data/animal-counts`
-directory).
-
-
+正解は選択肢4です。
+なぜそうなるのか理解が難しい場合は、
+コマンドやパイプラインのサブセクションを実行してみてください
+（`shell-lesson-data/exercise-data/animal-counts`ディレクトリにいることを確認してください）。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Nelle's Pipeline: Checking Files
+## ネルのパイプライン: ファイルの確認
 
-Nelle has run her samples through the assay machines
-and created 17 files in the `north-pacific-gyre` directory described earlier.
-As a quick check, starting from the `shell-lesson-data` directory, Nelle types:
+ネルはサンプルをアッセイマシンに通し、先に説明した `north-pacific-gyre` ディレクトリに17個のファイルを作成しました。  
+簡単にチェックするために、`shell-lesson-data` ディレクトリから次のコマンドを入力します:
 
 ```bash
 $ cd north-pacific-gyre
 $ wc -l *.txt
 ```
 
-The output is 18 lines that look like this:
+出力は以下のように18行が表示されます:
 
 ```output
 300 NENE01729A.txt
@@ -648,7 +625,7 @@ The output is 18 lines that look like this:
 ... ...
 ```
 
-Now she types this:
+次に以下を入力します:
 
 ```bash
 $ wc -l *.txt | sort -n | head -n 5
@@ -662,13 +639,9 @@ $ wc -l *.txt | sort -n | head -n 5
  300 NENE01751A.txt
 ```
 
-Whoops: one of the files is 60 lines shorter than the others.
-When she goes back and checks it,
-she sees that she did that assay at 8:00 on a Monday morning --- someone
-was probably in using the machine on the weekend,
-and she forgot to reset it.
-Before re-running that sample,
-she checks to see if any files have too much data:
+おっと、1つのファイルが他より60行少ないことに気づきました。  
+ログを確認すると、そのアッセイは月曜日の朝8時に実行されており、週末に誰かが機械を使用し、リセットするのを忘れた可能性があります。  
+そのサンプルを再実行する前に、データが多すぎるファイルがないか確認します:
 
 ```bash
 $ wc -l *.txt | sort -n | tail -n 5
@@ -682,11 +655,10 @@ $ wc -l *.txt | sort -n | tail -n 5
 5040 total
 ```
 
-Those numbers look good --- but what's that 'Z' doing there in the third-to-last line?
-All of her samples should be marked 'A' or 'B';
-by convention,
-her lab uses 'Z' to indicate samples with missing information.
-To find others like it, she does this:
+これらの数値は問題なさそうですが、3行目の「Z」は何でしょうか?  
+彼女のサンプルはすべて「A」または「B」でマークされているはずです。  
+慣例として、彼女の研究室では「Z」を欠損情報があるサンプルを示すために使用します。  
+これに似た他のサンプルを探すために、次のコマンドを実行します:
 
 ```bash
 $ ls *Z.txt
@@ -696,25 +668,17 @@ $ ls *Z.txt
 NENE01971Z.txt    NENE02040Z.txt
 ```
 
-Sure enough,
-when she checks the log on her laptop,
-there's no depth recorded for either of those samples.
-Since it's too late to get the information any other way,
-she must exclude those two files from her analysis.
-She could delete them using `rm`,
-but there are actually some analyses she might do later where depth doesn't matter,
-so instead, she'll have to be careful later on to select files using the wildcard expressions
-`NENE*A.txt NENE*B.txt`.
+やはり、彼女がラップトップのログを確認すると、これらのサンプルの深度が記録されていません。  
+他の方法で情報を取得するには遅すぎるため、これら2つのファイルを解析から除外する必要があります。  
+`rm` を使用して削除することもできますが、深度が重要でない解析を行う可能性もあるため、代わりに後でワイルドカード式 `NENE*A.txt NENE*B.txt` を使ってファイルを選択するよう注意する必要があります。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Removing Unneeded Files
+## 不要なファイルの削除
 
-Suppose you want to delete your processed data files, and only keep
-your raw files and processing script to save storage.
-The raw files end in `.dat` and the processed files end in `.txt`.
-Which of the following would remove all the processed data files,
-and *only* the processed data files?
+ストレージを節約するために、処理済みデータファイルを削除し、生データファイルと処理スクリプトのみを保持したいとします。  
+生データファイルは `.dat` で終わり、処理済みファイルは `.txt` で終わります。  
+次のうち、処理済みデータファイルのみを削除するコマンドはどれでしょうか?
 
 1. `rm ?.txt`
 2. `rm *.txt`
@@ -723,35 +687,28 @@ and *only* the processed data files?
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. This would remove `.txt` files with one-character names
-2. This is the correct answer
-3. The shell would expand `*` to match everything in the current directory,
-  so the command would try to remove all matched files and an additional
-  file called `.txt`
-4. The shell expands `*.*` to match all filenames containing at least one
-  `.`, including the processed files (`.txt`) *and* raw files (`.dat`)
-  
-  
+1. このコマンドは1文字の名前を持つ `.txt` ファイルを削除します。
+2. これが正しい答えです。
+3. シェルは `*` を現在のディレクトリ内のすべてのファイルに展開するため、このコマンドはすべての一致するファイルと追加の `.txt` という名前のファイルを削除しようとします。
+4. シェルは `*.*` を拡張して少なくとも1つの `.` を含むすべてのファイル名に一致させるため、処理済みファイル (`.txt`) と生データファイル (`.dat`) の両方が削除されます。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- `wc` counts lines, words, and characters in its inputs.
-- `cat` displays the contents of its inputs.
-- `sort` sorts its inputs.
-- `head` displays the first 10 lines of its input by default without additional arguments.
-- `tail` displays the last 10 lines of its input by default without additional arguments.
-- `command > [file]` redirects a command's output to a file (overwriting any existing content).
-- `command >> [file]` appends a command's output to a file.
-- `[first] | [second]` is a pipeline: the output of the first command is used as the input to the second.
-- The best way to use the shell is to use pipes to combine simple single-purpose programs (filters).
+- `wc`は入力内の行、単語、および文字数をカウントします。
+- `cat`は入力の内容を表示します。
+- `sort`は入力をソートします。
+- `head`はデフォルトで入力の最初の10行を表示します。
+- `tail`はデフォルトで入力の最後の10行を表示します。
+- `command > [file]`はコマンドの出力をファイルにリダイレクトします（既存の内容を上書きします）。
+- `command >> [file]`はコマンドの出力をファイルに追記します。
+- `[first] | [second]`はパイプラインです：最初のコマンドの出力が2番目のコマンドの入力として使用されます。
+- シェルを使用する最良の方法は、単純で一つの目的を持つプログラム（フィルタ）をパイプで組み合わせることです。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
