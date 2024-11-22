@@ -2,30 +2,29 @@
 site: sandpaper::sandpaper_site
 ---
 
-The Unix shell has been around longer than most of its users
-have been alive. It has survived because it's a powerful tool that
-allows users to perform complex and powerful tasks, often with just
-a few keystrokes or lines of code. It helps users automate repetitive
-tasks and easily combine smaller tasks into larger, more powerful workflows.
+Unix シェルは、その利用者の多くが生まれる前から存在しています。
+その理由は、非常に強力なツールであり、少ないキーストロークや短いコードで
+複雑かつ強力なタスクを実行できるからです。
+シェルは、繰り返し作業を自動化し、小さな作業を簡単に組み合わせて、
+より強力なワークフローを構築するのに役立ちます。
 
-Use of the shell is fundamental to a wide range of advanced computing
-tasks, including high-performance computing. These lessons will introduce
-you to this powerful tool.
+シェルの使用は、高性能コンピューティングを含む幅広い高度な計算タスクの基盤となるものです。
+このレッスンでは、この強力なツールの使い方を紹介します。
 
 ::::::::::::::::::::::::::::::::::::::::::  prereq
 
-## Prerequisites
+## 前提条件
 
-This lesson guides you through the basics of file systems and the
-shell. If you have stored files on a computer at all and recognize
-the word "file" and either "directory" or "folder" (two common words
-for the same thing), you're ready for this lesson.
+このレッスンでは、ファイルシステムとシェルの基本を学びます。
+コンピュータにファイルを保存したことがあり、「ファイル」という言葉や
+「ディレクトリ」または「フォルダ」（同じものを指す2つの一般的な言葉）のいずれかを
+知っている場合、このレッスンの準備ができています。
 
-If you're already comfortable manipulating files and directories,
-searching for files with `grep` and `find`, and writing simple loops
-and scripts, you probably want to explore the next lesson:
-[shell-extras](https://carpentries-incubator.github.io/shell-extras/).
-
+すでにファイルやディレクトリの操作に慣れていて、
+`grep` や `find` を使ったファイル検索や、
+簡単なループやスクリプトを書くことができる場合は、
+次のレッスン [shell-extras](https://carpentries-incubator.github.io/shell-extras/) を
+試してみるのがおすすめです。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

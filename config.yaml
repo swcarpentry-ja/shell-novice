@@ -11,13 +11,13 @@
 carpentry: 'swc'
 
 # Overall title for pages.
-title: 'The Unix Shell'
+title: 'Unixシェル'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
 created: '2014-10-22'
 
 # Comma-separated list of keywords for the lesson
-keywords: 'software, data, lesson, The Carpentries'
+keywords: 'ソフトウェア, データ, レッスン, The Carpentries'
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable

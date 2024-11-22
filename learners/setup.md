@@ -1,48 +1,47 @@
 ---
-title: Setup
+title: セットアップ
 ---
 
-## Download files
+## ファイルのダウンロード
 
-You need to download some files to follow this lesson.
+このレッスンを進めるには、いくつかのファイルをダウンロードする必要があります。
 
-1. Download [shell-lesson-data.zip][zip-file] and move the file to your Desktop.
-2. Unzip/extract the file.
-  **Let your instructor know if you need help with this step**.
-  You should end up with a new folder called **`shell-lesson-data`** on your Desktop.
+1. [shell-lesson-data.zip][zip-file] をダウンロードし、デスクトップに移動させます。
+2. ファイルを解凍/展開します。
+   **この手順で問題があれば、インストラクターに知らせてください**。
+   デスクトップに **`shell-lesson-data`** という新しいフォルダが作成されるはずです。
 
-## Install software
+## ソフトウェアのインストール
 
-If you do not already have the shell software installed, you will need to
-[download and install][install_shell] it.
+シェルソフトウェアがまだインストールされていない場合は、
+[こちら][install_shell] からダウンロードしてインストールしてください。
 
-## Open a new shell
+## 新しいシェルを開く
 
-After installing the software
+ソフトウェアをインストールした後、
 
-3. Open a terminal.
-  If you're not sure how to open a terminal on your operating system, see the instructions below.
-4. In the terminal type `cd` then press the <kbd>Return</kbd> key.
-  This step will make sure you start with your home folder as your working directory.
+3. ターミナルを開きます。
+   ご使用のオペレーティングシステムでターミナルを開く方法がわからない場合は、
+   以下の説明をご覧ください。
+4. ターミナルで `cd` と入力し、<kbd>Return</kbd> キーを押します。
+   この手順により、ホームフォルダを作業ディレクトリとして開始できます。
 
-In the lesson, you will find out how to access the data files in this folder.
+レッスンでは、このフォルダ内のデータファイルにアクセスする方法を学びます。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Where to type commands: How to open a new shell
+## コマンドを入力する場所：新しいシェルを開く方法
 
-The shell is a program that enables us to send commands to the computer and receive output.
-It is also referred to as the terminal or command line.
+シェルは、コンピュータにコマンドを送信し、出力を受け取ることを可能にするプログラムです。
+ターミナルやコマンドラインとも呼ばれます。
 
-Some computers include a default Unix Shell program.
-The steps below describe some methods for identifying and opening
-a Unix Shell program if you already have one installed.
-There are also options for identifying and downloading a Unix Shell program,
-a Linux/UNIX emulator, or a program to access a Unix Shell on a server.
+多くのコンピュータには、デフォルトで Unix シェルプログラムが含まれています。
+以下の手順は、インストール済みの Unix シェルプログラムを特定して開く方法を説明しています。
+また、Unix シェルプログラム、Linux/UNIX エミュレーター、またはサーバー上の Unix シェルにアクセスするプログラムを特定して
+ダウンロードする方法も紹介します。
 
-If none of the options below address your circumstances,
-try an online search for: Unix shell [your computer model] [your operating system].
-
+以下のオプションがいずれも該当しない場合は、
+「Unix shell [コンピュータモデル] [オペレーティングシステム]」でオンライン検索を試してください。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -50,21 +49,18 @@ try an online search for: Unix shell [your computer model] [your operating syste
 
 ### Windows {#windows}
 
-Computers with Windows operating systems do not automatically have a Unix Shell program
-installed.
-In this lesson, we encourage you to use an emulator included in [Git for Windows][install_shell],
-which gives you access to both Bash shell commands and Git.
+Windows オペレーティングシステムを搭載したコンピュータには、デフォルトで Unix シェルプログラムがインストールされていません。
+このレッスンでは、[Git for Windows][install_shell] に含まれるエミュレーターの使用を推奨します。
+これにより、Bash シェルコマンドと Git にアクセスできます。
 
-Once installed, you can open a terminal by running the program Git Bash from the Windows start
-menu.
+インストール後、Windows のスタートメニューから「Git Bash」を実行することでターミナルを開けます。
 
-**For advanced users:**
+**上級者向け：**
 
-As an alternative to Git for Windows you may wish to [Install the Windows Subsystem for Linux][wsl]
-which gives access to a Bash shell command-line tool in Windows 10 and above.
+Git for Windows の代替として、[Windows Subsystem for Linux（WSL）][wsl] をインストールすることで、
+Windows 10 以降で Bash シェルコマンドラインツールを使用することもできます。
 
-Please note that commands in the Windows Subsystem for Linux (WSL) may differ slightly
-from those shown in the lesson or presented in the workshop.
+ただし、WSL のコマンドはレッスンやワークショップで提示される内容と若干異なる場合があります。
 
 ::::::::::::
 
@@ -72,24 +68,23 @@ from those shown in the lesson or presented in the workshop.
 
 ### MacOS {#macos}
 
-For a Mac computer running macOS Mojave or earlier releases, the default Unix Shell is Bash.
-For a Mac computer running macOS Catalina or later releases, the default Unix Shell is Zsh.
-Your default shell is available via the Terminal program within your Utilities folder.
+macOS Mojave またはそれ以前のリリースを実行している Mac コンピュータのデフォルト Unix シェルは Bash です。
+macOS Catalina またはそれ以降を実行している場合、デフォルト Unix シェルは Zsh です。
+デフォルトのシェルは、ユーティリティフォルダ内のターミナルプログラムを介して利用できます。
 
-To open Terminal, try one or both of the following:
+ターミナルを開くには、以下のいずれかを試してください：
 
-- In Finder, select the Go menu, then select Utilities.
-  Locate Terminal in the Utilities folder and open it.
-- Use the Mac 'Spotlight' computer search function.
-  Search for: `Terminal` and press <kbd>Return</kbd>.
+- Finder で「移動」メニューを選択し、「ユーティリティ」を選択します。
+  ユーティリティフォルダ内の「ターミナル」を見つけて開きます。
+- Mac の「Spotlight」検索機能を使用します。
+  `Terminal` と検索し、<kbd>Return</kbd> を押します。
 
-To check if your machine is set up to use something other than Bash,
-type `echo $SHELL` in your terminal window.
+お使いのマシンが Bash 以外を使用するように設定されているかどうかを確認するには、
+ターミナルウィンドウで `echo $SHELL` と入力します。
 
-If your machine is set up to use something other than Bash,
-you can run it by opening a terminal and typing `bash`.
+もし Bash 以外が設定されている場合、ターミナルを開き、`bash` と入力することで Bash を使用できます。
 
-[How to Use Terminal on a Mac][mac-terminal]
+[Macでターミナルを使用する方法][mac-terminal]
 
 ::::::::::::
 
@@ -97,12 +92,11 @@ you can run it by opening a terminal and typing `bash`.
 
 ### Linux {#linux}
 
-The default Unix Shell for Linux operating systems is usually Bash.
-On most versions of Linux, it is accessible by running the
-[Gnome Terminal][gnome-terminal] or [KDE Konsole][kde-konsole] or [xterm],
-which can be found via the applications menu or the search bar.
-If your machine is set up to use something other than Bash,
-you can run it by opening a terminal and typing `bash`.
+Linux オペレーティングシステムのデフォルト Unix シェルは通常 Bash です。
+ほとんどの Linux バージョンでは、
+[Gnome Terminal][gnome-terminal]、[KDE Konsole][kde-konsole]、または [xterm] を実行することでアクセスできます。
+これらはアプリケーションメニューや検索バーから見つけることができます。
+もし Bash 以外を使用するように設定されている場合、ターミナルを開き、`bash` と入力することで Bash を使用できます。
 
 ::::::::::::
 

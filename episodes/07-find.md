@@ -1,44 +1,35 @@
 ---
-title: Finding Things
+title: ファイルを見つける
 teaching: 25
 exercises: 20
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Use `grep` to select lines from text files that match simple patterns.
-- Use `find` to find files and directories whose names match simple patterns.
-- Use the output of one command as the command-line argument(s) to another command.
-- Explain what is meant by 'text' and 'binary' files, and why many common tools don't handle the latter well.
+- `grep` を使って、テキストファイルから特定のパターンに一致する行を選択する。
+- `find` を使って、特定のパターンに一致する名前のファイルやディレクトリを見つける。
+- 1つのコマンドの出力を別のコマンドのコマンドライン引数として使用する。
+- 「テキスト」ファイルと「バイナリ」ファイルの意味、およびなぜ多くの一般的なツールが後者を適切に処理できないかを説明する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I find files?
-- How can I find things in files?
+- ファイルをどのように見つけることができますか？
+- ファイル内の内容をどのように見つけることができますか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-In the same way that many of us now use 'Google' as a
-verb meaning 'to find', Unix programmers often use the
-word 'grep'.
-'grep' is a contraction of 'global/regular expression/print',
-a common sequence of operations in early Unix text editors.
-It is also the name of a very useful command-line program.
+多くの人が「Google」を「探す」という意味の動詞として使うのと同じように、Unixプログラマーは「grep」という言葉をよく使います。
+`grep` は「global/regular expression/print」の略で、初期のUnixテキストエディターで一般的に使用された操作の一連の名前です。
+また、非常に便利なコマンドラインプログラムの名前でもあります。
 
-`grep` finds and prints lines in files that match a pattern.
-For our examples,
-we will use a file that contains three haiku taken from a
-[1998 competition](https://web.archive.org/web/19991201042211/http://salon.com/21st/chal/1998/01/26chal.html)
-in *Salon* magazine (Credit to authors Bill Torcaso, Howard Korder, and
-Margaret Segall, respectively. See
-Haiku Error Messsages archived
-[Page 1](https://web.archive.org/web/20000310061355/http://www.salon.com/21st/chal/1998/02/10chal2.html)
-and
-[Page 2](https://web.archive.org/web/20000229135138/http://www.salon.com/21st/chal/1998/02/10chal3.html)
-.). For this set of examples,
-we're going to be working in the writing subdirectory:
+`grep` は、特定のパターンに一致するファイル内の行を検索して表示します。
+例として、*Salon* マガジンの[1998年のコンテスト](https://web.archive.org/web/19991201042211/http://salon.com/21st/chal/1998/01/26chal.html)から取った3つの俳句を含むファイルを使用します。
+（作者 Bill Torcaso、Howard Korder、Margaret Segall に敬意を表します。俳句エラーメッセージのアーカイブ：
+[ページ1](https://web.archive.org/web/20000310061355/http://www.salon.com/21st/chal/1998/02/10chal2.html)、
+[ページ2](https://web.archive.org/web/20000229135138/http://www.salon.com/21st/chal/1998/02/10chal3.html)。）
+この例では、`writing` サブディレクトリで作業します。
 
 ```bash
 $ cd
@@ -60,7 +51,7 @@ Today it is not working
 Software is like that.
 ```
 
-Let's find lines that contain the word 'not':
+単語「not」を含む行を見つけてみましょう：
 
 ```bash
 $ grep not haiku.txt
@@ -72,18 +63,17 @@ Is not the true Tao, until
 Today it is not working
 ```
 
-Here, `not` is the pattern we're searching for.
-The grep command searches through the file, looking for matches to the pattern specified.
-To use it type `grep`, then the pattern we're searching for and finally
-the name of the file (or files) we're searching in.
+ここでは、`not` が検索しているパターンです。
+`grep` コマンドは、指定したパターンに一致する行をファイル内で検索します。
+使用方法は、`grep` と検索したいパターン、その後に検索対象のファイル名を入力します。
 
-The output is the three lines in the file that contain the letters 'not'.
+出力は、`not` を含む3行です。
 
-By default, grep searches for a pattern in a case-sensitive way.
-In addition, the search pattern we have selected does not have to form a complete word,
-as we will see in the next example.
+デフォルトでは、`grep` は大文字小文字を区別して検索を行います。
+また、選択した検索パターンが完全な単語である必要はありません。
+次の例で確認してみましょう。
 
-Let's search for the pattern: 'The'.
+`The` というパターンを検索してみます。
 
 ```bash
 $ grep The haiku.txt
@@ -94,15 +84,11 @@ The Tao that is seen
 "My Thesis" not found.
 ```
 
-This time, two lines that include the letters 'The' are outputted,
-one of which contained our search pattern within a larger word, 'Thesis'.
+今回は、`The` を含む2行が出力され、そのうちの1行には「Thesis」という単語内に検索パターンが含まれています。
 
-To restrict matches to lines containing the word 'The' on its own,
-we can give `grep` the `-w` option.
-This will limit matches to word boundaries.
+`grep` に `-w` オプションを指定すると、単語境界を基準に一致する行を制限できます。
 
-Later in this lesson, we will also see how we can change the search behavior of grep
-with respect to its case sensitivity.
+このレッスンの後半では、`grep` の検索動作を大文字小文字の区別に関して変更する方法も説明します。
 
 ```bash
 $ grep -w The haiku.txt
@@ -112,11 +98,9 @@ $ grep -w The haiku.txt
 The Tao that is seen
 ```
 
-Note that a 'word boundary' includes the start and end of a line, so not
-just letters surrounded by spaces.
-Sometimes we don't
-want to search for a single word, but a phrase. We can also do this with
-`grep` by putting the phrase in quotes.
+単語境界は、行の開始や終了も含むため、スペースに囲まれた文字だけではありません。
+場合によっては、単一の単語ではなくフレーズを検索したいこともあります。
+`grep` ではフレーズを引用符で囲むことでこれが可能です。
 
 ```bash
 $ grep -w "is not" haiku.txt
@@ -126,13 +110,10 @@ $ grep -w "is not" haiku.txt
 Today it is not working
 ```
 
-We've now seen that you don't have to have quotes around single words,
-but it is useful to use quotes when searching for multiple words.
-It also helps to make it easier to distinguish between the search term or phrase
-and the file being searched.
-We will use quotes in the remaining examples.
+単語1つだけの場合は引用符が不要ですが、複数単語を検索する場合は引用符を使用することで、検索対象の用語やフレーズと検索対象のファイルを区別しやすくなります。
+残りの例では、引用符を使用します。
 
-Another useful option is `-n`, which numbers the lines that match:
+便利なオプションとして、`-n` を使用すると、一致する行の行番号を表示できます。
 
 ```bash
 $ grep -n "it" haiku.txt
@@ -144,12 +125,11 @@ $ grep -n "it" haiku.txt
 10:Today it is not working
 ```
 
-Here, we can see that lines 5, 9, and 10 contain the letters 'it'.
+行番号5、9、10に「it」が含まれています。
 
-We can combine options (i.e. flags) as we do with other Unix commands.
-For example, let's find the lines that contain the word 'the'.
-We can combine the option `-w` to find the lines that contain the word 'the'
-and `-n` to number the lines that match:
+他のUnixコマンドと同様に、オプション（フラグ）を組み合わせることができます。
+例えば、「the」という単語を含む行を検索する場合、
+オプション `-w` を使用して単語境界で一致する行を見つけ、`-n` を使用して行番号を表示することができます。
 
 ```bash
 $ grep -n -w "the" haiku.txt
@@ -160,7 +140,7 @@ $ grep -n -w "the" haiku.txt
 6:and the presence of absence:
 ```
 
-Now we want to use the option `-i` to make our search case-insensitive:
+次に、`-i` オプションを使って大文字小文字を区別せずに検索します：
 
 ```bash
 $ grep -n -w -i "the" haiku.txt
@@ -172,8 +152,7 @@ $ grep -n -w -i "the" haiku.txt
 6:and the presence of absence:
 ```
 
-Now, we want to use the option `-v` to invert our search, i.e., we want to output
-the lines that do not contain the word 'the'.
+さらに、`-v` オプションを使用して検索を反転し、「the」を含まない行を出力します。
 
 ```bash
 $ grep -n -w -v "the" haiku.txt
@@ -191,10 +170,9 @@ $ grep -n -w -v "the" haiku.txt
 11:Software is like that.
 ```
 
-If we use the `-r` (recursive) option,
-`grep` can search for a pattern recursively through a set of files in subdirectories.
+`-r`（再帰）オプションを使用すると、`grep` はサブディレクトリ内の一連のファイルを再帰的にパターン検索できます。
 
-Let's search recursively for `Yesterday` in the `shell-lesson-data/exercise-data/writing` directory:
+次の例では、`shell-lesson-data/exercise-data/writing` ディレクトリ内で `Yesterday` を再帰的に検索してみます：
 
 ```bash
 $ grep -r Yesterday .
@@ -207,7 +185,8 @@ $ grep -r Yesterday .
 ./haiku.txt:Yesterday it worked
 ```
 
-`grep` has lots of other options. To find out what they are, we can type:
+`grep` には他にも多くのオプションがあります。
+これらを確認するには、以下を入力します：
 
 ```bash
 $ grep --help
@@ -237,9 +216,9 @@ Miscellaneous:
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Using `grep`
+## `grep`を使用する
 
-Which command would result in the following output:
+次の出力を得るには、どのコマンドを使用しますか？
 
 ```output
 and the presence of absence:
@@ -252,12 +231,10 @@ and the presence of absence:
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The correct answer is 3, because the `-w` option looks only for whole-word matches.
-The other options will also match 'of' when part of another word.
-
-
+正解は3です。`-w`オプションは、完全な単語の一致のみを検索します。
+他のオプションも「of」が他の単語の一部として現れる場合に一致します。
 
 :::::::::::::::::::::::::
 
@@ -265,15 +242,13 @@ The other options will also match 'of' when part of another word.
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Wildcards
+## ワイルドカード
 
-`grep`'s real power doesn't come from its options, though; it comes from
-the fact that patterns can include wildcards. (The technical name for
-these is **regular expressions**, which
-is what the 're' in 'grep' stands for.) Regular expressions are both complex
-and powerful; if you want to do complex searches, please look at the lesson
-on [our website](https://librarycarpentry.org/lc-data-intro/01-regular-expressions.html). As a taster, we can
-find lines that have an 'o' in the second position like this:
+`grep` の真の力はそのオプションではなく、パターンにワイルドカードを含めることができる点にあります。
+（これを技術的には**正規表現**と呼びます。`grep` の名前の中の「re」はこれを指します。）
+正規表現は複雑かつ強力であり、複雑な検索を行いたい場合は、
+[私たちのウェブサイト](https://librarycarpentry.org/lc-data-intro/01-regular-expressions.html)のレッスンをご覧ください。
+ここではその一例を紹介します。次のようにして、2文字目が「o」である行を見つけることができます：
 
 ```bash
 $ grep -E "^.o" haiku.txt
@@ -285,22 +260,18 @@ Today it is not working
 Software is like that.
 ```
 
-We use the `-E` option and put the pattern in quotes to prevent the shell
-from trying to interpret it. (If the pattern contained a `*`, for
-example, the shell would try to expand it before running `grep`.) The
-`^` in the pattern anchors the match to the start of the line. The `.`
-matches a single character (just like `?` in the shell), while the `o`
-matches an actual 'o'.
-
+`-E`オプションを使用し、パターンを引用符で囲むことで、シェルがそのパターンを解釈しようとするのを防ぎます。
+（例えば、パターンに `*` が含まれている場合、シェルは `grep` を実行する前にそれを展開しようとします。）
+パターン内の `^` は、行の先頭を基準に一致を固定します。
+`.` は1文字を表し（シェルでの `?` と同様）、`o` は実際の「o」を表します。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Tracking a Species
+## 種の追跡
 
-Leah has several hundred
-data files saved in one directory, each of which is formatted like this:
+Leah は、次のような形式で保存された数百のデータファイルを1つのディレクトリに持っています：
 
 ```source
 2012-11-05,deer,5
@@ -313,10 +284,9 @@ data files saved in one directory, each of which is formatted like this:
 2012-11-07,bear,1
 ```
 
-She wants to write a shell script that takes a species as the first command-line argument
-and a directory as the second argument. The script should return one file called `<species>.txt`
-containing a list of dates and the number of that species seen on each date.
-For example using the data shown above, `rabbit.txt` would contain:
+彼女は、種名を最初のコマンドライン引数として受け取り、ディレクトリ名を2番目の引数として受け取るシェルスクリプトを書きたいと考えています。
+スクリプトは `<species>.txt` という1つのファイルを出力し、その中に日付とその種が各日に観察された数を記録します。
+例えば、上記のデータを使用すると、`rabbit.txt` の内容は次のようになります：
 
 ```source
 2012-11-05,22
@@ -324,8 +294,8 @@ For example using the data shown above, `rabbit.txt` would contain:
 2012-11-07,16
 ```
 
-Below, each line contains an individual command, or pipe.  Arrange their
-sequence in one command in order to achieve Leah's goal:
+以下の各行には、個々のコマンドまたはパイプが含まれています。
+Leah の目標を達成するために、それらを1つのコマンドの中で並べ替えましょう：
 
 ```bash
 cut -d : -f 2
@@ -337,25 +307,25 @@ $1.txt
 cut -d , -f 1,3
 ```
 
-Hint: use `man grep` to look for how to grep text recursively in a directory
-and `man cut` to select more than one field in a line.
+ヒント：`man grep` を使用して、ディレクトリ内でテキストを再帰的に検索する方法を調べ、
+`man cut` を使用して、1行の複数のフィールドを選択する方法を確認してください。
 
-An example of such a file is provided in
+このようなファイルの例は
 `shell-lesson-data/exercise-data/animal-counts/animals.csv`
+にあります。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```source
 grep -w $1 -r $2 | cut -d : -f 2 | cut -d , -f 1,3 > $1.txt
 ```
 
-Actually, you can swap the order of the two cut commands and it still works. At the
-command line, try changing the order of the cut commands, and have a look at the output
-from each step to see why this is the case.
+実際には、2つの cut コマンドの順序を入れ替えても機能します。
+コマンドラインで、cut コマンドの順序を変更して、それぞれのステップの出力を確認してみてください。
 
-You would call the script above like this:
+上記のスクリプトを次のように呼び出します：
 
 ```bash
 $ bash count-species.sh bear .
@@ -367,27 +337,22 @@ $ bash count-species.sh bear .
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Little Women
+## 若草物語
 
-You and your friend, having just finished reading *Little Women* by
-Louisa May Alcott, are in an argument.  Of the four sisters in the
-book, Jo, Meg, Beth, and Amy, your friend thinks that Jo was the
-most mentioned.  You, however, are certain it was Amy.  Luckily, you
-have a file `LittleWomen.txt` containing the full text of the novel
-(`shell-lesson-data/exercise-data/writing/LittleWomen.txt`).
-Using a `for` loop, how would you tabulate the number of times each
-of the four sisters is mentioned?
+Louisa May Alcott の *Little Women* を読み終えたあなたと友人は議論をしています。
+4人の姉妹 Jo、Meg、Beth、Amy のうち、友人は Jo が最も多く言及されていると考えています。
+しかし、あなたは Amy だと確信しています。
+幸い、`LittleWomen.txt` というファイルに小説全体のテキストがあります
+（`shell-lesson-data/exercise-data/writing/LittleWomen.txt`）。
+`for` ループを使用して、各姉妹が言及された回数を集計するにはどうすればよいでしょうか？
 
-Hint: one solution might employ
-the commands `grep` and `wc` and a `|`, while another might utilize
-`grep` options.
-There is often more than one way to solve a programming task, so a
-particular solution is usually chosen based on a combination of
-yielding the correct result, elegance, readability, and speed.
+ヒント：解決法の1つは、`grep` と `wc`、そして `|` を利用するかもしれません。
+もう1つの解決法は、`grep` のオプションを活用するかもしれません。
+プログラミングタスクを解決する方法は1つではないため、特定の解決法は正確な結果、優雅さ、可読性、速度の組み合わせによって選ばれます。
 
 :::::::::::::::  solution
 
-## Solutions
+## 解答
 
 ```source
 for sis in Jo Meg Beth Amy
@@ -397,7 +362,7 @@ do
 done
 ```
 
-Alternative, slightly inferior solution:
+別の、やや劣る解決法：
 
 ```source
 for sis in Jo Meg Beth Amy
@@ -407,28 +372,19 @@ do
 done
 ```
 
-This solution is inferior because `grep -c` only reports the number of lines matched.
-The total number of matches reported by this method will be lower if there is more
-than one match per line.
+この解決法が劣る理由は、`grep -c` は一致した行の数のみを報告するためです。
+この方法で報告される一致数は、1行に複数の一致がある場合に少なくなります。
 
-Perceptive observers may have noticed that character names sometimes appear in all-uppercase
-in chapter titles (e.g. 'MEG GOES TO VANITY FAIR').
-If you wanted to count these as well, you could add the `-i` option for case-insensitivity
-(though in this case, it doesn't affect the answer to which sister is mentioned
-most frequently).
-
-
+洞察力のある観察者は、キャラクター名が章タイトルで全大文字で表示されることがある（例：'MEG GOES TO VANITY FAIR'）ことに気づくかもしれません。
+これらもカウントしたい場合は、ケースを区別しない `-i` オプションを追加できます（ただし、この場合、どの姉妹が最も頻繁に言及されているかという答えには影響しません）。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-While `grep` finds lines in files,
-the `find` command finds files themselves.
-Again,
-it has a lot of options;
-to show how the simplest ones work, we'll use the `shell-lesson-data/exercise-data`
-directory tree shown below.
+`grep` はファイル内の行を検索しますが、`find` コマンドはファイルそのものを検索します。
+`find` には多くのオプションがありますが、その最も簡単なものの使い方を説明するために、
+以下に示す `shell-lesson-data/exercise-data` ディレクトリツリーを使用します。
 
 ```output
 .
@@ -451,11 +407,10 @@ directory tree shown below.
     └── LittleWomen.txt
 ```
 
-The `exercise-data` directory contains one file, `numbers.txt` and four directories:
-`animal-counts`, `creatures`, `alkanes` and `writing` containing various files.
+`exercise-data` ディレクトリには1つのファイル `numbers.txt` と、4つのディレクトリ：
+`animal-counts`、`creatures`、`alkanes`、および `writing` があり、それぞれにさまざまなファイルが含まれています。
 
-For our first command,
-let's run `find .` (remember to run this command from the `shell-lesson-data/exercise-data` folder).
+まずは `find .` を実行してみましょう（`shell-lesson-data/exercise-data` フォルダ内でコマンドを実行してください）。
 
 ```bash
 $ find .
@@ -482,17 +437,13 @@ $ find .
 ./alkanes/cubane.pdb
 ```
 
-As always, the `.` on its own means the current working directory,
-which is where we want our search to start.
-`find`'s output is the names of every file **and** directory
-under the current working directory.
-This can seem useless at first but `find` has many options
-to filter the output and in this lesson we will discover some
-of them.
+ここで使われている `.` はカレントディレクトリを意味し、検索をここから開始します。
+`find` の出力はカレントディレクトリ以下のすべてのファイル **と** ディレクトリの名前です。
+最初は役に立たないように見えるかもしれませんが、`find` には多くのオプションがあり、
+その出力をフィルタリングできます。このレッスンでは、それらの一部を紹介します。
 
-The first option in our list is
-`-type d` that means 'things that are directories'.
-Sure enough, `find`'s output is the names of the five directories (including `.`):
+最初のオプションは `-type d` で、「ディレクトリであるもの」を意味します。
+確かに、`find` の出力は5つのディレクトリ（`.` を含む）の名前です：
 
 ```bash
 $ find . -type d
@@ -506,9 +457,8 @@ $ find . -type d
 ./alkanes
 ```
 
-Notice that the objects `find` finds are not listed in any particular order.
-If we change `-type d` to `-type f`,
-we get a listing of all the files instead:
+`find` が見つけるオブジェクトは特定の順序でリストされないことに注意してください。
+`-type d` を `-type f` に変更すると、すべてのファイルがリストされます：
 
 ```bash
 $ find . -type f
@@ -530,7 +480,7 @@ $ find . -type f
 ./alkanes/cubane.pdb
 ```
 
-Now let's try matching by name:
+次に、名前で一致するものを検索してみましょう：
 
 ```bash
 $ find . -name *.txt
@@ -540,23 +490,20 @@ $ find . -name *.txt
 ./numbers.txt
 ```
 
-We expected it to find all the text files,
-but it only prints out `./numbers.txt`.
-The problem is that the shell expands wildcard characters like `*` *before* commands run.
-Since `*.txt` in the current directory expands to `./numbers.txt`,
-the command we actually ran was:
+すべてのテキストファイルを見つけることを期待しましたが、`./numbers.txt` だけが表示されました。
+問題は、シェルが `*` のようなワイルドカードをコマンドが実行される*前に*展開することです。
+カレントディレクトリでは `*.txt` は `./numbers.txt` に展開されるため、
+実際に実行されたコマンドは以下と同じでした：
 
 ```bash
 $ find . -name numbers.txt
 ```
 
-`find` did what we asked; we just asked for the wrong thing.
+`find` は指定された動作を実行しましたが、私たちが指定したものが誤っていました。
 
-To get what we want,
-let's do what we did with `grep`:
-put `*.txt` in quotes to prevent the shell from expanding the `*` wildcard.
-This way,
-`find` actually gets the pattern `*.txt`, not the expanded filename `numbers.txt`:
+正しい結果を得るには、`grep` で行ったように、`*.txt` を引用符で囲んで
+シェルがワイルドカードを展開しないようにしましょう。
+これにより、`find` は展開されたファイル名 `numbers.txt` ではなく、パターン `*.txt` を受け取ります。
 
 ```bash
 $ find . -name "*.txt"
@@ -570,25 +517,20 @@ $ find . -name "*.txt"
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Listing vs. Finding
+## リスト表示と検索
 
-`ls` and `find` can be made to do similar things given the right options,
-but under normal circumstances,
-`ls` lists everything it can,
-while `find` searches for things with certain properties and shows them.
-
+`ls` と `find` は、適切なオプションを指定すれば似たようなことを実行できますが、
+通常の状況では `ls` は見つけられるすべてをリストし、
+`find` は特定のプロパティを持つものを検索して表示します。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-As we said earlier,
-the command line's power lies in combining tools.
-We've seen how to do that with pipes;
-let's look at another technique.
-As we just saw,
-`find . -name "*.txt"` gives us a list of all text files in or below the current directory.
-How can we combine that with `wc -l` to count the lines in all those files?
+コマンドラインの力はツールを組み合わせることにあります。
+これまでにパイプを使う方法を見てきましたが、ここでは別の手法を見てみましょう。
+先ほど説明したように、`find . -name "*.txt"` は現在のディレクトリ以下のすべてのテキストファイルをリストします。
+これを `wc -l` と組み合わせて、これらのファイル内の行数をカウントするにはどうすればよいでしょうか？
 
-The simplest way is to put the `find` command inside `$()`:
+最も簡単な方法は、`find` コマンドを `$()` の中に入れることです：
 
 ```bash
 $ wc -l $(find . -name "*.txt")
@@ -601,25 +543,22 @@ $ wc -l $(find . -name "*.txt")
   21038 total
 ```
 
-When the shell executes this command,
-the first thing it does is run whatever is inside the `$()`.
-It then replaces the `$()` expression with that command's output.
-Since the output of `find` is the three filenames `./writing/LittleWomen.txt`,
-`./writing/haiku.txt`, and `./numbers.txt`, the shell constructs the command:
+シェルがこのコマンドを実行するとき、最初に `$()` 内のコマンドを実行します。
+次に、`$()` 式をそのコマンドの出力で置き換えます。
+`find` の出力が3つのファイル名 `./writing/LittleWomen.txt`、`./writing/haiku.txt`、および `./numbers.txt` であるため、
+シェルは次のコマンドを構築します：
 
 ```bash
 $ wc -l ./writing/LittleWomen.txt ./writing/haiku.txt ./numbers.txt
 ```
 
-which is what we wanted.
-This expansion is exactly what the shell does when it expands wildcards like `*` and `?`,
-but lets us use any command we want as our own 'wildcard'.
+これが意図した通りの結果です。この展開は、`*` や `?` のようなワイルドカードが展開されるときに
+シェルが行う処理と正確に同じですが、任意のコマンドを自分の「ワイルドカード」として使用できます。
 
-It's very common to use `find` and `grep` together.
-The first finds files that match a pattern;
-the second looks for lines inside those files that match another pattern.
-Here, for example, we can find txt files that contain the word "searching"
-by looking for the string 'searching' in all the `.txt` files in the current directory:
+`find` と `grep` を一緒に使うことも非常に一般的です。
+最初にファイル名パターンに一致するファイルを検索し、
+次にそのファイル内の別のパターンに一致する行を検索します。
+例えば、現在のディレクトリ内の `.txt` ファイルで「searching」という単語を含むものを検索するには、次のようにします：
 
 ```bash
 $ grep "searching" $(find . -name "*.txt")
@@ -632,37 +571,35 @@ $ grep "searching" $(find . -name "*.txt")
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Matching and Subtracting
+## マッチングと除外
 
-The `-v` option to `grep` inverts pattern matching, so that only lines
-which do *not* match the pattern are printed. Given that, which of
-the following commands will find all .dat files in `creatures`
-except `unicorn.dat`?
-Once you have thought about your answer, you can test the commands in the
-`shell-lesson-data/exercise-data` directory.
+`grep` の `-v` オプションはパターンマッチングを反転し、
+パターンに一致*しない*行のみを表示します。
+これを踏まえて、`creatures` ディレクトリ内の `.dat` ファイルをすべて検索し、
+`unicorn.dat` を除外するには、次のコマンドのうちどれを使用すればよいでしょうか？
+考えた後に、`shell-lesson-data/exercise-data` ディレクトリでコマンドをテストしてみてください。
 
 1. `find creatures -name "*.dat" | grep -v unicorn`
 2. `find creatures -name *.dat | grep -v unicorn`
 3. `grep -v "unicorn" $(find creatures -name "*.dat")`
-4. None of the above.
+4. 上記のいずれでもない。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-Option 1 is correct. Putting the match expression in quotes prevents the shell
-expanding it, so it gets passed to the `find` command.
+正解は1です。マッチ式を引用符で囲むことで、シェルによる
 
-Option 2 also works in this instance because the shell tries to expand `*.dat`
-but there are no `*.dat` files in the current directory,
-so the wildcard expression gets passed to `find`.
-We first encountered this in
-[episode 3](03-create.md).
+展開を防ぎ、
+`find` コマンドに渡されるようになります。
 
-Option 3 is incorrect because it searches the contents of the files for lines which
-do not match 'unicorn', rather than searching the file names.
+オプション2もこの場合は機能します。
+これは、シェルが `*.dat` を展開しようとしますが、カレントディレクトリに `*.dat` ファイルが存在しないため、
+ワイルドカード式がそのまま `find` に渡されるためです。
+この動作については[エピソード3](03-create.md)で最初に説明しました。
 
-
+オプション3は正しくありません。これは、ファイル名ではなく、
+ファイル内容の行を検索し、「unicorn」に一致しない行を探してしまいます。
 
 :::::::::::::::::::::::::
 
@@ -670,45 +607,42 @@ do not match 'unicorn', rather than searching the file names.
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Binary Files
+## バイナリファイル
 
-We have focused exclusively on finding patterns in text files. What if
-your data is stored as images, in databases, or in some other format?
+これまで、テキストファイル内のパターン検索に焦点を当ててきましたが、
+データが画像、データベース、またはその他の形式で保存されている場合はどうすればよいでしょうか？
 
-A handful of tools extend `grep` to handle a few non text formats. But a
-more generalizable approach is to convert the data to text, or
-extract the text-like elements from the data. On the one hand, it makes simple
-things easy to do. On the other hand, complex things are usually impossible. For
-example, it's easy enough to write a program that will extract X and Y
-dimensions from image files for `grep` to play with, but how would you
-write something to find values in a spreadsheet whose cells contained
-formulas?
+`grep` を拡張して一部の非テキスト形式を扱えるようにするツールもありますが、
+より一般的なアプローチは、データをテキストに変換するか、
+データからテキストに似た要素を抽出することです。
+この方法には一長一短があります。
+簡単な操作が容易に行える反面、複雑な操作は通常不可能です。
+例えば、画像ファイルから X および Y の次元を抽出して `grep` で処理するプログラムを書くことは容易ですが、
+セルに数式が含まれるスプレッドシートで値を検索するものを書くのはどうでしょうか？
 
-A last option is to recognize that the shell and text processing have
-their limits, and to use another programming language.
-When the time comes to do this, don't be too hard on the shell. Many
-modern programming languages have borrowed a lot of
-ideas from it, and imitation is also the sincerest form of praise.
-
+最後の選択肢として、シェルやテキスト処理には限界があることを認識し、
+他のプログラミング言語を使用する方法があります。
+この選択肢を取るとき、シェルをあまり厳しく評価しないでください。
+多くの現代的なプログラミング言語がシェルから多くのアイデアを借用しており、
+模倣は最高の賛辞でもあります。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-The Unix shell is older than most of the people who use it. It has
-survived so long because it is one of the most productive programming
-environments ever created --- maybe even *the* most productive. Its syntax
-may be cryptic, but people who have mastered it can experiment with
-different commands interactively, then use what they have learned to
-automate their work. Graphical user interfaces may be easier to use at
-first, but once learned, the productivity in the shell is unbeatable.
-And as Alfred North Whitehead wrote in 1911, 'Civilization advances by
-extending the number of important operations which we can perform
-without thinking about them.'
+Unix シェルは、それを使用する人々のほとんどよりも古いものです。
+これが長く生き延びた理由は、かつて作られた最も生産的なプログラミング環境の1つであり、
+おそらく*最も*生産的だからです。
+その構文は難解に思えるかもしれませんが、シェルを習得した人々は
+さまざまなコマンドを対話的に試しながら学んだことを活かして作業を自動化できます。
+グラフィカルユーザーインターフェイスは最初は使いやすいかもしれませんが、
+シェルを学んだ後の生産性には匹敵しません。
+そして、アルフレッド・ノース・ホワイトヘッドが1911年に書いたように、
+「文明は、人間が考えなくても重要な操作を行える数を増やすことで進歩する」のです。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## `find` Pipeline Reading Comprehension
+## `find` パイプラインの読解力
 
-Write a short explanatory comment for the following shell script:
+次のシェルスクリプトについて、簡潔な説明コメントを書いてください：
 
 ```bash
 wc -l $(find . -name "*.dat") | sort -n
@@ -716,28 +650,22 @@ wc -l $(find . -name "*.dat") | sort -n
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-1. Find all files with a `.dat` extension recursively from the current directory
-2. Count the number of lines each of these files contains
-3. Sort the output from step 2. numerically
-  
-  
+1. カレントディレクトリ以下で `.dat` 拡張子を持つすべてのファイルを再帰的に検索する
+2. それらのファイルの各行数をカウントする
+3. ステップ2の出力を数値順にソートする
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- `find` finds files with specific properties that match patterns.
-- `grep` selects lines in files that match patterns.
-- `--help` is an option supported by many bash commands, and programs that can be run from within Bash, to display more information on how to use these commands or programs.
-- `man [command]` displays the manual page for a given command.
-- `$([command])` inserts a command's output in place.
+- `find` は、特定のプロパティを持つファイルを検索するためのコマンドです。
+- `grep` は、ファイル内の特定のパターンに一致する行を選択します。
+- `--help` は、多くの Bash コマンドや Bash 内から実行可能なプログラムがサポートするオプションで、これらのコマンドやプログラムの使用方法に関する詳細情報を表示します。
+- `man [コマンド]` は、指定したコマンドのマニュアルページを表示します。
+- `$([コマンド])` は、そのコマンドの出力を挿入します。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
-
-

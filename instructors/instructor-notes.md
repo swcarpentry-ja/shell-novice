@@ -1,284 +1,242 @@
 ---
-title: Instructor Notes
+title: 講師用ノート
 ---
 
-- Why do we learn to use the shell?
-  - Allows users to automate repetitive tasks
-  - And capture small data manipulation steps that are normally not recorded
-    to make research reproducible
-- The Problem
-  - Running the same workflow on several samples can be unnecessarily labour intensive
-  - Manual manipulation of data files:
-    - is often not captured in documentation
-    - is hard to reproduce
-    - is hard to troubleshoot, review, or improve
-- The Shell
-  - Workflows can be automated through the use of shell scripts
-  - Built-in commands allow for easy data manipulation (e.g. sort, grep, etc.)
-  - Every step can be captured in the shell script and allow reproducibility and
-    easy troubleshooting
+- なぜシェルを学ぶのでしょうか？
+  - ユーザーが繰り返し作業を自動化できるようになるため
+  - 通常記録されない小さなデータ操作手順を記録し、
+    研究を再現可能にするため
+- 問題点
+  - 同じワークフローを複数のサンプルで実行するのは不必要に労力がかかる場合がある
+  - データファイルの手動操作は以下のような課題がある：
+    - 文書化に記録されないことが多い
+    - 再現が困難
+    - 問題の解決やレビュー、改善が難しい
+- シェルの利点
+  - シェルスクリプトを使用することでワークフローを自動化できる
+  - 組み込みコマンド（例: `sort`、`grep` など）により簡単にデータ操作が可能
+  - すべての手順をシェルスクリプトで記録できるため、再現性や問題解決が容易になる
 
-## Overall
+## 全体的な考察
 
-Many people have questioned whether we should still teach the shell.
-After all,
-anyone who wants to rename several thousand data files
-can easily do so interactively in the Python interpreter,
-and anyone who's doing serious data analysis
-is probably going to do most of their work inside the IPython Notebook or R Studio.
-So why teach the shell?
+シェルをまだ教えるべきかどうか、多くの人が疑問を抱いています。
+結局のところ、数千のデータファイルを名前変更するには、
+Python インタプリタで簡単にインタラクティブに実行できますし、
+本格的なデータ分析を行う人はおそらく IPython Notebook や R Studio 内で作業の大半を行うでしょう。
+では、なぜシェルを教えるのでしょうか？
 
-The first answer is,
-"Because so much else depends on it."
-Installing software,
-configuring your default editor,
-and controlling remote machines frequently assume a basic familiarity with the shell,
-and with related ideas like standard input and output.
-Many tools also use its terminology
-(for example, the `%ls` and `%cd` magic commands in IPython).
+### 理由 1: 他の多くのことがシェルに依存しているから
 
-The second answer is,
-"Because it's an easy way to introduce some fundamental ideas about how to use computers."
-As we teach people how to use the Unix shell,
-we teach them that they should get the computer to repeat things
-(via tab completion,
-`!` followed by a command number,
-and `for` loops)
-rather than repeating things themselves.
-We also teach them to take things they've discovered they do frequently
-and save them for later re-use
-(via shell scripts),
-to give things sensible names,
-and to write a little bit of documentation
-(like comment at the top of shell scripts)
-to make their future selves' lives better.
+ソフトウェアのインストール、デフォルトエディタの設定、
+リモートマシンの制御などは、
+シェルや標準入力・標準出力の基本的な理解を前提としています。
+また、多くのツールがシェルの用語を使用しています
+（例: IPython の `%ls` や `%cd` マジックコマンド）。
 
-The third answer is,
-"Because it enables use of many domain-specific tools and compute resources researchers
-cannot access otherwise."
-Familiarity with the shell is very useful for remote accessing machines,
-using high-performance computing infrastructure,
-and running new specialist tools in many disciplines.
-We do not teach HPC or domain-specific skills here
-but lay the groundwork for further development of these skills.
-In particular,
-understanding the syntax of commands, flags, and help systems is useful for domain specific tools
-and understanding the file system (and how to navigate it) is useful for remote access.
+### 理由 2: 基本的なコンピュータ利用の考え方を紹介する簡単な方法だから
 
-Finally,
-and perhaps most importantly,
-teaching people the shell lets us teach them
-to think about programming in terms of function composition.
-In the case of the shell,
-this takes the form of pipelines rather than nested function calls,
-but the core idea of "small pieces, loosely joined" is the same.
+Unix シェルの使い方を教えるとき、
+タブ補完や `!`（コマンド番号の再実行）、
+`for` ループを通じて、
+コンピュータに繰り返し作業を任せるべきだという考えを教えます。
+また、頻繁に行う作業を保存して再利用する方法
+（シェルスクリプトの使用）や、
+意味のある名前を付けること、簡単なドキュメントを書くことの重要性も伝えます。
 
-All of this material can be covered in three hours
-as long as learners using Windows do not run into roadblocks such as:
+### 理由 3: ドメイン固有ツールや計算リソースの利用が可能になるから
 
-- not being able to figure out where their home directory is
-  (particularly if they're using Cygwin);
-- not being able to run a plain text editor;
-  and
-- the shell refusing to run scripts that include DOS line endings.
+シェルを使えるようになると、リモートマシンへのアクセスや、
+高性能計算インフラの利用、新しい専門ツールの操作が可能になります。
+ここでは HPC（高性能計算）やドメイン固有のスキルを教えることはありませんが、
+これらのスキルの基礎を提供します。
+特に、コマンドの構文、フラグ、ヘルプシステムの理解は
+ドメイン固有ツールに役立ちます。
+また、ファイルシステムの理解やナビゲーションの方法もリモートアクセスに有用です。
 
-## Preparing to Teach
+### 理由 4: 関数の構成というプログラミングの考え方を教えられるから
 
-- Use the `data` directory for in-workshop exercises and live coding examples.
-  You can clone the shell-novice directory or use the *Download ZIP*
-  button on the right to get the entire
-  [Git repository](https://github.com/swcarpentry/shell-novice). We also now provide
-  a zip file of the `data` directory
-  at the [Setup page](../learners/setup.md).
+シェルを教えることで、
+小さな部品を組み合わせるという考え方を伝えることができます。
+シェルの場合、この考え方はネストされた関数呼び出しではなく、
+パイプラインの形式を取りますが、
+基本的なアイデアは「小さな部品を緩やかに結合する」という点で同じです。
 
-- Website: various practices have been used.
-  
-  - Option 1: Can give links to learners before the lesson so they can follow along,
-    catch up,
-    and see exercises (particularly if you're following the lesson content without many changes).
-  - Option 2: Don't show the website to the learners during the lesson,
-    as it can be distracting:
-    students may read instead of listen, and having another window open is an additional
-    cognitive load.
-  - In any case, make sure to point to website as a post-workshop reference.
+これらすべての内容は3時間以内でカバーできますが、
+Windows を使用している学習者が次のような問題に直面しない場合に限ります：
 
-- Content:
-  Unless you have a truly generous amount of time (4+ hours),
-  it is likely that you will not cover ALL the material in this lesson in a single half-day
-  session.
-  Plan ahead on what you might skip, what you really want to emphasize, etc.
+- ホームディレクトリがどこにあるのか分からない
+  （特に Cygwin を使用している場合）
+- プレーンテキストエディタを実行できない
+- シェルが DOS の改行コードを含むスクリプトを実行しない
 
-- Exercises:
-  Think in advance about how you might want to handle exercises during the lesson.
-  How are you assigning them (website, slide, handout)?
-  Do you want everyone to try it and then you show the solution?
-  Have a learner show the solution?
-  Have groups each do a different exercise and present their solutions?
+## 教える準備
 
-- The [Reference page](../learners/reference.md) can be printed out
-  and given to students as a reference, your choice.
+- ワークショップでの練習やライブコーディングの例には `data` ディレクトリを使用します。
+  `shell-novice` リポジトリをクローンするか、
+  右側の *Download ZIP* ボタンを使用して
+  [Git リポジトリ](https://github.com/swcarpentry/shell-novice) を取得できます。
+  また、`data` ディレクトリの ZIP ファイルは
+  [セットアップページ](../learners/setup.md)でも提供しています。
 
-- Other preparation:
-  Feel free to add your own examples or side comments,
-  but know that it shouldn't be necessary:
-  the topics and commands can be taught as given on the lesson pages.
-  If you think there is a place where the lesson is lacking,
-  feel free to file an issue or submit a pull request.
+- ウェブサイトについての注意：
+  - オプション1: レッスンの前にリンクを学習者に提供し、
+    レッスンの進行に合わせて学習者が内容を追えるようにします。
+    特に、レッスン内容があまり変更されない場合に有用です。
+  - オプション2: レッスン中にウェブサイトを見せない。
+    注意が散漫になる場合があり、学習者が読むことに集中したり、
+    別ウィンドウを開く認知負荷が増える可能性があります。
+  - どちらの場合でも、ワークショップ後の参考資料としてウェブサイトを指摘することを忘れないでください。
 
-## Teaching Notes
+- コンテンツ：
+  時間が非常に余裕がある場合（4時間以上）を除き、
+  このレッスンのすべての内容を1回の半日セッションでカバーすることは難しいでしょう。
+  事前に、何をスキップするか、何を強調するかを計画してください。
 
-- Super cool online resource!
-  [http://explainshell.com/](https://explainshell.com/) will dissect any shell command you type in
-  and display help text for each piece.
-  Additional nice manual tool could be [http://tldr.sh/](https://tldr.sh/)
-  with short very descriptive manuals for shell commands,
-  useful especially on Windows while using Git BASH where `man` could not work.
+- 練習問題：
+  レッスン中に練習問題をどのように扱うか事前に考えてください。
+  どのように課題を割り当てるか（ウェブサイト、スライド、配布資料）？
+  全員が試してから解答を示しますか？
+  学習者に解答を示してもらいますか？
+  グループごとに異なる課題を解き、解答を発表しますか？
 
-- Another super cool online resource is [http://www.shellcheck.net](https://www.shellcheck.net),
-  which will check shell scripts (both uploaded and typed in) for common errors.
+- [参考ページ](../learners/reference.md)を印刷して学生に配布することも可能です。
 
-- Resources for "splitting" your shell so that recent commands
-  remain in view: [https://github.com/rgaiacs/swc-shell-split-window](https://github.com/rgaiacs/swc-shell-split-window).
+- その他の準備：
+  独自の例や補足コメントを追加しても構いませんが、
+  必要はありません。
+  トピックやコマンドはレッスンページに記載されている通りに教えることができます。
+  レッスンに不足があると感じた場合は、
+  イシューを提出したり、プルリクエストを送信してください。
 
-- Tab completion sounds like a small thing: it isn't.
-  Re-running old commands using `!123` or `!wc`
-  isn't a small thing either,
-  and neither are wildcard expansion and `for` loops.
-  Each one is an opportunity to repeat one of the big ideas of Software Carpentry:
-  if the computer *can* repeat it,
-  some programmer somewhere will almost certainly have built
-  some way for the computer *to* repeat it.
+## 教育用ノート
 
-- Building up a pipeline with four or five stages,
-  then putting it in a shell script for re-use
-  and calling that script inside a `for` loop,
-  is a great opportunity to show how
-  "seven plus or minus two"
-  connects to programming.
-  Once we have figured out how to do something moderately complicated,
-  we make it re-usable and give it a name
-  so that it only takes up one slot in working memory
-  rather than several.
-  It is also a good opportunity to talk about exploratory programming:
-  rather than designing a program up front,
-  we can do a few useful things
-  and then retroactively decide which are worth encapsulating
-  for future re-use.
+- とても便利なオンラインリソース！
+  [http://explainshell.com/](https://explainshell.com/) は、入力した任意のシェルコマンドを解析し、
+  各部分のヘルプテキストを表示してくれます。
+  また、非常に簡潔で説明的なシェルコマンドのマニュアルを提供する
+  [http://tldr.sh/](https://tldr.sh/) も便利です。
+  特に、`man` が動作しない Git BASH を使用する Windows で役立ちます。
 
-- If everything is going well, you can drive home the point that file
-  extensions are essentially there to help computers (and human
-  readers) understand file content and are not a requirement of files
-  (covered briefly in
-  [Navigating Files and Directories](../episodes/02-filedir.md)).
-  This can be done in the
-  [Pipes and Filters](../episodes/04-pipefilter.md) section by showing
-  that you can redirect standard output to a file without the .txt extension
-  (e.g., lengths), and that the resulting file is still a perfectly usable text file.
-  Make the point that if double-clicked in the GUI, the computer will
-  probably ask you what you want to do.
+- もう一つの優れたオンラインリソースとして [http://www.shellcheck.net](https://www.shellcheck.net) があります。
+  これは、シェルスクリプト（アップロードまたは入力）をチェックし、一般的なエラーを指摘してくれます。
 
-- We have to leave out many important things because of time constraints,
-  including file permissions, job control, and SSH.
-  If learners already understand the basic material,
-  this can be covered instead using the online lessons as guidelines.
-  These limitations also have follow-on consequences:
+- 最近使用したコマンドを表示したまま作業するためにシェルを「分割」するリソース：
+  [https://github.com/rgaiacs/swc-shell-split-window](https://github.com/rgaiacs/swc-shell-split-window)。
 
-- It's hard to discuss `#!` (shebang) without first discussing
-  permissions, which we don't do.  `#!` is also [pretty
-  complicated][shebang], so even if we did discuss permissions, we
-  probably still wouldn't want to discuss `#!`.
+- タブ補完は一見小さなことに思えますが、実際にはそうではありません。
+  `!123` や `!wc` を使用して以前のコマンドを再実行することや、
+  ワイルドカード展開や `for` ループも同様です。
+  これらはすべて、Software Carpentry の大きなアイデアの1つを繰り返す機会です：
+  コンピュータが何かを繰り返すことができるならば、
+  それを可能にする方法がプログラマーによってほぼ確実に作られています。
 
-- Installing Bash and a reasonable set of Unix commands on Windows
-  always involves some fiddling and frustration.
-  Please see the latest set of installation guidelines for advice,
-  and try it out yourself *before* teaching a class.
+- 4～5段階のパイプラインを構築し、それをシェルスクリプトにまとめて再利用し、
+  そのスクリプトを `for` ループ内で呼び出すことは、
+  「7プラスマイナス2」というアイデアがプログラミングとどう結びつくかを示す
+  素晴らしい機会です。
+  中程度に複雑な操作方法を見つけたら、それを再利用可能にして名前を付けることで、
+  ワーキングメモリ内の複数のスロットではなく1つのスロットしか使わなくなります。
+  これは、探索的プログラミングについて話す良い機会でもあります。
+  プログラムを最初から設計するのではなく、
+  いくつかの有用なことを行い、それを遡って再利用に値するものとしてまとめるのです。
 
-- By default, you may have a long string of information attached to
-  your command prompt in Git Bash. To reduce the "noise" and proceed
-  with a tidier prompt, enter the command:
+- すべてが順調に進んでいる場合、
+  ファイル拡張子は本質的にコンピュータ（および人間の読者）がファイルの内容を理解するのを助けるためのものであり、
+  ファイルの要件ではないことを強調するのも良いでしょう。
+  これは、[Pipes and Filters](../episodes/04-pipefilter.md) のセクションで、
+  `.txt` 拡張子なしで標準出力をリダイレクトしてファイルに保存することを示すことで行えます
+  （例: `lengths`）。結果として得られるファイルは完全に使用可能なテキストファイルです。
+  GUI でダブルクリックすると、コンピュータが何をしたいか尋ねる可能性が高いことを指摘してください。
+
+- 時間の制約により、ファイルの権限、ジョブ管理、SSH など多くの重要なトピックを省略しています。
+  学習者が基本的な内容を理解している場合は、オンラインのレッスンをガイドラインとして
+  これらを代わりに取り上げることができます。
+  これらの制限には以下のような影響もあります：
+
+  - ファイルの権限を最初に説明せずに `#!`（シェバン）を説明するのは難しい。
+    また、`#!` は[非常に複雑](https://www.in-ulm.de/~mascheck/various/shebang/)であるため、
+    権限を説明したとしても取り上げたくない場合があります。
+
+  - Windows に Bash と適切な Unix コマンドセットをインストールするのは、
+    いくつかの調整とフラストレーションが伴います。
+    最新のインストールガイドラインを確認し、*クラスを教える前に*自分で試してみてください。
+
+- デフォルトでは、Git Bash のコマンドプロンプトには多くの情報が表示されます。
+  プロンプトをシンプルにするには、次のコマンドを入力します：
   
   ```bash
   PS1='$ '
   ```
 
-- On Windows machines
-  if `nano` hasn't been properly installed with the
-  [Software Carpentry Windows Installer][windows-installer]
-  it is possible to use `notepad` as an alternative.  There will be a GUI
-  interface and line endings are treated differently, but otherwise, for
-  the purposes of this lesson, `notepad` and `nano` can be used almost interchangeably.
+- Windows マシンで `nano` が[Software Carpentry Windows Installer][windows-installer]で
+  正しくインストールされていない場合、代替として `notepad` を使用することができます。
+  GUI インターフェースが表示され、改行コードの扱いが異なりますが、
+  このレッスンの目的では `notepad` と `nano` はほぼ同等に使用できます。
 
-- On Windows, it appears that:
-  
+- Windows の場合：
+
   ```bash
   $ cd
   $ cd Desktop
   ```
-  
-  will always put someone on their desktop
-  (unless their machine is backed up using enterprise OneDrive, see next point).
-  Have them create the example directory for the shell exercises there
-  so that they can find it easily
-  and watch it evolve.
 
-- If a Windows machine is backed up with enterprise OneDrive, their GUI desktop may
-  be rendered from a folder within OneDrive, which will not match the contents of `~/Desktop`.
-  The OneDrive desktop should be accessible using one of the following commands
-  (if the name of the enterprise isn't clear, look through the output of `ls` to find
-  the right folder):
+  で常にデスクトップに移動できます。
+  （ただし、企業の OneDrive バックアップを使用している場合を除きます。次のポイントを参照してください。）
+  デスクトップにシェル演習用の例のディレクトリを作成させると、
+  簡単に見つけられ、進行が確認できます。
+
+- エンタープライズ OneDrive でバックアップされた Windows マシンの場合、
+  GUI デスクトップが OneDrive 内のフォルダからレンダリングされ、
+  `~/Desktop` の内容と一致しない場合があります。
+  OneDrive デスクトップは次のコマンドでアクセス可能です：
   
   ```bash
   $ cd "~/OneDrive - Name Of Enterprise/Desktop"
   $ cd "C:/Users/Username/OneDrive - Name Of Enterprise/Desktop"
   ```
-  
-  One way to spot if the computer is using this kind of configuration is to look at files,
-  folders or links on the desktop. Usually the icon contains a shortcut/arrow symbol if it
-  is a link, or just the plain icon if the file is just saved in the `Desktop` folder.
-  Files synced with OneDrive contain an additional symbol indicating the sync status
-  (typically blue arrows for 'sync pending' or a green tick for 'synced').
 
-- Stay within POSIX-compliant commands, as all the teaching materials do.
-  Your particular shell may have extensions beyond POSIX that are not available
-  on other machines, especially the default macOS bash and Windows bash emulators.
-  For example, POSIX `ls` does not have an `--ignore=` or `-I` option, and POSIX
-  `head` takes `-n 10` or `-10`, but not the long form of `--lines=10`.
+  コンピュータがこの種の設定を使用しているかどうかを確認する1つの方法は、
+  デスクトップ上のファイル、フォルダ、またはリンクを調べることです。
+  通常、アイコンにはリンクの場合にショートカット/矢印の記号が含まれています。
+  OneDrive と同期されたファイルには追加の同期状態を示す記号
+  （通常は「同期保留中」の青い矢印や「同期済み」の緑色のチェックマーク）があります。
+
+- POSIX 準拠のコマンド内で作業を進めてください。
+  教材全体も POSIX 準拠で設計されています。
+  使用するシェルによっては、macOS のデフォルトの bash や Windows の bash エミュレーターでは
+  利用できない拡張機能が含まれる場合があります。
+  たとえば、POSIX の `ls` には `--ignore=` や `-I` オプションがありません。
+  また、POSIX の `head` は `-n 10` または `-10` を受け付けますが、`--lines=10` のような
+  ロングフォームは使用できません。
 
 ## Windows
 
-Installing Bash and a reasonable set of Unix commands on Windows
-always involves some fiddling and frustration.
-Please see the latest set of installation guidelines for advice,
-and try it out yourself *before* teaching a class.
-Options we have explored include:
+Windows に Bash と適切な Unix コマンドをインストールするには、いくつかの調整とフラストレーションが伴います。
+最新のインストールガイドラインを参照し、*ワークショップの前に*自分で試してみてください。
+検討したオプションは以下の通りです：
 
-1. [msysGit](https://msysgit.github.io/) (also called "Git Bash"),
-2. [Cygwin](https://www.cygwin.com/),
-3. using a desktop virtual machine, and
-4. having learners connect to a remote Unix machine (typically a VM in the cloud).
+1. [msysGit](https://msysgit.github.io/)（「Git Bash」とも呼ばれる）
+2. [Cygwin](https://www.cygwin.com/)
+3. デスクトップ仮想マシンの使用
+4. 学習者をリモート Unix マシン（通常はクラウド上の VM）に接続させる
 
-Cygwin was the preferred option until mid-2013,
-but once we started teaching Git,
-msysGit proved to work better.
-Desktop virtual machines and cloud-based VMs work well for technically sophisticated learners,
-and can reduce installation and configuration at the start of the workshop,
-but:
+2013年中頃まで Cygwin が推奨されていましたが、
+Git の指導を始めた頃から msysGit の方がより良い選択肢となりました。
+デスクトップ仮想マシンやクラウドベースの VM は、
+技術的に熟練した学習者にとっては良い選択肢であり、
+ワークショップの開始時のインストールと設定を簡素化できますが：
 
-1. they don't work well on underpowered machines,
-2. they're confusing for novices (because simple things like copy and paste work differently),
-3. learners leave the workshop without a working environment on their operating system of choice,
-  and
-4. learners may show up without having downloaded the VM or the wireless will go down
-  (or become congested) during the lesson.
+1. 性能の低いマシン
 
-Whatever you use,
-please *test it yourself* on a Windows machine *before* your workshop:
-things may always have changed behind your back since your last workshop.
-And please also make use of our
-[Software Carpentry Windows Installer][windows-installer].
+ではうまく機能しない
+2. 初心者には混乱を招きやすい（コピー＆ペーストのような簡単な操作が異なるため）
+3. 学習者が自身の選んだ OS 上で動作する環境を持ち帰れない
+4. 学習者が VM を事前にダウンロードしていない、またはワークショップ中に無線がダウンする
+  （または混雑する）可能性がある
+
+使用する環境にかかわらず、ワークショップの前に Windows マシンで必ず自分でテストしてください。
+前回のワークショップ以降に状況が変わっている場合があります。
+また、[Software Carpentry Windows Installer][windows-installer] を活用してください。
 
 [shebang]: https://www.in-ulm.de/~mascheck/various/shebang/
 [windows-installer]: https://github.com/swcarpentry/windows-installer
-
-
-

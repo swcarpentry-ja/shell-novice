@@ -1,64 +1,59 @@
 ---
-title: Shell Scripts
+title: シェルスクリプト
 teaching: 30
 exercises: 15
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Write a shell script that runs a command or series of commands for a fixed set of files.
-- Run a shell script from the command line.
-- Write a shell script that operates on a set of files defined by the user on the command line.
-- Create pipelines that include shell scripts you, and others, have written.
+- 固定されたファイルセットに対してコマンドまたはコマンドの一連の処理を実行するシェルスクリプトを書く。
+- コマンドラインからシェルスクリプトを実行する。
+- コマンドラインで指定されたファイルセットを操作するシェルスクリプトを書く。
+- 自分や他の人が作成したシェルスクリプトを含むパイプラインを作成する。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I save and re-use commands?
+- コマンドを保存して再利用するにはどうすればよいですか？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-We are finally ready to see what makes the shell such a powerful programming environment.
-We are going to take the commands we repeat frequently and save them in files
-so that we can re-run all those operations again later by typing a single command.
-For historical reasons,
-a bunch of commands saved in a file is usually called a **shell script**,
-but make no mistake --- these are actually small programs.
+ついに、シェルがいかに強力なプログラミング環境であるかを確認する準備が整いました。  
+繰り返し実行するコマンドをファイルに保存し、それらの操作を後で再実行するために、  
+1つのコマンドを入力するだけで済むようにします。  
+歴史的な理由から、ファイルに保存された一連のコマンドは通常 **シェルスクリプト** と呼ばれますが、  
+実際にはこれらは小さなプログラムです。
 
-Not only will writing shell scripts make your work faster, but also you won't have to retype
-the same commands over and over again. It will also make it more accurate (fewer chances for
-typos) and more reproducible. If you come back to your work later (or if someone else finds
-your work and wants to build on it), you will be able to reproduce the same results simply
-by running your script, rather than having to remember or retype a long list of commands.
+シェルスクリプトを書くことで作業が速くなるだけでなく、同じコマンドを何度も再入力する必要がなくなります。  
+また、タイポの可能性を減らし、再現性を向上させます。後で作業を見返したり、他の誰かが作業を見つけてそれを基にしたい場合でも、  
+スクリプトを実行するだけで同じ結果を再現できます。長いコマンドを思い出したり再入力したりする必要はありません。
 
-Let's start by going back to `alkanes/` and creating a new file, `middle.sh` which will
-become our shell script:
+まず `alkanes/` に戻り、新しいファイル `middle.sh` を作成してシェルスクリプトにします:
 
 ```bash
 $ cd alkanes
 $ nano middle.sh
 ```
 
-The command `nano middle.sh` opens the file `middle.sh` within the text editor 'nano'
-(which runs within the shell).
-If the file does not exist, it will be created.
-We can use the text editor to directly edit the file by inserting the following line:
+`nano middle.sh` コマンドは、テキストエディタ「nano」で `middle.sh` ファイルを開きます。  
+ファイルが存在しない場合は、新規に作成されます。次の行を挿入してファイルを編集します:
 
 ```source
 head -n 15 octane.pdb | tail -n 5
 ```
 
-This is a variation on the pipe we constructed earlier, which selects lines 11-15 of
-the file `octane.pdb`. Remember, we are *not* running it as a command just yet;
-we are only incorporating the commands in a file.
+これは以前構築したパイプのバリエーションで、  
+`octane.pdb` ファイルの11行目から15行目を選択します。  
+ここではまだコマンドを実行していないことに注意してください。  
+コマンドをファイルに組み込んでいるだけです。
 
-Then we save the file (`Ctrl-O` in nano) and exit the text editor (`Ctrl-X` in nano).
-Check that the directory `alkanes` now contains a file called `middle.sh`.
+次にファイルを保存します（nanoでは `Ctrl-O`）、  
+その後、テキストエディタを終了します（nanoでは `Ctrl-X`）。  
+`alkanes` ディレクトリに `middle.sh` というファイルが作成されていることを確認します。
 
-Once we have saved the file,
-we can ask the shell to execute the commands it contains.
-Our shell is called `bash`, so we run the following command:
+ファイルを保存したら、その中に含まれるコマンドをシェルに実行させることができます。  
+シェルは `bash` と呼ばれるため、次のコマンドを実行します:
 
 ```bash
 $ bash middle.sh
@@ -72,45 +67,37 @@ ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
 ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
 ```
 
-Sure enough,
-our script's output is exactly what we would get if we ran that pipeline directly.
+確かに、スクリプトの出力は、パイプラインを直接実行した場合とまったく同じ結果になります。
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Text vs. Whatever
+## テキストとその他の形式
 
-We usually call programs like Microsoft Word or LibreOffice Writer "text
-editors", but we need to be a bit more careful when it comes to
-programming. By default, Microsoft Word uses `.docx` files to store not
-only text, but also formatting information about fonts, headings, and so
-on. This extra information isn't stored as characters and doesn't mean
-anything to tools like `head`, which expects input files to contain
-nothing but the letters, digits, and punctuation on a standard computer
-keyboard. When editing programs, therefore, you must either use a plain
-text editor or be careful to save files as plain text.
-
+Microsoft WordやLibreOffice Writerのようなプログラムは通常「テキストエディタ」と呼ばれますが、  
+プログラミングに関してはもう少し慎重になる必要があります。  
+Microsoft Wordはデフォルトで `.docx` ファイルを使用して、テキストだけでなく、フォントや見出しなどの書式情報も保存します。  
+これらの追加情報は文字として保存されておらず、`head` のようなツールには意味を持ちません。  
+`head` は標準のキーボード上の文字、数字、句読点のみを含む入力ファイルを想定しています。  
+したがって、プログラムを編集する際にはプレーンテキストエディタを使用するか、ファイルをプレーンテキスト形式で保存するよう注意する必要があります。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-What if we want to select lines from an arbitrary file?
-We could edit `middle.sh` each time to change the filename,
-but that would probably take longer than typing the command out again
-in the shell and executing it with a new file name.
-Instead, let's edit `middle.sh` and make it more versatile:
+次に、任意のファイルの行を選択したい場合はどうでしょうか?  
+その都度 `middle.sh` を編集してファイル名を変更するのは、シェルでコマンドを入力して実行するより時間がかかるかもしれません。  
+代わりに、`middle.sh` を編集してより汎用的にします:
 
 ```bash
 $ nano middle.sh
 ```
 
-Now, within "nano", replace the text `octane.pdb` with the special variable called `$1`:
+次に、「nano」で `octane.pdb` のテキストを特別な変数 `$1` に置き換えます:
 
 ```source
 head -n 15 "$1" | tail -n 5
 ```
 
-Inside a shell script,
-`$1` means 'the first filename (or other argument) on the command line'.
-We can now run our script like this:
+シェルスクリプト内では、`$1` は「コマンドライン上の最初のファイル名（または他の引数）」を意味します。  
+これでスクリプトを以下のように実行できます:
 
 ```bash
 $ bash middle.sh octane.pdb
@@ -124,7 +111,7 @@ ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
 ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
 ```
 
-or on a different file like this:
+また、別のファイルでも以下のように実行できます:
 
 ```bash
 $ bash middle.sh pentane.pdb
@@ -140,24 +127,17 @@ ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Double-Quotes Around Arguments
+## 引数の周囲のダブルクオート
 
-For the same reason that we put the loop variable inside double-quotes,
-in case the filename happens to contain any spaces,
-we surround `$1` with double-quotes.
-
+ループ変数をダブルクオートで囲む理由と同じく、ファイル名にスペースが含まれている場合に備えて、`$1` をダブルクオートで囲みます。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Currently, we need to edit `middle.sh` each time we want to adjust the range of
-lines that is returned.
-Let's fix that by configuring our script to instead use three command-line arguments.
-After the first command-line argument (`$1`), each additional argument that we
-provide will be accessible via the special variables `$1`, `$2`, `$3`,
-which refer to the first, second, third command-line arguments, respectively.
+現在、返される行の範囲を調整するたびに `middle.sh` を編集する必要があります。  
+これを修正するために、スクリプトを3つのコマンドライン引数を使用するように構成します。  
+最初のコマンドライン引数（`$1`）の後に提供される追加の引数は、それぞれ `$2`, `$3` という特別な変数を介してアクセスできます。
 
-Knowing this, we can use additional arguments to define the range of lines to
-be passed to `head` and `tail` respectively:
+この仕組みを利用して、行範囲を `head` と `tail` に渡すようスクリプトを編集します:
 
 ```bash
 $ nano middle.sh
@@ -167,7 +147,9 @@ $ nano middle.sh
 head -n "$2" "$1" | tail -n "$3"
 ```
 
-We can now run:
+
+
+以下のように実行できます:
 
 ```bash
 $ bash middle.sh pentane.pdb 15 5
@@ -181,8 +163,7 @@ ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
 ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
 ```
 
-By changing the arguments to our command, we can change our script's
-behaviour:
+引数を変更することでスクリプトの動作を変えることができます:
 
 ```bash
 $ bash middle.sh pentane.pdb 20 5
@@ -196,59 +177,49 @@ ATOM     17  H           1      -3.393   0.254  -0.321  1.00  0.00
 TER      18              1
 ```
 
-This works,
-but it may take the next person who reads `middle.sh` a moment to figure out what it does.
-We can improve our script by adding some **comments** at the top:
+これでも動作しますが、次に `middle.sh` を読む人が何をするスクリプトなのかを理解するのに少し時間がかかるかもしれません。  
+スクリプトの先頭に **コメント** を追加することで改善できます:
 
 ```bash
 $ nano middle.sh
 ```
 
 ```source
-# Select lines from the middle of a file.
-# Usage: bash middle.sh filename end_line num_lines
+# ファイルの中間部分の行を選択する。
+# 使用法: bash middle.sh ファイル名 終了行 行数
 head -n "$2" "$1" | tail -n "$3"
 ```
 
-A comment starts with a `#` character and runs to the end of the line.
-The computer ignores comments,
-but they're invaluable for helping people (including your future self) understand and use scripts.
-The only caveat is that each time you modify the script,
-you should check that the comment is still accurate. An explanation that sends
-the reader in the wrong direction is worse than none at all.
+コメントは `#` 文字で始まり、その行の終わりまで続きます。  
+コンピュータはコメントを無視しますが、人々（特に将来の自分）がスクリプトを理解しやすくするために不可欠です。  
+唯一の注意点は、スクリプトを変更するたびにコメントが正確であることを確認する必要があることです。  
+間違った方向に読者を導く説明は、コメントがないよりも悪い場合があります。
 
-What if we want to process many files in a single pipeline?
-For example, if we want to sort our `.pdb` files by length, we would type:
+複数のファイルを1つのパイプラインで処理したい場合はどうすればよいでしょうか?  
+例えば、`.pdb` ファイルを長さ順に並べ替えたい場合、次のコマンドを入力します:
 
 ```bash
 $ wc -l *.pdb | sort -n
 ```
 
-because `wc -l` lists the number of lines in the files
-(recall that `wc` stands for 'word count', adding the `-l` option means 'count lines' instead)
-and `sort -n` sorts things numerically.
-We could put this in a file,
-but then it would only ever sort a list of `.pdb` files in the current directory.
-If we want to be able to get a sorted list of other kinds of files,
-we need a way to get all those names into the script.
-We can't use `$1`, `$2`, and so on
-because we don't know how many files there are.
-Instead, we use the special variable `$@`,
-which means,
-'All of the command-line arguments to the shell script'.
-We also should put `$@` inside double-quotes
-to handle the case of arguments containing spaces
-(`"$@"` is special syntax and is equivalent to `"$1"` `"$2"` ...).
+`wc -l` はファイル内の行数をリストします  
+（`wc` は "word count" を意味し、`-l` オプションを追加すると "行を数える" を意味します）。  
+`sort -n` は数値順に並べ替えます。  
+これをファイルに入れることもできますが、その場合、現在のディレクトリ内の `.pdb` ファイルのリストを並べ替えるだけになります。  
+他の種類のファイルのリストを取得できるようにするには、ファイル名をスクリプトに渡す方法が必要です。  
+`$1`, `$2` のような変数は使えません。なぜなら、ファイル数がわからないからです。  
+代わりに、特別な変数 `$@` を使用します。これは「シェルスクリプトへのすべてのコマンドライン引数」を意味します。  
+また、引数にスペースが含まれている場合に備えて `$@` をダブルクオートで囲む必要があります（`"$@"` は特別な構文で、`"$1"`, `"$2"` ... と同等です）。
 
-Here's an example:
+例を示します:
 
 ```bash
 $ nano sorted.sh
 ```
 
 ```source
-# Sort files by their length.
-# Usage: bash sorted.sh one_or_more_filenames
+# ファイルをその長さで並べ替える。
+# 使用法: bash sorted.sh 1つ以上のファイル名
 wc -l "$@" | sort -n
 ```
 
@@ -271,9 +242,9 @@ $ bash sorted.sh *.pdb ../creatures/*.dat
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## List Unique Species
+## ユニークな種のリストを作成する
 
-Leah has several hundred data files, each of which is formatted like this:
+リアは数百のデータファイルを持っています。それぞれのファイルは以下のような形式です:
 
 ```source
 2013-11-05,deer,5
@@ -286,31 +257,28 @@ Leah has several hundred data files, each of which is formatted like this:
 2013-11-07,bear,1
 ```
 
-An example of this type of file is given in
-`shell-lesson-data/exercise-data/animal-counts/animals.csv`.
+このようなファイルの例は、`shell-lesson-data/exercise-data/animal-counts/animals.csv` にあります。
 
-We can use the command `cut -d , -f 2 animals.csv | sort | uniq` to produce
-the unique species in `animals.csv`.
-In order to avoid having to type out this series of commands every time,
-a scientist may choose to write a shell script instead.
+コマンド `cut -d , -f 2 animals.csv | sort | uniq` を使用すると、  
+`animals.csv` 内のユニークな種を抽出することができます。  
+この一連のコマンドを毎回入力するのを避けるために、科学者はシェルスクリプトを書くことを選ぶかもしれません。
 
-Write a shell script called `species.sh` that takes any number of
-filenames as command-line arguments and uses a variation of the above command
-to print a list of the unique species appearing in each of those files separately.
+コマンドライン引数として任意の数のファイル名を受け取り、それぞれのファイルに含まれるユニークな種のリストを出力する  
+`species.sh` という名前のシェルスクリプトを書いてください。
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```bash
-# Script to find unique species in csv files where species is the second data field
-# This script accepts any number of file names as command line arguments
+# CSVファイル内のユニークな種を検索するスクリプト
+# このスクリプトはコマンドライン引数として任意のファイル名を受け取ります
 
-# Loop over all files
+# すべてのファイルに対してループを実行
 for file in $@
 do
-    echo "Unique species in $file:"
-    # Extract species names
+    echo "$file に含まれるユニークな種:"
+    # 種の名前を抽出
     cut -d , -f 2 $file | sort | uniq
 done
 ```
@@ -319,19 +287,15 @@ done
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Suppose we have just run a series of commands that did something useful --- for example,
-creating a graph we'd like to use in a paper.
-We'd like to be able to re-create the graph later if we need to,
-so we want to save the commands in a file.
-Instead of typing them in again
-(and potentially getting them wrong)
-we can do this:
+例えば、論文に使用するグラフを作成するために便利な一連のコマンドを実行したとします。  
+後で再度グラフを作成できるように、コマンドをファイルに保存したいとします。  
+再度コマンドを入力する代わりに（そして間違える可能性を減らすために）、次のようにします:
 
 ```bash
 $ history | tail -n 5 > redo-figure-3.sh
 ```
 
-The file `redo-figure-3.sh` now contains:
+このコマンドで、ファイル `redo-figure-3.sh` に以下の内容が保存されます:
 
 ```source
 297 bash goostats.sh NENE01729B.txt stats-NENE01729B.txt
@@ -341,70 +305,62 @@ The file `redo-figure-3.sh` now contains:
 301 history | tail -n 5 > redo-figure-3.sh
 ```
 
-After a moment's work in an editor to remove the serial numbers on the commands,
-and to remove the final line where we called the `history` command,
-we have a completely accurate record of how we created that figure.
+エディタで一部編集し、行番号と最後の `history` コマンドを削除することで、  
+正確にグラフを作成する手順を記録したスクリプトを得ることができます。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Why Record Commands in the History Before Running Them?
+## コマンドを実行する前に履歴に記録する理由
 
-If you run the command:
+以下のコマンドを実行すると:
 
 ```bash
 $ history | tail -n 5 > recent.sh
 ```
 
-the last command in the file is the `history` command itself, i.e.,
-the shell has added `history` to the command log before actually
-running it. In fact, the shell *always* adds commands to the log
-before running them. Why do you think it does this?
+ファイルの最後のコマンドは `history` コマンド自体になります。  
+つまり、シェルは実際にコマンドを実行する前に `history` をコマンドログに追加します。  
+実際、シェルは *常に* コマンドを実行する前にログに追加します。  
+なぜこのような仕様になっていると思いますか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-If a command causes something to crash or hang, it might be useful
-to know what that command was, in order to investigate the problem.
-Were the command only be recorded after running it, we would not
-have a record of the last command run in the event of a crash.
-
-
+コマンドが原因でクラッシュやフリーズが発生した場合、そのコマンドが何であったかを知ることで問題の調査が可能になります。  
+コマンドが実行された後にのみ記録された場合、クラッシュが起きた時に最後に実行されたコマンドの記録を失う可能性があります。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-In practice, most people develop shell scripts by running commands
-at the shell prompt a few times
-to make sure they're doing the right thing,
-then saving them in a file for re-use.
-This style of work allows people to recycle
-what they discover about their data and their workflow with one call to `history`
-and a bit of editing to clean up the output
-and save it as a shell script.
+実際には、多くの人がシェルスクリプトを開発する際、  
+まずシェルプロンプトでコマンドを何度か実行して正しいことを確認し、  
+その後、それらを再利用のためにファイルに保存します。  
+この方法では、データやワークフローに関する発見をリサイクルすることが可能です。  
+`history` を一度実行し、出力を少し編集してシェルスクリプトとして保存するだけで済みます。
 
-## Nelle's Pipeline: Creating a Script
+## ネルのパイプライン: スクリプトの作成
 
-Nelle's supervisor insisted that all her analytics must be reproducible.
-The easiest way to capture all the steps is in a script.
+ネルの指導教官は、すべての分析が再現可能でなければならないと主張しました。  
+そのための最も簡単な方法は、すべてのステップをスクリプトに記録することです。
 
-First we return to Nelle's project directory:
+まず、ネルのプロジェクトディレクトリに戻ります:
 
 ```bash
 $ cd ../../north-pacific-gyre/
 ```
 
-She creates a file using `nano` ...
+`nano` を使用してファイルを作成します...
 
 ```bash
 $ nano do-stats.sh
 ```
 
-...which contains the following:
+以下の内容を含むスクリプトを作成します:
 
 ```bash
-# Calculate stats for data files.
+# データファイルの統計を計算する。
 for datafile in "$@"
 do
     echo $datafile
@@ -412,28 +368,26 @@ do
 done
 ```
 
-She saves this in a file called `do-stats.sh`
-so that she can now re-do the first stage of her analysis by typing:
+このスクリプトを `do-stats.sh` という名前で保存することで、  
+以下のコマンドを入力するだけで分析の最初の段階を再実行できるようになります:
 
 ```bash
 $ bash do-stats.sh NENE*A.txt NENE*B.txt
 ```
 
-She can also do this:
+また、以下のようにも実行できます:
 
 ```bash
 $ bash do-stats.sh NENE*A.txt NENE*B.txt | wc -l
 ```
 
-so that the output is just the number of files processed
-rather than the names of the files that were processed.
+これにより、処理されたファイル数のみが出力され、処理されたファイル名のリストは表示されません。
 
-One thing to note about Nelle's script is that
-it lets the person running it decide what files to process.
-She could have written it as:
+ネルのスクリプトの特徴の1つは、処理するファイルを実行者が決定できることです。  
+以下のようにも書けます:
 
 ```bash
-# Calculate stats for Site A and Site B data files.
+# Site A と Site B のデータファイルの統計を計算する。
 for datafile in NENE*A.txt NENE*B.txt
 do
     echo $datafile
@@ -441,62 +395,55 @@ do
 done
 ```
 
-The advantage is that this always selects the right files:
-she doesn't have to remember to exclude the 'Z' files.
-The disadvantage is that it *always* selects just those files --- she can't run it on all files
-(including the 'Z' files),
-or on the 'G' or 'H' files her colleagues in Antarctica are producing,
-without editing the script.
-If she wanted to be more adventurous,
-she could modify her script to check for command-line arguments,
-and use `NENE*A.txt NENE*B.txt` if none were provided.
-Of course, this introduces another tradeoff between flexibility and complexity.
+この方法の利点は、常に正しいファイルを選択できることです。  
+「Z」ファイルを除外することを忘れる心配がありません。  
+しかし、欠点は、常にそのファイルだけを選択する点です。  
+すべてのファイル（「Z」ファイルを含む）や、南極の同僚が作成した「G」や「H」ファイルに対して実行するには、スクリプトを編集する必要があります。  
+さらに柔軟にするには、コマンドライン引数をチェックし、指定がなければ `NENE*A.txt NENE*B.txt` を使用するようスクリプトを変更することもできます。  
+もちろん、これは柔軟性と複雑さのトレードオフをもたらします。
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Variables in Shell Scripts
+## シェルスクリプトの変数
 
-In the `alkanes` directory, imagine you have a shell script called `script.sh` containing the
-following commands:
+`alkanes` ディレクトリで、次のコマンドを含む `script.sh` という名前のシェルスクリプトがあるとします:
 
 ```bash
 head -n $2 $1
 tail -n $3 $1
 ```
 
-While you are in the `alkanes` directory, you type the following command:
+`alkanes` ディレクトリで以下のコマンドを入力します:
 
 ```bash
 $ bash script.sh '*.pdb' 1 1
 ```
 
-Which of the following outputs would you expect to see?
+次のうち、どの出力が期待されますか？
 
-1. All of the lines between the first and the last lines of each file ending in `.pdb`
-  in the `alkanes` directory
-2. The first and the last line of each file ending in `.pdb` in the `alkanes` directory
-3. The first and the last line of each file in the `alkanes` directory
-4. An error because of the quotes around `*.pdb`
+1. `alkanes` ディレクトリ内の `.pdb` ファイルの各ファイルの最初と最後の行の間にあるすべての行
+2. `alkanes` ディレクトリ内の `.pdb` ファイルの各ファイルの最初と最後の行
+3. `alkanes` ディレクトリ内のすべてのファイルの最初と最後の行
+4. `*.pdb` の引用符が原因でエラー
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The correct answer is 2.
+正しい答えは 2 です。
 
-The special variables `$1`, `$2` and `$3` represent the command line arguments given to the
-script, such that the commands run are:
+特別な変数 `$1`, `$2`, `$3` はスクリプトに与え
+
+られたコマンドライン引数を表します。  
+したがって、実行されるコマンドは次のようになります:
 
 ```bash
 $ head -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
 $ tail -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
 ```
 
-The shell does not expand `'*.pdb'` because it is enclosed by quote marks.
-As such, the first argument to the script is `'*.pdb'` which gets expanded within the
-script by `head` and `tail`.
-
-
+引用符で囲まれているため、シェルは `*.pdb` を展開しません。  
+そのため、スクリプトの最初の引数は `'*.pdb'` となり、`head` と `tail` によってスクリプト内で展開されます。
 
 :::::::::::::::::::::::::
 
@@ -504,21 +451,19 @@ script by `head` and `tail`.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Find the Longest File With a Given Extension
+## 特定の拡張子を持つ最長のファイルを見つける
 
-Write a shell script called `longest.sh` that takes the name of a
-directory and a filename extension as its arguments, and prints
-out the name of the file with the most lines in that directory
-with that extension. For example:
+`longest.sh` というシェルスクリプトを作成してください。このスクリプトは、引数としてディレクトリ名とファイル拡張子を受け取り、  
+そのディレクトリ内で指定された拡張子を持つファイルのうち、最も多くの行を含むファイルの名前を出力します。  
+例えば:
 
 ```bash
 $ bash longest.sh shell-lesson-data/exercise-data/alkanes pdb
 ```
 
-would print the name of the `.pdb` file in `shell-lesson-data/exercise-data/alkanes` that has
-the most lines.
+は、`shell-lesson-data/exercise-data/alkanes` ディレクトリ内の `.pdb` ファイルの中で最も多くの行を持つファイルの名前を出力します。
 
-Feel free to test your script on another directory e.g.
+別のディレクトリでスクリプトをテストしてみてください。例:
 
 ```bash
 $ bash longest.sh shell-lesson-data/exercise-data/writing txt
@@ -526,26 +471,24 @@ $ bash longest.sh shell-lesson-data/exercise-data/writing txt
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
 ```bash
-# Shell script which takes two arguments:
-#    1. a directory name
-#    2. a file extension
-# and prints the name of the file in that directory
-# with the most lines which matches the file extension.
+# シェルスクリプト: 
+# 1. ディレクトリ名
+# 2. ファイル拡張子
+# を引数に受け取り、そのディレクトリ内で
+# 指定された拡張子を持つ最も多くの行を含むファイル名を出力します。
 
 wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
 ```
 
-The first part of the pipeline, `wc -l $1/*.$2 | sort -n`, counts
-the lines in each file and sorts them numerically (largest last). When
-there's more than one file, `wc` also outputs a final summary line,
-giving the total number of lines across *all* files.  We use `tail -n 2 | head -n 1` to throw away this last line.
+このパイプラインの最初の部分、`wc -l $1/*.$2 | sort -n` は、各ファイルの行数を数えて数値順にソートします（最大値が最後に来る）。  
+複数のファイルがある場合、`wc` はすべてのファイルの合計行数を示す最終的なサマリー行も出力します。  
+`tail -n 2 | head -n 1` を使用して、このサマリー行を削除しています。
 
-With `wc -l $1/*.$2 | sort -n | tail -n 1` we'll see the final summary
-line: we can build our pipeline up in pieces to be sure we understand
-the output.
+もし `wc -l $1/*.$2 | sort -n | tail -n 1` を使用した場合は、最終的なサマリー行が表示されます。  
+出力を理解するために、パイプラインを段階的に構築して確認することができます。
 
 :::::::::::::::::::::::::
 
@@ -553,13 +496,11 @@ the output.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Script Reading Comprehension
+## スクリプト読解問題
 
-For this question, consider the `shell-lesson-data/exercise-data/alkanes` directory once again.
-This contains a number of `.pdb` files in addition to any other files you
-may have created.
-Explain what each of the following three scripts would do when run as
-`bash script1.sh *.pdb`, `bash script2.sh *.pdb`, and `bash script3.sh *.pdb` respectively.
+再び `shell-lesson-data/exercise-data/alkanes` ディレクトリを考えてみます。  
+このディレクトリには `.pdb` ファイルがいくつか含まれており、その他のファイルが作成されている場合もあります。  
+以下の3つのスクリプトが、それぞれ `bash script1.sh *.pdb`、`bash script2.sh *.pdb`、`bash script3.sh *.pdb` として実行された場合の挙動を説明してください。
 
 ```bash
 # Script 1
@@ -581,20 +522,22 @@ echo $@.pdb
 
 :::::::::::::::  solution
 
-## Solutions
+## 解答
 
-In each case, the shell expands the wildcard in `*.pdb` before passing the resulting
-list of file names as arguments to the script.
+各ケースで、シェルはスクリプトに渡す前に `*.pdb` のワイルドカードを展開し、  
+結果のファイル名リストをスクリプトに引数として渡します。
 
-Script 1 would print out a list of all files containing a dot in their name.
-The arguments passed to the script are not actually used anywhere in the script.
+### Script 1:
+このスクリプトは、名前にドット `.` を含むすべてのファイルのリストを出力します。  
+スクリプトに渡された引数はスクリプト内では使用されていません。
 
-Script 2 would print the contents of the first 3 files with a `.pdb` file extension.
-`$1`, `$2`, and `$3` refer to the first, second, and third argument respectively.
+### Script 2:
+このスクリプトは、`.pdb` 拡張子を持つ最初の3つのファイルの内容を出力します。  
+`$1`, `$2`, `$3` はそれぞれ最初、2番目、3番目の引数を指します。
 
-Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
-followed by `.pdb`.
-`$@` refers to *all* the arguments given to a shell script.
+### Script 3:
+このスクリプトは、スクリプトに渡されたすべての引数（すなわちすべての `.pdb` ファイル）を出力し、  
+その後に `.pdb` を追加します。`$@` はシェルスクリプトに渡された *すべて* の引数を指します。
 
 ```output
 cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
@@ -606,13 +549,12 @@ cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Debugging Scripts
+## スクリプトのデバッグ
 
-Suppose you have saved the following script in a file called `do-errors.sh`
-in Nelle's `north-pacific-gyre` directory:
+以下のスクリプトが `north-pacific-gyre` ディレクトリ内の `do-errors.sh` に保存されているとします:
 
 ```bash
-# Calculate stats for data files.
+# データファイルの統計を計算する。
 for datafile in "$@"
 do
     echo $datfile
@@ -620,48 +562,43 @@ do
 done
 ```
 
-When you run it from the `north-pacific-gyre` directory:
+このスクリプトを `north-pacific-gyre` ディレクトリから次のように実行すると:
 
 ```bash
 $ bash do-errors.sh NENE*A.txt NENE*B.txt
 ```
 
-the output is blank.
-To figure out why, re-run the script using the `-x` option:
+出力は空になります。  
+原因を特定するために、`-x` オプションを使用してスクリプトを再実行します:
 
 ```bash
 $ bash -x do-errors.sh NENE*A.txt NENE*B.txt
 ```
 
-What is the output showing you?
-Which line is responsible for the error?
+この出力には何が表示されますか？どの行がエラーの原因ですか？
 
 :::::::::::::::  solution
 
-## Solution
+## 解答
 
-The `-x` option causes `bash` to run in debug mode.
-This prints out each command as it is run, which will help you to locate errors.
-In this example, we can see that `echo` isn't printing anything. We have made a typo
-in the loop variable name, and the variable `datfile` doesn't exist, hence returning
-an empty string.
+`-x` オプションは `bash` をデバッグモードで実行します。  
+これにより、実行される各コマンドが出力され、エラーの特定に役立ちます。
 
-
+この例では、`echo` が何も出力していないことがわかります。  
+ループ変数名にタイポ（`datfile`）があり、変数 `datfile` が存在しないため、空の文字列が返されています。
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- Save commands in files (usually called shell scripts) for re-use.
-- `bash [filename]` runs the commands saved in a file.
-- `$@` refers to all of a shell script's command-line arguments.
-- `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
-- Place variables in quotes if the values might have spaces in them.
-- Letting users decide what files to process is more flexible and more consistent with built-in Unix commands.
+- コマンドを再利用するためにファイル（通常はシェルスクリプト）に保存する。
+- `bash [ファイル名]` を使用してファイル内のコマンドを実行する。
+- `$@` はシェルスクリプトのすべてのコマンドライン引数を参照する。
+- `$1`, `$2` などは、それぞれ最初のコマンドライン引数、2番目のコマンドライン引数を参照する。
+- 値にスペースが含まれる場合に備えて、変数を引用符で囲む。
+- 処理するファイルをユーザーが選択できるようにすることは、柔軟性が高く、Unixの組み込みコマンドとの一貫性が高い。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
